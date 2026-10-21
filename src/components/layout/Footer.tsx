@@ -14,11 +14,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Col 1: Brand & Identity */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded border border-[#C5A45D] text-[#C5A45D] flex items-center justify-center font-bold tracking-wider text-base bg-black/20">
-                PS
+              <div className="bg-white p-2 rounded-sm shadow-sm border border-[#C5A45D]/40">
+                <img
+                  src="/assets/aistudio/image_d32710d1.png"
+                  alt="Padmasena PS Convention Center Logo"
+                  className="h-10 w-auto object-contain"
+                />
               </div>
               <div>
-                <span className="block text-base font-bold tracking-wider text-white uppercase">PS Convention Center</span>
+                <span className="block text-sm font-bold tracking-wider text-white uppercase">PS Convention Center</span>
                 <span className="text-[10px] tracking-widest uppercase text-[#C5A45D]">Palur Village &bull; Tamil Nadu</span>
               </div>
             </div>

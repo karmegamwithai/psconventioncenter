@@ -62,25 +62,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
             }}
             className="flex items-center gap-3 group text-left focus:outline-none cursor-pointer"
           >
-            <div
-              className={`w-10 h-10 rounded-sm border flex items-center justify-center font-bold tracking-wider transition-all duration-300 ${
-                isSolid
-                  ? 'border-[#234D3C] text-[#234D3C] bg-[#E8F2E8]/60 group-hover:bg-[#234D3C] group-hover:text-white'
-                  : 'border-[#C5A45D] text-[#C5A45D] bg-black/30 group-hover:bg-[#C5A45D] group-hover:text-[#234D3C]'
-              }`}
-            >
-              PS
+            <div className="bg-white px-2 py-1 rounded-sm shadow-sm border border-[#C5A45D]/40 flex items-center justify-center">
+              <img
+                src="/assets/aistudio/image_d32710d1.png"
+                alt="Padmasena PS Convention Center Logo"
+                className="h-8 sm:h-10 w-auto object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span
-                className={`text-sm sm:text-base font-bold tracking-wider uppercase transition-colors ${
+                className={`text-xs sm:text-sm font-bold tracking-wider uppercase transition-colors ${
                   isSolid ? 'text-[#234D3C]' : 'text-white'
                 }`}
               >
                 PS Convention Center
               </span>
               <span
-                className={`text-[9px] tracking-[0.22em] uppercase font-medium ${
+                className={`text-[9px] tracking-[0.2em] uppercase font-medium ${
                   isSolid ? 'text-gray-500' : 'text-gray-300'
                 }`}
               >
