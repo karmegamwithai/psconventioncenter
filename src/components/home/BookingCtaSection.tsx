@@ -32,24 +32,8 @@ export const BookingCtaSection: React.FC<BookingCtaSectionProps> = ({ onGoToBook
 
         {/* Description */}
         <p className="text-sm sm:text-base text-gray-200 max-w-2xl mx-auto leading-relaxed font-light">
-          Choose your preferred date and take the first step toward creating unforgettable memories at PS Convention Center. View live monthly availability, compare session slots, and receive an itemized proposal.
+          "Choose your preferred date and take the first step toward creating unforgettable memories."
         </p>
-
-        {/* Value props */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-300">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-[#C5A45D]" />
-            <span>Instant Date Verification</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-[#C5A45D]" />
-            <span>No Obligation Enquiries</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-[#C5A45D]" />
-            <span>Dedicated Event Manager Callback</span>
-          </div>
-        </div>
 
         {/* CTA Buttons */}
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -47,21 +47,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onCheckAvailability, o
 
           {/* Supporting Description */}
           <p className="text-base sm:text-lg text-gray-200 font-light max-w-2xl leading-relaxed">
-            Celebrate life's most meaningful occasions in an elegant setting designed for unforgettable experiences. Located in scenic Palur Village, crafted for royal celebrations and cherished moments.
+            "Celebrate life's most meaningful occasions in an elegant setting designed for unforgettable experiences."
           </p>
-
-          {/* Key Quick Badges */}
-          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-300 pt-1">
-            <span className="px-3 py-1 rounded bg-white/10 backdrop-blur-sm border border-white/10">
-              1,000+ Floating Capacity
-            </span>
-            <span className="px-3 py-1 rounded bg-white/10 backdrop-blur-sm border border-white/10">
-              Centralized HVAC
-            </span>
-            <span className="px-3 py-1 rounded bg-white/10 backdrop-blur-sm border border-white/10">
-              Palur &bull; Near Chengalpattu & Walajabad
-            </span>
-          </div>
 
           {/* CTA Action Buttons */}
           <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">

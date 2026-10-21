@@ -41,56 +41,56 @@ export const FACILITIES = [
   {
     id: 'main-hall',
     title: 'Main Convention Hall',
-    capacity: '600 Seated • ~1,000 Floating',
-    description: 'A grand pillar-free auditorium featuring opulent crystal chandeliers, soaring ceilings, acoustic treatment, and centralized HVAC for royal weddings and milestone receptions.',
+    capacity: '600 Seated • 1,000 Floating',
+    description: '600 seated guests, approximately 1,000 floating capacity, centralised HVAC.',
     image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
-    badge: 'Flagship Space',
-    specs: ['Centralized HVAC', 'Pillar-Free Sightlines', 'Integrated AV Stage', 'Acoustic Wall Panels']
+    badge: 'Main Hall',
+    specs: ['600 Seating', '1,000 Floating', 'Centralised HVAC']
   },
   {
     id: 'dining-hall',
     title: 'Dining Hall',
-    capacity: '300 Seated • ~500 Floating',
-    description: 'Spacious, hygienic, fully air-conditioned dining facility configured for both traditional banana-leaf feasts and contemporary buffet layouts with dedicated handwash stations.',
+    capacity: '300 Seated • 500 Floating',
+    description: '300 seated guests, approximately 500 floating capacity, centralised HVAC.',
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
-    badge: 'Climate Controlled',
-    specs: ['300 Seated Capacity', 'Separate Handwash Counters', 'HVAC Air Conditioned', 'Direct Kitchen Access']
+    badge: 'Dining',
+    specs: ['300 Seating', '500 Floating', 'Centralised HVAC']
   },
   {
     id: 'guest-rooms',
     title: 'Guest Accommodation',
-    capacity: '6 Furnished Suites with Lift Access',
-    description: 'Six luxuriously appointed guest suites including bride & groom dressing chambers on the first floor with private washrooms, dressing mirrors, and lift accessibility.',
+    capacity: '6 Rooms with Lift',
+    description: 'Six guest rooms, including first-floor rooms with lift access.',
     image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80',
-    badge: 'VIP Suites',
-    specs: ['Attached Bathrooms', 'High-Speed Lift Access', 'Wardrobes & Vanity', '24/7 Hot Water']
+    badge: 'Rooms',
+    specs: ['6 Guest Rooms', 'First-Floor Lift', 'Attached Bathrooms']
   },
   {
     id: 'open-terrace',
     title: 'Open Terrace',
-    capacity: 'First-Floor Breezy Gathering Area',
-    description: 'An open-air terrace venue perfect for evening sangeet, cocktail receptions, mehendi ceremonies, or starlit family chats overlooking the serene Palur countryside.',
+    capacity: 'First-Floor Terrace',
+    description: 'First-floor open terrace.',
     image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80',
-    badge: 'Open-Air',
-    specs: ['Panoramic Views', 'Evening Ambient Lighting', 'Breezy Elevated Setting', 'Open Skies']
+    badge: 'Terrace',
+    specs: ['Open Air', 'First Floor', 'Scenic View']
   },
   {
     id: 'temple-courtyard',
     title: 'Temple & Courtyard',
-    capacity: 'Sanctified Ganesha Shrine & Open Lawn',
-    description: 'A charming Ganesha temple and central courtyard nestled between the main hall and dining area for auspicious pre-wedding poojas and traditional welcoming ceremonies.',
+    capacity: 'Ganesha Temple & Lawn',
+    description: 'Small Ganesha temple and open courtyard between halls.',
     image: 'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80',
-    badge: 'Traditional Heritage',
-    specs: ['Ganesha Sannidhi', 'Auspicious Rituals', 'Open Courtyard Walkway', 'Floral Mandap Area']
+    badge: 'Temple',
+    specs: ['Ganesha Temple', 'Open Courtyard', 'Rituals Area']
   },
   {
     id: 'parking-security',
     title: 'Parking & Security',
-    capacity: '30+ Dedicated Cars & Valet Lane',
-    description: 'Gated venue grounds with separate entry and exit checkpoints, dedicated two-wheeler bays, CCTV security perimeter, and 100% diesel generator power backup.',
+    capacity: '30 Cars Parking',
+    description: 'Parking for approximately 30 cars, separate entry and exit gates, CCTV and generator backup.',
     image: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=1200&q=80',
-    badge: 'Seamless Logistics',
-    specs: ['30+ Car Bays', 'Dual Entry/Exit Gates', 'CCTV 24/7 Surveillance', '100% DG Power Backup']
+    badge: 'Parking',
+    specs: ['30 Car Parking', 'Dual Gates', 'CCTV & Generator']
   }
 ];
 
@@ -98,57 +98,57 @@ export const EVENTS = [
   {
     id: 'weddings',
     title: 'Weddings',
-    subtitle: 'Grand Muhurtham & Sacred Vows',
-    desc: 'Lavish traditional Hindu, Christian, and interfaith nuptials with majestic stage set-ups and royal hospitality.',
+    subtitle: 'Ceremony',
+    desc: 'Weddings',
     image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'receptions',
     title: 'Wedding Receptions',
-    subtitle: 'Starlight Evenings & Glamour',
-    desc: 'Spectacular evening banquets complete with customized lighting, LED backdrop visuals, and gourmet feasts.',
+    subtitle: 'Reception',
+    desc: 'Wedding Receptions',
     image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'engagements',
     title: 'Engagement Ceremonies',
-    subtitle: 'Nichayathartham & Rings',
-    desc: 'Intimate and joyful betrothal celebrations bringing both families together in refined luxury.',
+    subtitle: 'Engagement',
+    desc: 'Engagement Ceremonies',
     image: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'birthdays',
     title: 'Birthday Celebrations',
-    subtitle: 'Milestone 1st, 21st, 50th & 60th',
-    desc: 'Themed birthday bashes, balloon arches, entertainment stages, and delightful food corners.',
+    subtitle: 'Birthday',
+    desc: 'Birthday Celebrations',
     image: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'anniversaries',
     title: 'Wedding Anniversaries',
-    subtitle: 'Silver, Gold & Diamond Jubilees',
-    desc: 'Honor decades of love surrounded by children, grandchildren, and cherished lifetime friends.',
+    subtitle: 'Anniversary',
+    desc: 'Wedding Anniversaries',
     image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'family-gatherings',
     title: 'Family Gatherings',
-    subtitle: 'Reunions & Festive Banquets',
-    desc: 'Spacious halls and open terraces where extended families reunite for memorable weekends.',
+    subtitle: 'Gathering',
+    desc: 'Family Gatherings',
     image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'traditional',
     title: 'Traditional Ceremonies',
-    subtitle: 'Upanayanam, Seemantham & Shashtiabdhapoorthi',
-    desc: 'Authentic South Indian cultural rituals performed with sacred pooja decor and banana-leaf hospitality.',
+    subtitle: 'Traditions',
+    desc: 'Traditional Ceremonies',
     image: 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'corporate',
     title: 'Corporate Events',
-    subtitle: 'Conferences, AGMs & Gala Dinners',
-    desc: 'Professional AV facilities, podium setups, executive dining, and seamless connectivity.',
+    subtitle: 'Corporate',
+    desc: 'Corporate Events',
     image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
   }
 ];
@@ -157,30 +157,30 @@ export const SERVICES = [
   {
     icon: 'UtensilsCrossed',
     title: 'Catering Arrangements',
-    summary: 'Vegetarian & Non-Vegetarian Facilities',
-    description: 'Hygienic dedicated indoor kitchen for pure vegetarian cooking and organized outdoor cooking facilities for non-vegetarian banquets with complete dining setup support.',
-    tag: 'Flexible Culinary'
+    summary: 'Indoor & Outdoor',
+    description: 'Vegetarian indoor cooking and non-vegetarian outdoor cooking arrangements.',
+    tag: 'Catering'
   },
   {
     icon: 'Sparkles',
     title: 'Stage Decorations',
-    summary: 'Appointed Decorators & Custom Mandaps',
-    description: 'Tie-ups with elite decoration partners for bespoke floral mandaps, thematic LED arches, traditional banana-stem entrance designs, and client-coordinated setups.',
-    tag: 'Bespoke Ambience'
+    summary: 'Stage & Mandap',
+    description: 'Stage decoration through appointed companies, with other decoration arrangements coordinated by clients.',
+    tag: 'Decorations'
   },
   {
     icon: 'PackageCheck',
     title: 'Flexible Packages',
-    summary: 'Tailored Event Day Configurations',
-    description: 'Customized pricing schemes tailored to Full-Day, Morning Muhurtham, or Evening Reception slots with transparent tariff structures and no hidden surcharges.',
-    tag: 'Transparent Tariff'
+    summary: 'Custom Pricing',
+    description: 'Event pricing based on selected packages and requirements.',
+    tag: 'Packages'
   },
   {
     icon: 'ShieldCheck',
     title: 'Security & Backup',
-    summary: 'Uninterrupted Comfort & Protection',
-    description: 'High-power generator backup ensuring zero light flickering, continuous HVAC operation, 24/7 CCTV vigilance, and trained venue marshals.',
-    tag: 'Guaranteed Peace of Mind'
+    summary: '24/7 Security',
+    description: 'CCTV surveillance, security facilities, and generator backup.',
+    tag: 'Security'
   }
 ];
 
@@ -245,28 +245,24 @@ export const GALLERY_ITEMS = [
 
 export const FAQS = [
   {
-    q: 'How do I check available dates on the calendar?',
-    a: 'Simply open our interactive calendar on the `/booking` page. Available dates are colored in light green (#DDF1DF). Click on any upcoming date to view whether the Full Day, Morning, or Evening slot is open, and proceed with your enquiry in real-time.'
+    q: 'How do I check available dates?',
+    a: 'View the monthly calendar on this page. Available dates are highlighted in light green.'
   },
   {
     q: 'Does submitting an enquiry confirm my booking?',
-    a: 'No, submitting an enquiry does not automatically confirm a booking. It registers your date request in our system under "Pending Review". Our reservation team will reach out within 24 hours to discuss package requirements, inspect the premises, and formalize the advance deposit.'
+    a: 'No. Submitting an enquiry does not confirm a booking. Our team reviews availability and requirements before confirming.'
   },
   {
-    q: 'Can I request an alternative date if my primary date is busy?',
-    a: 'Yes! The booking enquiry form includes an "Alternative Date" field. If your preferred Muhurtham date has already been reserved, our coordinator will immediately check and offer your backup date option.'
+    q: 'Can I request an alternative date?',
+    a: 'Yes. An optional alternative date field is available in the booking enquiry form.'
   },
   {
-    q: 'Are catering arrangements and cooking facilities available?',
-    a: 'Yes. PS Convention Center provides a modern, fully-equipped indoor kitchen for pure vegetarian cooking. Additionally, we have specialized outdoor cooking zones for non-vegetarian feasts, enabling complete flexibility for your caterers.'
+    q: 'Are catering arrangements available?',
+    a: 'Yes. Vegetarian indoor cooking and non-vegetarian outdoor cooking arrangements are available.'
   },
   {
     q: 'How are event packages priced?',
-    a: 'Event pricing depends on whether you reserve a Full-Day (Morning + Evening), Morning Muhurtham, or Evening Reception session, as well as selected room requirements and date seasonality. Our team provides an itemized quotation tailored to your exact celebration.'
-  },
-  {
-    q: 'What guest accommodation and room facilities are included?',
-    a: 'We feature six furnished guest rooms including dedicated bride and groom dressing suites located on the first floor. The suites include comfortable double beds, mirrors, wardrobes, attached bathrooms, and direct elevator (lift) accessibility.'
+    a: 'Event pricing is based on selected packages, session timing, and requirements.'
   }
 ];
 

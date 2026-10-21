@@ -41,22 +41,8 @@ export const BookingHero: React.FC<BookingHeroProps> = ({ onGoHome }) => {
           </h1>
 
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed max-w-2xl font-light">
-            Explore live monthly availability, compare session slots (Full Day, Morning Muhurtham, or Evening Reception), and send a formal booking enquiry for your special occasion at PS Convention Center.
+            "Explore available dates and send a booking enquiry for your special occasion at PS Convention Center."
           </p>
-
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-600 pt-2">
-            <span className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded border border-[#234D3C]/10">
-              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-              Live Date Availability
-            </span>
-            <span className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded border border-[#234D3C]/10">
-              <span className="w-2 h-2 rounded-full bg-[#C5A45D]"></span>
-              No Auto-Charges &bull; Free Inquiries
-            </span>
-            <span className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded border border-[#234D3C]/10">
-              <span>Timezone: Asia/Kolkata (IST)</span>
-            </span>
-          </div>
         </div>
       </div>
     </section>

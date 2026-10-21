@@ -127,25 +127,10 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
     });
   };
 
-  const sessionOptions: Array<{ id: SessionSlot; label: string; time: string; desc: string }> = [
-    {
-      id: 'FULL_DAY',
-      label: 'Full Day',
-      time: '6:00 AM – 11:00 PM',
-      desc: 'Ideal for complete wedding celebrations with Morning Muhurtham and Grand Evening Reception.'
-    },
-    {
-      id: 'MORNING',
-      label: 'Morning Session',
-      time: '6:00 AM – 2:00 PM',
-      desc: 'Auspicious Muhurtham poojas, Upanayanam, or morning betrothal rituals.'
-    },
-    {
-      id: 'EVENING',
-      label: 'Evening Session',
-      time: '3:00 PM – 11:00 PM',
-      desc: 'Cocktail receptions, birthday galas, corporate banquets, and music sangeet.'
-    }
+  const sessionOptions: Array<{ id: SessionSlot; label: string }> = [
+    { id: 'FULL_DAY', label: 'Full Day' },
+    { id: 'MORNING', label: 'Morning' },
+    { id: 'EVENING', label: 'Evening' }
   ];
 
   const eventTypesList = [
@@ -164,16 +149,9 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
     <div className="bg-[#FAF8F2] rounded-sm border border-[#e2d8c3] shadow-md p-6 sm:p-8 space-y-6">
       {/* Header */}
       <div className="border-b border-[#e2d8c3] pb-4">
-        <div className="inline-flex items-center gap-2 text-[#C5A45D] text-xs uppercase tracking-widest font-semibold mb-1">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>DATE & SESSION DETAILS</span>
-        </div>
         <h3 className="text-2xl font-bold text-[#234D3C] tracking-tight">
           Tell Us About Your Celebration.
         </h3>
-        <p className="text-xs text-gray-600 mt-1">
-          Review your selected date, choose your event timings, and share requirements for an itemized quotation.
-        </p>
       </div>
 
       {/* Selected Date Ribbon */}
@@ -184,7 +162,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-wider font-semibold text-gray-500 block">
-              Requested Event Date
+              Selected Event Date
             </span>
             <span className="text-base font-bold text-[#234D3C]">
               {formattedSelectedDate}
@@ -195,7 +173,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
         {selectedDate ? (
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[#E8F2E8] text-[#234D3C] border border-[#234D3C]/20 self-start sm:self-auto">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            Date Picked
+            Selected
           </span>
         ) : (
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 self-start sm:self-auto">
@@ -211,9 +189,9 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
       {/* Session Selection */}
       <div className="space-y-3">
         <label className="block text-xs uppercase font-bold tracking-wider text-[#234D3C]">
-          Select Event Session *
+          Event Session *
         </label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {sessionOptions.map((opt) => {
             const isChosen = session === opt.id;
             return (
@@ -221,24 +199,15 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
                 key={opt.id}
                 type="button"
                 onClick={() => setSession(opt.id)}
-                className={`p-3.5 rounded text-left transition-all cursor-pointer border ${
+                className={`py-3 px-2 rounded text-center transition-all cursor-pointer border ${
                   isChosen
                     ? 'bg-[#234D3C] text-white border-[#C5A45D] shadow-md ring-1 ring-[#C5A45D]'
                     : 'bg-white text-gray-700 border-gray-300 hover:border-[#234D3C]/40'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isChosen ? 'text-[#C5A45D]' : 'text-[#234D3C]'}`}>
-                    {opt.label}
-                  </span>
-                  <Clock className={`w-3.5 h-3.5 ${isChosen ? 'text-[#C5A45D]' : 'text-gray-400'}`} />
-                </div>
-                <div className={`text-[11px] font-semibold mt-1 ${isChosen ? 'text-white' : 'text-gray-800'}`}>
-                  {opt.time}
-                </div>
-                <p className={`text-[10px] mt-1.5 leading-snug line-clamp-2 ${isChosen ? 'text-gray-200' : 'text-gray-500'}`}>
-                  {opt.desc}
-                </p>
+                <span className={`text-xs font-bold uppercase tracking-wider block ${isChosen ? 'text-[#C5A45D]' : 'text-[#234D3C]'}`}>
+                  {opt.label}
+                </span>
               </button>
             );
           })}

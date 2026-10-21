@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 import { FAQS } from '../../data/venueData';
 
 export const BookingFaq: React.FC = () => {
@@ -12,17 +12,10 @@ export const BookingFaq: React.FC = () => {
   return (
     <section className="py-20 bg-[#FAF8F2] relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
-          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#C5A45D] font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>CLARITY & ASSISTANCE</span>
-          </div>
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#234D3C] tracking-tight">
             Frequently Asked <span className="font-serif italic font-semibold">Questions</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600">
-            Everything you need to know about date availability, reservation terms, and catering guidelines at PS Convention Center.
-          </p>
         </div>
 
         {/* FAQ Accordions */}
@@ -60,16 +53,6 @@ export const BookingFaq: React.FC = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Direct Coordinator Contact Card */}
-        <div className="mt-12 text-center p-6 rounded bg-white border border-[#C5A45D]/40 shadow-sm space-y-2">
-          <p className="text-xs text-gray-600">
-            Have a specialized custom requirement or high-profile VIP delegation?
-          </p>
-          <p className="text-xs sm:text-sm font-semibold text-[#234D3C]">
-            Speak directly with our General Manager at <span className="text-[#C5A45D] font-bold">+91 94432 18920</span> or email <span className="text-[#C5A45D] font-bold">enquiry@psconventioncenter.com</span>
-          </p>
         </div>
       </div>
     </section>

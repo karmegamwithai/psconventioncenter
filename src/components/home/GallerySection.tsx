@@ -37,9 +37,6 @@ export const GallerySection: React.FC = () => {
             Spaces That Inspire <br />
             <span className="font-serif italic font-semibold">Beautiful Memories.</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-xl mx-auto">
-            Take a visual tour through our grand air-conditioned auditorium, spacious dining hall, bridal accommodations, and scenic Palur surroundings.
-          </p>
         </div>
 
         {/* Category Filters */}

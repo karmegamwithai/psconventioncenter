@@ -1,30 +1,30 @@
 import React from 'react';
-import { CalendarSearch, FileText, ClipboardCheck, Award, Sparkles } from 'lucide-react';
+import { CalendarSearch, FileText, ClipboardCheck, Award } from 'lucide-react';
 
 export const BookingSteps: React.FC = () => {
   const steps = [
     {
       num: '01',
       title: 'Choose Your Date',
-      desc: 'Explore the live calendar and select your preferred event day and session slot.',
+      desc: 'Explore the calendar and select a suitable date.',
       icon: <CalendarSearch className="w-6 h-6 text-[#234D3C]" />
     },
     {
       num: '02',
       title: 'Share Your Details',
-      desc: 'Provide your event type, expected guest count, and catering preference.',
+      desc: 'Provide event information and contact details.',
       icon: <FileText className="w-6 h-6 text-[#234D3C]" />
     },
     {
       num: '03',
       title: 'Venue Team Review',
-      desc: 'Our coordinator validates technical schedules and customizes package pricing.',
+      desc: 'Our team reviews availability and requirements.',
       icon: <ClipboardCheck className="w-6 h-6 text-[#234D3C]" />
     },
     {
       num: '04',
       title: 'Booking Confirmation',
-      desc: 'The venue team confirms the reservation upon advance formalization.',
+      desc: 'The venue team confirms the reservation after completing the necessary arrangements.',
       icon: <Award className="w-6 h-6 text-[#234D3C]" />
     }
   ];
@@ -32,17 +32,10 @@ export const BookingSteps: React.FC = () => {
   return (
     <section className="py-20 bg-white border-y border-gray-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
-          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#C5A45D] font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>TRANSPARENT RESERVATION JOURNEY</span>
-          </div>
+        <div className="text-center max-w-2xl mx-auto mb-14">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#234D3C] tracking-tight">
-            How Venue Booking <span className="font-serif italic font-semibold">Works</span>
+            Booking <span className="font-serif italic font-semibold">Process</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600">
-            A structured, reliable four-step protocol ensuring complete clarity for every family and event host.
-          </p>
         </div>
 
         {/* 4 Steps with Thin Gold Connecting Lines */}
@@ -67,7 +60,7 @@ export const BookingSteps: React.FC = () => {
                 {step.title}
               </h3>
 
-              <p className="text-xs text-gray-600 leading-relaxed font-light">
+              <p className="text-xs text-gray-700 leading-relaxed font-normal">
                 {step.desc}
               </p>
             </div>

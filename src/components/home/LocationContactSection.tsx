@@ -35,9 +35,6 @@ export const LocationContactSection: React.FC = () => {
             Conveniently Located. <br />
             <span className="font-serif italic font-semibold">Beautifully Connected.</span>
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-xl mx-auto">
-            Situated amidst the serene landscapes of Palur Village, strategically connected via Chengalpattu and Walajabad arterial corridors for hassle-free guest arrivals.
-          </p>
         </div>
 
         {/* Content Layout */}
