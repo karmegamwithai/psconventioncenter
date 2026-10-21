@@ -1,0 +1,6 @@
+{
+  "name": "PS Convention Center",
+  "description": "Premier luxury convention center and wedding venue located in Palur Village, Tamil Nadu. Features 1,000+ guest capacity, centralized air conditioning, guest rooms, and an interactive availability calendar booking engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

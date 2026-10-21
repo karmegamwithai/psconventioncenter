@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forest: #234D3C;
+  --color-forest-dark: #17372a;
+  --color-forest-light: #2d634d;
+  --color-gold: #C5A45D;
+  --color-gold-light: #d8bc7a;
+  --color-gold-dark: #a98741;
+  --color-sage: #E8F2E8;
+  --color-sage-light: #f3f8f3;
+  --color-sage-dark: #cfdfcf;
+  --color-cream: #FAF8F2;
+  --color-charcoal: #202823;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom luxury scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5A45D;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #234D3C;
+}
+
+/* Subtle gold shine effect */
+.gold-shimmer {
+  background: linear-gradient(110deg, #C5A45D 20%, #f7e6b8 45%, #C5A45D 70%);
+  background-size: 200% 100%;
+  animation: shine 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
