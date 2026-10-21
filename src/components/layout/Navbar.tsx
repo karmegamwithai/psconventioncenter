@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Calendar, ChevronRight, Phone, Clock, MapPin } from 'lucide-react';
+import { Menu, X, Calendar, ChevronRight, Phone, Clock, MapPin, Sparkles } from 'lucide-react';
 
 interface NavbarProps {
   currentRoute: '/' | '/booking';
@@ -9,7 +9,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpenBlogs }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
   ];
 
   const handleLinkClick = (item: typeof navLinks[0]) => {
-    setMobileMenuOpen(false);
+    setMenuOpen(false);
     if (item.isBlog) {
       onOpenBlogs();
       return;
@@ -56,8 +56,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Brand Logo */}
           <button
-            onClick={() => onNavigate('/')}
-            className="flex items-center gap-3 group text-left focus:outline-none"
+            onClick={() => {
+              setMenuOpen(false);
+              onNavigate('/');
+            }}
+            className="flex items-center gap-3 group text-left focus:outline-none cursor-pointer"
           >
             <div
               className={`w-10 h-10 rounded-sm border flex items-center justify-center font-bold tracking-wider transition-all duration-300 ${
@@ -86,89 +89,93 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
             </div>
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center space-x-6">
-            {navLinks.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => handleLinkClick(item)}
-                className={`text-[12px] uppercase tracking-wider font-semibold relative py-1.5 transition-colors group cursor-pointer focus:outline-none ${
-                  isSolid
-                    ? 'text-[#202823] hover:text-[#C5A45D]'
-                    : 'text-white hover:text-[#C5A45D]'
-                }`}
-              >
-                <span>{item.label}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#C5A45D] transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            ))}
-          </nav>
-
-          {/* Header Action Button */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Right Header Navigation & Actions */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Book Your Event Button */}
             <button
-              onClick={() => onNavigate('/booking')}
-              className={`px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all duration-300 shadow-sm flex items-center gap-2 cursor-pointer ${
+              onClick={() => {
+                setMenuOpen(false);
+                onNavigate('/booking');
+              }}
+              className={`px-4 sm:px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all duration-300 shadow-sm flex items-center gap-2 cursor-pointer ${
                 isSolid
-                  ? 'bg-[#234D3C] text-white hover:bg-[#17372a] shadow-[#234D3C]/10'
-                  : 'bg-[#C5A45D] text-[#234D3C] hover:bg-white hover:text-[#234D3C] shadow-lg'
+                  ? 'bg-[#234D3C] text-white hover:bg-[#17372a]'
+                  : 'bg-[#C5A45D] text-[#17372a] hover:bg-white hover:text-[#234D3C] shadow-lg'
               }`}
             >
               <Calendar className="w-3.5 h-3.5 text-[#C5A45D] group-hover:text-current" />
-              <span>BOOK YOUR EVENT</span>
+              <span className="hidden sm:inline">BOOK YOUR EVENT</span>
+              <span className="sm:hidden">BOOK</span>
+            </button>
+
+            {/* Menu Bar Button (Click to show menus) */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`px-3.5 py-2 rounded-sm border flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                isSolid
+                  ? 'border-gray-300 bg-white text-[#234D3C] hover:border-[#234D3C] hover:bg-[#E8F2E8]'
+                  : 'border-white/40 bg-black/30 text-white hover:border-[#C5A45D] hover:text-[#C5A45D]'
+              }`}
+              aria-label="Toggle menu bar"
+            >
+              {menuOpen ? <X className="w-4 h-4 text-[#C5A45D]" /> : <Menu className="w-4 h-4 text-[#C5A45D]" />}
+              <span>{menuOpen ? 'CLOSE' : 'MENU'}</span>
             </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`xl:hidden p-2 rounded focus:outline-none ${
-              isSolid ? 'text-[#234D3C]' : 'text-white'
-            }`}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
 
-        {/* Mobile Fullscreen Overlay Menu */}
-        {mobileMenuOpen && (
-          <div className="xl:hidden fixed inset-x-0 top-[62px] bg-white border-b border-gray-200 shadow-2xl px-6 py-6 flex flex-col gap-3 text-[#202823] max-h-[85vh] overflow-y-auto animate-in slide-in-from-top-2 duration-200">
-            <div className="pb-3 border-b border-gray-100 flex items-center justify-between text-xs text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#C5A45D]" /> Palur, Tamil Nadu
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-[#C5A45D]" /> +91 94432 18920
-              </span>
+        {/* Expandable Menu Panel (Shows when Menu Bar is clicked) */}
+        {menuOpen && (
+          <div className="fixed inset-x-0 top-[62px] bg-white border-b border-gray-200 shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {/* Top metadata info */}
+              <div className="pb-4 mb-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+                <span className="flex items-center gap-1.5 font-medium text-[#234D3C]">
+                  <MapPin className="w-4 h-4 text-[#C5A45D]" /> Palur Village, Tamil Nadu (12 km from Chengalpattu)
+                </span>
+                <span className="flex items-center gap-1.5 font-medium text-[#234D3C]">
+                  <Phone className="w-4 h-4 text-[#C5A45D]" /> Enquiry: +91 94432 18920
+                </span>
+              </div>
+
+              {/* Menu Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {navLinks.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleLinkClick(item)}
+                    className="p-3.5 rounded-sm bg-[#FAF8F2] hover:bg-[#E8F2E8] border border-gray-200/80 hover:border-[#C5A45D] text-left flex items-center justify-between group transition-all cursor-pointer"
+                  >
+                    <span className="text-xs uppercase font-bold tracking-wider text-[#234D3C] group-hover:text-[#234D3C]">
+                      {item.label}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#C5A45D] group-hover:translate-x-1 transition-all" />
+                  </button>
+                ))}
+              </div>
+
+              {/* Quick Action inside Menu */}
+              <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-xs text-gray-500 italic">
+                  Where Beautiful Celebrations Become Timeless Memories.
+                </div>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onNavigate('/booking');
+                  }}
+                  className="w-full sm:w-auto px-6 py-3 bg-[#234D3C] text-white text-xs uppercase font-bold tracking-widest rounded-sm hover:bg-[#17372a] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                >
+                  <Calendar className="w-4 h-4 text-[#C5A45D]" />
+                  <span>Check Date Availability Calendar</span>
+                </button>
+              </div>
             </div>
-
-            {navLinks.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => handleLinkClick(item)}
-                className="text-left text-xs uppercase tracking-wider font-semibold border-b border-gray-100 py-2.5 flex justify-between items-center text-[#202823] hover:text-[#234D3C]"
-              >
-                <span>{item.label}</span>
-                <ChevronRight className="w-4 h-4 text-[#C5A45D]" />
-              </button>
-            ))}
-
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onNavigate('/booking');
-              }}
-              className="mt-3 w-full py-3.5 bg-[#234D3C] text-white text-center text-xs uppercase font-semibold tracking-widest rounded shadow-md hover:bg-[#17372a] flex items-center justify-center gap-2"
-            >
-              <Calendar className="w-4 h-4 text-[#C5A45D]" />
-              <span>Check Availability & Book</span>
-            </button>
           </div>
         )}
       </header>
 
-      {/* Fixed Mobile Bottom Booking CTA (only visible on mobile screens) */}
+      {/* Fixed Mobile Bottom Booking CTA */}
       <div className="sm:hidden fixed bottom-3 inset-x-4 z-40">
         <button
           onClick={() => onNavigate('/booking')}
@@ -176,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
         >
           <span className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#C5A45D]" />
-            <span>Check Date Availability</span>
+            <span>Check Availability</span>
           </span>
           <span className="bg-[#C5A45D] text-[#234D3C] px-3 py-1 rounded-full text-[10px] font-bold">
             BOOK NOW

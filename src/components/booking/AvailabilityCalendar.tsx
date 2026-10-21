@@ -180,7 +180,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         </div>
 
         {/* Calendar Matrix */}
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5">
+        <div className="grid grid-cols-7 gap-2 sm:gap-3">
           {calendarDays.map((cell, idx) => {
             const isClickable = cell.dateStr && !cell.isPast && !cell.data?.isBlocked;
             const badge = getStatusBadgeText(cell);
@@ -192,14 +192,14 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 type="button"
                 disabled={!cell.dateStr || cell.isPast || cell.data?.isBlocked}
                 onClick={() => cell.dateStr && onSelectDate(cell.dateStr)}
-                className={`relative aspect-square sm:aspect-[4/3] rounded-sm p-1.5 sm:p-2.5 flex flex-col justify-between transition-all duration-200 text-left focus:outline-none ${getStatusColorClass(
+                className={`relative min-h-[64px] sm:min-h-[96px] rounded-sm p-2 sm:p-3 flex flex-col justify-between transition-all duration-200 text-left focus:outline-none ${getStatusColorClass(
                   cell
                 )}`}
               >
                 {cell.dayNumber && (
                   <>
                     <div className="flex items-center justify-between w-full">
-                      <span className={`text-xs sm:text-sm font-bold ${isSelected ? 'text-[#C5A45D]' : ''}`}>
+                      <span className={`text-xs sm:text-base font-bold ${isSelected ? 'text-[#C5A45D]' : ''}`}>
                         {cell.dayNumber}
                       </span>
                       {cell.isToday && (
@@ -211,9 +211,9 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                     </div>
 
                     {/* Status badge in cell */}
-                    <div className="mt-auto">
+                    <div className="mt-auto pt-1">
                       <span
-                        className={`hidden sm:inline-block text-[9px] font-semibold uppercase tracking-wider px-1 py-0.5 rounded ${
+                        className={`inline-block text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                           isSelected
                             ? 'bg-[#C5A45D] text-[#234D3C]'
                             : 'bg-black/5 text-current'

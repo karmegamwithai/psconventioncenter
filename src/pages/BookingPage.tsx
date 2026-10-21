@@ -55,12 +55,9 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
 
   const handleSelectDate = (dateStr: string) => {
     setSelectedDate(dateStr);
-    // Smooth scroll to form on mobile devices
-    if (window.innerWidth < 1024) {
-      const formEl = document.getElementById('booking-enquiry-form');
-      if (formEl) {
-        formEl.scrollIntoView({ behavior: 'smooth' });
-      }
+    const formEl = document.getElementById('booking-enquiry-form');
+    if (formEl) {
+      formEl.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -106,10 +103,10 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
             onNewEnquiry={handleMakeAnotherEnquiry}
           />
         ) : (
-          /* Section 2, 3, & 4: Interactive Calendar & Booking Details */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Desktop Left 65%: Availability Calendar */}
-            <div className="lg:col-span-7 space-y-4">
+          /* Section 2, 3, & 4: Full Screen Calendar & Form Underneath */
+          <div className="space-y-12">
+            {/* Full Screen / Full Width Calendar */}
+            <div className="w-full">
               <AvailabilityCalendar
                 currentDate={currentDate}
                 selectedDate={selectedDate}
@@ -121,8 +118,8 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
               />
             </div>
 
-            {/* Desktop Right 35%: Selected Date Panel & Enquiry Form */}
-            <div id="booking-enquiry-form" className="lg:col-span-5">
+            {/* Under: Fill the Form */}
+            <div id="booking-enquiry-form" className="w-full scroll-mt-24">
               <BookingEnquiryForm
                 selectedDate={selectedDate}
                 dayData={currentSelectedDayData}
