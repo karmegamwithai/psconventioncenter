@@ -49,108 +49,93 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isSolid
-            ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-[#e2d8c3]/60 py-3 text-[#202823]'
-            : 'bg-gradient-to-b from-black/85 via-black/45 to-transparent py-4 text-white'
+            ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-[#e2d8c3]/60 py-2.5 sm:py-3 text-[#202823]'
+            : 'bg-gradient-to-b from-black/85 via-black/45 to-transparent py-3 sm:py-4 text-white'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo & Name */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between">
+          {/* Brand Logo */}
           <button
             onClick={() => {
               setMenuOpen(false);
               onNavigate('/');
             }}
-            className="flex items-center gap-3.5 group text-left focus:outline-none cursor-pointer"
+            className="flex items-center group text-left focus:outline-none cursor-pointer shrink-0"
+            aria-label="PS Convention Center Home"
           >
-            <div className="bg-white p-1.5 shadow-sm border border-[#C5A45D]/50 flex items-center justify-center">
+            <div className="bg-white p-1 sm:p-1.5 shadow-sm border border-[#C5A45D]/50 flex items-center justify-center transition-transform group-hover:scale-105">
               <img
                 src="/assets/aistudio/image_d32710d1.png"
-                alt="Padmasena PS Convention Center Logo"
-                className="h-9 sm:h-11 w-auto object-contain"
+                alt="PS Convention Center Logo"
+                className="h-8 sm:h-11 w-auto object-contain"
               />
-            </div>
-            <div className="flex flex-col">
-              <span
-                className={`text-xs sm:text-sm font-bold tracking-[0.15em] uppercase transition-colors ${
-                  isSolid ? 'text-[#234D3C]' : 'text-white'
-                }`}
-              >
-                PS Convention Center
-              </span>
-              <span
-                className={`text-[9px] tracking-[0.25em] uppercase font-medium ${
-                  isSolid ? 'text-gray-500' : 'text-[#C5A45D]'
-                }`}
-              >
-                Palur Village &bull; Tamil Nadu
-              </span>
             </div>
           </button>
 
           {/* Right Header Navigation & Actions */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {/* Prominent Gold-Accented BOOK YOUR EVENT Button */}
             <button
               onClick={() => {
                 setMenuOpen(false);
                 onNavigate('/booking');
               }}
-              className="px-5 sm:px-6 py-2.5 bg-[#C5A45D] text-[#0e241b] text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#d8bc7a] transition-all shadow-md flex items-center gap-2 cursor-pointer"
+              className="px-3 sm:px-6 py-2 sm:py-2.5 bg-[#C5A45D] text-[#0e241b] text-[11px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] font-semibold hover:bg-[#d8bc7a] transition-all shadow-md flex items-center gap-1.5 sm:gap-2 cursor-pointer"
             >
-              <Calendar className="w-3.5 h-3.5 text-[#0e241b]" />
+              <Calendar className="w-3.5 h-3.5 text-[#0e241b] shrink-0" />
               <span className="hidden sm:inline">BOOK YOUR EVENT</span>
-              <span className="sm:hidden">BOOK</span>
+              <span className="sm:hidden font-bold">BOOK</span>
             </button>
 
             {/* Menu Bar Button (Click to show menus) */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`px-3.5 py-2 border flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 border flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 isSolid
                   ? 'border-gray-300 bg-white text-[#234D3C] hover:border-[#234D3C] hover:bg-[#FAF8F2]'
                   : 'border-white/40 bg-black/40 text-white hover:border-[#C5A45D] hover:text-[#C5A45D]'
               }`}
               aria-label="Toggle menu navigation"
             >
-              {menuOpen ? <X className="w-4 h-4 text-[#C5A45D]" /> : <Menu className="w-4 h-4 text-[#C5A45D]" />}
+              {menuOpen ? <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D]" /> : <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D]" />}
               <span>{menuOpen ? 'CLOSE' : 'MENU'}</span>
             </button>
           </div>
         </div>
 
-        {/* Expandable Menu Panel (Shows when Menu Bar is clicked) */}
+        {/* Expandable Menu Panel (Responsive scrollable drawer) */}
         {menuOpen && (
-          <div className="fixed inset-x-0 top-[64px] bg-white border-b-2 border-[#C5A45D] shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="fixed inset-x-0 top-[52px] sm:top-[64px] bg-white border-b-2 border-[#C5A45D] shadow-2xl z-50 max-h-[calc(100dvh-52px)] sm:max-h-[calc(100dvh-64px)] overflow-y-auto overscroll-contain animate-in slide-in-from-top-2 duration-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 pb-20 sm:pb-8">
               {/* Top metadata info */}
-              <div className="pb-4 mb-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+              <div className="pb-3 mb-4 sm:pb-4 sm:mb-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] sm:text-xs text-gray-500 gap-1.5 sm:gap-2">
                 <span className="flex items-center gap-1.5 font-medium text-[#234D3C]">
-                  <MapPin className="w-4 h-4 text-[#C5A45D]" /> Palur Village, Tamil Nadu (12 km from Chengalpattu)
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D] shrink-0" /> Palur Village, Tamil Nadu (12 km from Chengalpattu)
                 </span>
                 <span className="flex items-center gap-1.5 font-medium text-[#234D3C]">
-                  <Phone className="w-4 h-4 text-[#C5A45D]" /> Direct Line: +91 94432 18920
+                  <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D] shrink-0" /> Direct Line: +91 94432 18920
                 </span>
               </div>
 
               {/* Menu Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 {navLinks.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => handleLinkClick(item)}
-                    className="p-4 bg-[#FAF8F2] hover:bg-[#E8F2E8] border border-gray-200 hover:border-[#C5A45D] text-left flex items-center justify-between group transition-all cursor-pointer"
+                    className="p-3.5 sm:p-4 bg-[#FAF8F2] hover:bg-[#E8F2E8] border border-gray-200 hover:border-[#C5A45D] text-left flex items-center justify-between group transition-all cursor-pointer"
                   >
-                    <span className="text-xs uppercase font-bold tracking-wider text-[#234D3C]">
+                    <span className="text-[11px] sm:text-xs uppercase font-bold tracking-wider text-[#234D3C]">
                       {item.label}
                     </span>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#C5A45D] group-hover:translate-x-1 transition-all" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#C5A45D] group-hover:translate-x-1 transition-all shrink-0" />
                   </button>
                 ))}
               </div>
 
               {/* Quick Action inside Menu */}
-              <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-xs text-gray-500 italic">
+              <div className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+                <div className="text-[11px] sm:text-xs text-gray-500 italic text-center sm:text-left">
                   The Grand Stage for Prestigious Celebrations.
                 </div>
                 <button
@@ -158,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
                     setMenuOpen(false);
                     onNavigate('/booking');
                   }}
-                  className="w-full sm:w-auto px-6 py-3 bg-[#234D3C] text-white text-xs uppercase font-semibold tracking-[0.2em] hover:bg-[#163b2c] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                  className="w-full sm:w-auto px-5 sm:px-6 py-3 bg-[#234D3C] text-white text-xs uppercase font-semibold tracking-[0.15em] sm:tracking-[0.2em] hover:bg-[#163b2c] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
                 >
                   <Calendar className="w-4 h-4 text-[#C5A45D]" />
                   <span>Check Date Availability Calendar</span>
@@ -170,14 +155,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
       </header>
 
       {/* Fixed Mobile Bottom Booking CTA */}
-      <div className="sm:hidden fixed bottom-3 inset-x-4 z-40">
+      <div className="sm:hidden fixed bottom-3 inset-x-3 z-40">
         <button
           onClick={() => onNavigate('/booking')}
-          className="w-full bg-[#1b3d30] text-white py-3.5 px-5 shadow-2xl flex items-center justify-between border border-[#C5A45D]/50 backdrop-blur-md font-semibold text-xs uppercase tracking-wider cursor-pointer"
+          className="w-full bg-[#1b3d30] text-white py-3 px-4 shadow-2xl flex items-center justify-between border border-[#C5A45D]/60 backdrop-blur-md font-semibold text-xs uppercase tracking-wider cursor-pointer"
         >
           <span className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#C5A45D]" />
-            <span>Check Availability</span>
+            <span className="text-[11px]">Check Availability</span>
           </span>
           <span className="bg-[#C5A45D] text-[#0e241b] px-3 py-1 text-[10px] font-bold tracking-wider">
             BOOK NOW

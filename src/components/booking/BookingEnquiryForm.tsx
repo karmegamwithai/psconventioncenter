@@ -139,43 +139,43 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
   ];
 
   return (
-    <div className="w-full bg-[#FAF8F2] border border-[#e2d8c3] shadow-xl p-6 sm:p-10 space-y-6">
+    <div className="w-full bg-[#FAF8F2] border border-[#e2d8c3] shadow-xl p-4 sm:p-8 lg:p-10 space-y-5 sm:space-y-6">
       {/* Header */}
-      <div className="border-b border-[#e2d8c3] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-[#e2d8c3] pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
         <div>
-          <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
             RESERVATION ENQUIRY
           </span>
-          <h3 className="text-2xl font-bold text-[#234D3C] tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-bold text-[#234D3C] tracking-tight">
             Event Booking Form
           </h3>
         </div>
       </div>
 
       {/* Selected Date Banner */}
-      <div className="p-4 bg-white border border-gray-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 bg-[#234D3C] text-[#C5A45D] flex items-center justify-center shrink-0">
-            <Calendar className="w-5 h-5" />
+      <div className="p-3 sm:p-4 bg-white border border-gray-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#234D3C] text-[#C5A45D] flex items-center justify-center shrink-0">
+            <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-gray-500 block">
+            <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-gray-500 block">
               Selected Date
             </span>
-            <span className="text-base font-bold text-[#234D3C]">
+            <span className="text-xs sm:text-base font-bold text-[#234D3C]">
               {formattedSelectedDate}
             </span>
           </div>
         </div>
 
         {selectedDate ? (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 bg-[#E8F2E8] text-[#234D3C] border border-[#234D3C]/20 self-start sm:self-auto">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 bg-[#E8F2E8] text-[#234D3C] border border-[#234D3C]/20 self-start sm:self-auto">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             Selected
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 self-start sm:self-auto">
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+          <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 self-start sm:self-auto">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
             Select Date from Calendar Above
           </span>
         )}
@@ -189,7 +189,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
         <label className="block text-xs uppercase font-bold tracking-wider text-[#234D3C]">
           Session Slot *
         </label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
           {sessionOptions.map((opt) => {
             const isChosen = session === opt.id;
             return (
@@ -197,13 +197,13 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
                 key={opt.id}
                 type="button"
                 onClick={() => setSession(opt.id)}
-                className={`py-3 px-2 text-center transition-all cursor-pointer border ${
+                className={`py-2.5 sm:py-3 px-1 sm:px-2 text-center transition-all cursor-pointer border ${
                   isChosen
                     ? 'bg-[#234D3C] text-white border-[#C5A45D] shadow-md ring-1 ring-[#C5A45D]'
                     : 'bg-white text-gray-700 border-gray-300 hover:border-[#234D3C]/40'
                 }`}
               >
-                <span className={`text-xs font-bold uppercase tracking-wider block ${isChosen ? 'text-[#C5A45D]' : 'text-[#234D3C]'}`}>
+                <span className={`text-[11px] sm:text-xs font-bold uppercase tracking-wider block ${isChosen ? 'text-[#C5A45D]' : 'text-[#234D3C]'}`}>
                   {opt.label}
                 </span>
               </button>

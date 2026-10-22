@@ -44,14 +44,14 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-10 bg-white rounded-sm border border-[#C5A45D]/40 shadow-xl overflow-hidden">
+    <div className="max-w-2xl mx-auto my-6 sm:my-10 bg-white rounded-sm border border-[#C5A45D]/40 shadow-xl overflow-hidden">
       {/* Top Banner */}
-      <div className="bg-[#234D3C] text-white p-8 text-center">
-        <div className="w-14 h-14 rounded-full bg-[#E8F2E8] text-[#234D3C] flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-9 h-9 text-emerald-700" />
+      <div className="bg-[#234D3C] text-white p-5 sm:p-8 text-center">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#E8F2E8] text-[#234D3C] flex items-center justify-center mx-auto mb-3 sm:mb-4">
+          <CheckCircle2 className="w-7 h-7 sm:w-9 sm:h-9 text-emerald-700" />
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+        <h2 className="text-xl sm:text-3xl font-bold text-white tracking-tight">
           Your Enquiry Has Been Received!
         </h2>
 
@@ -60,16 +60,16 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
         </p>
 
         {/* Reference Code */}
-        <div className="mt-5 inline-block bg-black/30 border border-[#C5A45D] px-5 py-2 rounded-sm">
+        <div className="mt-4 sm:mt-5 inline-block bg-black/30 border border-[#C5A45D] px-4 sm:px-5 py-2 rounded-sm">
           <span className="text-[10px] uppercase tracking-wider text-gray-300 block">Unique Enquiry Reference</span>
-          <span className="text-xl font-bold text-[#C5A45D] tracking-widest">
+          <span className="text-lg sm:text-xl font-bold text-[#C5A45D] tracking-widest">
             {data.reference}
           </span>
         </div>
       </div>
 
       {/* Confirmation Summary Body */}
-      <div className="p-6 sm:p-8 space-y-5 bg-[#FAF8F2]">
+      <div className="p-4 sm:p-8 space-y-4 sm:space-y-5 bg-[#FAF8F2]">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded border border-gray-200">
             <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">

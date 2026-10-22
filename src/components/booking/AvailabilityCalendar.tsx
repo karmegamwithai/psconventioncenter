@@ -118,59 +118,70 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     return 'Available';
   };
 
+  const getShortBadgeText = (item: typeof calendarDays[0]) => {
+    if (!item.dateStr || item.dayNumber === null) return null;
+    if (selectedDate === item.dateStr) return 'Sel';
+    if (item.isPast) return 'Past';
+    if (item.data?.isBlocked) return 'Block';
+    if (item.data?.status === 'CONFIRMED') return 'Booked';
+    if (item.data?.status === 'PARTIALLY_BOOKED') return '1 Slot';
+    if (item.data?.status === 'PENDING_ENQUIRY') return 'Req';
+    return 'Avail';
+  };
+
   return (
-    <div className="w-full bg-white border border-gray-200 shadow-xl p-6 sm:p-10 flex flex-col justify-between">
+    <div className="w-full bg-white border border-gray-200 shadow-xl p-3.5 sm:p-6 lg:p-10 flex flex-col justify-between">
       {/* Month Navigation Header */}
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-gray-100 gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 bg-[#FAF8F2] text-[#234D3C] flex items-center justify-center border border-[#C5A45D]/40">
-              <CalendarIcon className="w-5 h-5 text-[#234D3C]" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-gray-100 gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3.5">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-[#FAF8F2] text-[#234D3C] flex items-center justify-center border border-[#C5A45D]/40 shrink-0">
+              <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#234D3C]" />
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#234D3C] tracking-tight">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#234D3C] tracking-tight">
                 {monthNames[month]} {year}
               </h2>
-              <span className="text-[11px] text-gray-500 font-medium tracking-wider uppercase">
+              <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium tracking-wider uppercase block">
                 Venue Calendar (IST)
               </span>
             </div>
           </div>
 
           {/* Controls: Prev, Today, Next */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={onToday}
-              className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#234D3C] bg-[#FAF8F2] border border-gray-300 hover:bg-[#E8F2E8] transition-colors cursor-pointer"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#234D3C] bg-[#FAF8F2] border border-gray-300 hover:bg-[#E8F2E8] transition-colors cursor-pointer"
             >
               Today
             </button>
             <div className="flex items-center border border-gray-300 bg-white shadow-sm">
               <button
                 onClick={onPrevMonth}
-                className="p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
                 aria-label="Previous month"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <div className="w-px h-5 bg-gray-200" />
+              <div className="w-px h-4 sm:h-5 bg-gray-200" />
               <button
                 onClick={onNextMonth}
-                className="p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
                 aria-label="Next month"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Days of Week Header */}
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 my-5 text-center">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 my-3 sm:my-5 text-center">
           {weekDayLabels.map((day, idx) => (
             <div
               key={day}
-              className={`text-xs font-bold uppercase tracking-wider py-1 ${
+              className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider py-1 ${
                 idx === 0 || idx === 6 ? 'text-[#C5A45D]' : 'text-[#234D3C]'
               }`}
             >
@@ -180,9 +191,10 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         </div>
 
         {/* Calendar Matrix - Full Screen Responsive */}
-        <div className="grid grid-cols-7 gap-2 sm:gap-3">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 md:gap-3">
           {calendarDays.map((cell, idx) => {
             const badge = getStatusBadgeText(cell);
+            const shortBadge = getShortBadgeText(cell);
             const isSelected = selectedDate === cell.dateStr;
 
             return (
@@ -191,34 +203,35 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 type="button"
                 disabled={!cell.dateStr || cell.isPast || cell.data?.isBlocked}
                 onClick={() => cell.dateStr && onSelectDate(cell.dateStr)}
-                className={`relative min-h-[70px] sm:min-h-[105px] p-2.5 sm:p-3.5 flex flex-col justify-between transition-all duration-200 text-left focus:outline-none ${getStatusColorClass(
+                className={`relative min-h-[48px] xs:min-h-[54px] sm:min-h-[85px] md:min-h-[105px] p-1 xs:p-1.5 sm:p-2.5 md:p-3.5 flex flex-col justify-between transition-all duration-200 text-left focus:outline-none ${getStatusColorClass(
                   cell
                 )}`}
               >
                 {cell.dayNumber && (
                   <>
                     <div className="flex items-center justify-between w-full">
-                      <span className={`text-xs sm:text-base font-bold ${isSelected ? 'text-[#C5A45D]' : ''}`}>
+                      <span className={`text-[11px] xs:text-xs sm:text-base font-bold ${isSelected ? 'text-[#C5A45D]' : ''}`}>
                         {cell.dayNumber}
                       </span>
                       {cell.isToday && (
                         <span
-                          className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#C5A45D]' : 'bg-[#234D3C]'}`}
+                          className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${isSelected ? 'bg-[#C5A45D]' : 'bg-[#234D3C]'}`}
                           title="Today"
                         />
                       )}
                     </div>
 
                     {/* Status badge in cell */}
-                    <div className="mt-auto pt-1">
+                    <div className="mt-auto pt-0.5 sm:pt-1 w-full">
                       <span
-                        className={`inline-block text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 ${
+                        className={`block text-center sm:inline-block text-[8px] sm:text-[11px] font-semibold uppercase tracking-tight sm:tracking-wider px-1 sm:px-1.5 py-0.5 truncate ${
                           isSelected
                             ? 'bg-[#C5A45D] text-[#0e241b]'
                             : 'bg-black/5 text-current'
                         }`}
                       >
-                        {badge}
+                        <span className="sm:hidden">{shortBadge}</span>
+                        <span className="hidden sm:inline">{badge}</span>
                       </span>
                     </div>
                   </>
@@ -230,36 +243,36 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
       </div>
 
       {/* Calendar Legend below Calendar */}
-      <div className="mt-8 pt-6 border-t border-gray-100">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs uppercase font-bold tracking-wider text-[#234D3C]">
+      <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+          <span className="text-[11px] sm:text-xs uppercase font-bold tracking-wider text-[#234D3C]">
             Legend
           </span>
-          <span className="text-[11px] text-gray-500">
+          <span className="text-[10px] sm:text-[11px] text-gray-500">
             Click any available date to proceed with enquiry
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#EBF5ED] border border-emerald-300 shrink-0" />
-            <span className="text-[#202823] font-medium text-[11px]">Available</span>
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 text-xs">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#EBF5ED] border border-emerald-300 shrink-0" />
+            <span className="text-[#202823] font-medium text-[10px] sm:text-[11px]">Available</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#FBF5E6] border border-amber-300 shrink-0" />
-            <span className="text-[#202823] font-medium text-[11px]">Pending Enquiry</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#FBF5E6] border border-amber-300 shrink-0" />
+            <span className="text-[#202823] font-medium text-[10px] sm:text-[11px]">Pending Enquiry</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#FBEBEB] border border-red-300 shrink-0" />
-            <span className="text-[#202823] font-medium text-[11px]">Booked</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#FBEBEB] border border-red-300 shrink-0" />
+            <span className="text-[#202823] font-medium text-[10px] sm:text-[11px]">Booked</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#F3F4F6] border border-gray-300 shrink-0" />
-            <span className="text-[#202823] font-medium text-[11px]">Blocked / Past</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#F3F4F6] border border-gray-300 shrink-0" />
+            <span className="text-[#202823] font-medium text-[10px] sm:text-[11px]">Blocked / Past</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#1b3d30] border-2 border-[#C5A45D] shrink-0" />
-            <span className="text-[#202823] font-bold text-[11px]">Selected Date</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 col-span-2 xs:col-span-1">
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#1b3d30] border-2 border-[#C5A45D] shrink-0" />
+            <span className="text-[#202823] font-bold text-[10px] sm:text-[11px]">Selected Date</span>
           </div>
         </div>
       </div>

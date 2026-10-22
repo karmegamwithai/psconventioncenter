@@ -34,20 +34,20 @@ export const VenueHighlights: React.FC = () => {
         </div>
 
         {/* Statistic Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6 mb-8 sm:mb-12">
           {VENUE_INFO.stats.map((stat, idx) => (
             <div
               key={idx}
-              className="bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300 border-t-2 border-[#C5A45D] text-center flex flex-col items-center justify-center group"
+              className="bg-white p-3.5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 border-t-2 border-[#C5A45D] text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-10 h-10 bg-[#FAF8F2] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#FAF8F2] flex items-center justify-center mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
                 {statIcons[idx]}
               </div>
-              <div className="space-y-1">
-                <span className="block text-3xl sm:text-4xl font-bold text-[#234D3C] tracking-tight">
+              <div className="space-y-0.5 sm:space-y-1">
+                <span className="block text-2xl sm:text-4xl font-bold text-[#234D3C] tracking-tight">
                   {stat.value}
                 </span>
-                <span className="block text-[11px] font-semibold text-[#202823] tracking-wider uppercase">
+                <span className="block text-[10px] sm:text-[11px] font-semibold text-[#202823] tracking-wider uppercase">
                   {stat.label}
                 </span>
               </div>
@@ -56,11 +56,11 @@ export const VenueHighlights: React.FC = () => {
         </div>
 
         {/* Premium Feature Strip */}
-        <div className="bg-[#234D3C] text-white shadow-2xl p-6 lg:p-8 border border-[#C5A45D]/30">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-[#234D3C] text-white shadow-2xl p-4 sm:p-6 lg:p-8 border border-[#C5A45D]/30">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {VENUE_INFO.featureStrip.map((feature, i) => (
-              <div key={i} className="flex items-center gap-3.5">
-                <div className="p-3 bg-white/10 shrink-0 border border-[#C5A45D]/30">
+              <div key={i} className="flex items-center gap-3 sm:gap-3.5">
+                <div className="p-2.5 sm:p-3 bg-white/10 shrink-0 border border-[#C5A45D]/30">
                   {featureIcons[i]}
                 </div>
                 <h3 className="text-xs sm:text-sm font-semibold text-white tracking-wider uppercase">

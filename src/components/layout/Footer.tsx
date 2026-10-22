@@ -8,22 +8,18 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
-    <footer className="bg-[#0f251c] text-white pt-20 pb-12 border-t-2 border-[#C5A45D]/40">
+    <footer className="bg-[#0f251c] text-white pt-14 sm:pt-20 pb-20 sm:pb-12 border-t-2 border-[#C5A45D]/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 pb-14 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 pb-10 sm:pb-14 border-b border-white/10">
           {/* Col 1: Brand & Identity */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3.5">
-              <div className="bg-white p-1.5 shadow-sm border border-[#C5A45D]/40">
+            <div className="flex items-center">
+              <div className="bg-white p-1.5 sm:p-2 shadow-sm border border-[#C5A45D]/40 shrink-0">
                 <img
                   src="/assets/aistudio/image_d32710d1.png"
-                  alt="Padmasena PS Convention Center Logo"
-                  className="h-10 w-auto object-contain"
+                  alt="PS Convention Center Logo"
+                  className="h-9 sm:h-11 w-auto object-contain"
                 />
-              </div>
-              <div>
-                <span className="block text-sm font-bold tracking-[0.15em] text-white uppercase">PS Convention Center</span>
-                <span className="text-[10px] tracking-[0.25em] uppercase text-[#C5A45D]">Palur Village &bull; Tamil Nadu</span>
               </div>
             </div>
             <p className="text-xs text-gray-300 leading-relaxed font-light">

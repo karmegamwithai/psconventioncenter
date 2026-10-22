@@ -94,7 +94,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
       <BookingHero onGoHome={onGoHome} />
 
       {/* Main Interactive Booking Arena */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-16 pb-24 sm:pb-16">
         {submissionResult ? (
           /* Section 5: Booking Submission Confirmation */
           <BookingConfirmation
@@ -104,7 +104,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
           />
         ) : (
           /* Section 2, 3, & 4: Full Screen Calendar & Form Underneath */
-          <div className="space-y-12">
+          <div className="space-y-8 sm:space-y-12">
             {/* Full Screen / Full Width Calendar */}
             <div className="w-full">
               <AvailabilityCalendar

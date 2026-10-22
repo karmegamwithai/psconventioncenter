@@ -23,11 +23,11 @@ export const LocationContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-24 sm:py-32 bg-white relative">
+    <section id="contact" className="py-16 sm:py-24 lg:py-32 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-2">
-          <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16 space-y-2">
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
             ACCESSIBILITY & REACH
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#234D3C] tracking-tight">
@@ -37,22 +37,22 @@ export const LocationContactSection: React.FC = () => {
         </div>
 
         {/* Content Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column: Location Details & Landmarks */}
-          <div className="lg:col-span-7 space-y-8">
-            <div className="bg-[#FAF8F2] p-8 border border-[#e2d8c3]/80 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#234D3C] text-[#C5A45D] flex items-center justify-center shrink-0">
-                  <MapPin className="w-6 h-6" />
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+            <div className="bg-[#FAF8F2] p-4 sm:p-8 border border-[#e2d8c3]/80 space-y-5 sm:space-y-6">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#234D3C] text-[#C5A45D] flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#234D3C]">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#234D3C]">
                     PS Convention Center
                   </h3>
-                  <p className="text-sm text-gray-700 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-700 mt-1">
                     Palur Village, Chengalpattu District, Tamil Nadu &ndash; 603101
                   </p>
-                  <p className="text-xs font-semibold text-[#C5A45D] mt-1">
+                  <p className="text-[11px] sm:text-xs font-semibold text-[#C5A45D] mt-1">
                     12 km from Chengalpattu &bull; 10 km from Walajabad
                   </p>
                 </div>
@@ -60,20 +60,20 @@ export const LocationContactSection: React.FC = () => {
 
               {/* Landmarks Grid */}
               <div className="pt-2">
-                <h4 className="text-xs uppercase font-bold tracking-wider text-[#234D3C] mb-3">
+                <h4 className="text-[11px] sm:text-xs uppercase font-bold tracking-wider text-[#234D3C] mb-2.5 sm:mb-3">
                   Nearby Landmarks & Transit Points
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                   {VENUE_INFO.location.landmarks.map((landmark, idx) => (
                     <div
                       key={idx}
-                      className="bg-white p-3 border border-gray-200/80 flex items-center justify-between text-xs"
+                      className="bg-white p-2.5 sm:p-3 border border-gray-200/80 flex items-center justify-between text-xs"
                     >
                       <div className="flex items-center gap-2">
-                        <Navigation className="w-3.5 h-3.5 text-[#C5A45D]" />
-                        <span className="font-medium text-[#202823]">{landmark.name}</span>
+                        <Navigation className="w-3.5 h-3.5 text-[#C5A45D] shrink-0" />
+                        <span className="font-medium text-[#202823] text-[11px] sm:text-xs">{landmark.name}</span>
                       </div>
-                      <span className="text-[11px] font-semibold text-gray-500">
+                      <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500">
                         {landmark.distance}
                       </span>
                     </div>
@@ -83,7 +83,7 @@ export const LocationContactSection: React.FC = () => {
             </div>
 
             {/* Visual Interactive Map Placeholder */}
-            <div className="relative overflow-hidden border border-gray-200 bg-gray-100 shadow-sm aspect-[16/9] flex items-center justify-center text-center p-6 group">
+            <div className="relative overflow-hidden border border-gray-200 bg-gray-100 shadow-sm aspect-[16/10] sm:aspect-[16/9] flex items-center justify-center text-center group">
               <iframe
                 title="PS Convention Center Location Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.484920251833!2d79.9142106!3d12.6841285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f9a2db5976b9%3A0xb308a0df5a5e35fa!2sPalur%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
@@ -98,7 +98,7 @@ export const LocationContactSection: React.FC = () => {
           </div>
 
           {/* Right Column: Compact Contact Form */}
-          <div className="lg:col-span-5 bg-[#FAF8F2] p-8 sm:p-10 border border-[#e2d8c3]/80 shadow-lg">
+          <div className="lg:col-span-5 bg-[#FAF8F2] p-5 sm:p-8 lg:p-10 border border-[#e2d8c3]/80 shadow-lg">
             <h3 className="text-xl font-bold text-[#234D3C] mb-1">
               General Enquiry
             </h3>

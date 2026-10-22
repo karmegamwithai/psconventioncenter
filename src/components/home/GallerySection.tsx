@@ -39,12 +39,12 @@ export const GallerySection: React.FC = () => {
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-8 sm:mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`px-5 py-2.5 text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+              className={`px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
                 activeFilter === cat
                   ? 'bg-[#234D3C] text-white shadow-md'
                   : 'bg-white text-gray-700 hover:bg-[#E8F2E8] hover:text-[#234D3C] border border-gray-200'
@@ -89,44 +89,44 @@ export const GallerySection: React.FC = () => {
 
       {/* Fullscreen Lightbox Modal */}
       {selectedImageIndex !== null && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
           <button
             onClick={() => setSelectedImageIndex(null)}
-            className="absolute top-6 right-6 text-white hover:text-[#C5A45D] p-2 bg-white/10 hover:bg-white/20 transition-colors z-50 cursor-pointer"
+            className="absolute top-3 right-3 sm:top-6 sm:right-6 text-white hover:text-[#C5A45D] p-2 bg-white/10 hover:bg-white/20 transition-colors z-50 cursor-pointer"
             aria-label="Close Lightbox"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* Navigation Controls */}
           <button
             onClick={handlePrev}
-            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 text-white hover:text-[#C5A45D] p-3 bg-black/50 hover:bg-black/80 transition-colors z-50 cursor-pointer"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 text-white hover:text-[#C5A45D] p-2 sm:p-3 bg-black/60 hover:bg-black/80 transition-colors z-50 cursor-pointer"
             aria-label="Previous image"
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
           <button
             onClick={handleNext}
-            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 text-white hover:text-[#C5A45D] p-3 bg-black/50 hover:bg-black/80 transition-colors z-50 cursor-pointer"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 text-white hover:text-[#C5A45D] p-2 sm:p-3 bg-black/60 hover:bg-black/80 transition-colors z-50 cursor-pointer"
             aria-label="Next image"
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
           {/* Current Image & Caption */}
-          <div className="max-w-4xl max-h-[85vh] flex flex-col items-center">
+          <div className="max-w-4xl max-h-[85vh] flex flex-col items-center px-4">
             <img
               src={GALLERY_ITEMS[selectedImageIndex].image}
               alt={GALLERY_ITEMS[selectedImageIndex].title}
-              className="max-h-[70vh] w-auto max-w-full object-contain shadow-2xl border border-white/10"
+              className="max-h-[60vh] sm:max-h-[70vh] w-auto max-w-full object-contain shadow-2xl border border-white/10"
             />
-            <div className="text-center mt-4 text-white max-w-xl space-y-1">
-              <span className="text-[11px] uppercase tracking-widest text-[#C5A45D] font-semibold">
+            <div className="text-center mt-3 sm:mt-4 text-white max-w-xl space-y-1">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-widest text-[#C5A45D] font-semibold">
                 {GALLERY_ITEMS[selectedImageIndex].category}
               </span>
-              <h3 className="text-lg sm:text-xl font-bold">
+              <h3 className="text-base sm:text-xl font-bold">
                 {GALLERY_ITEMS[selectedImageIndex].title}
               </h3>
               <p className="text-xs sm:text-sm text-gray-300">
