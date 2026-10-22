@@ -1,75 +1,70 @@
 import React from 'react';
-import { Armchair, Users, Utensils, BedDouble, Car, Wind, Tv, Zap, Shield } from 'lucide-react';
-import { VENUE_INFO } from '../../data/venueData';
+import { Users, Utensils, Wind, Car, Zap, Shield, Sparkles, Building2 } from 'lucide-react';
 
 export const VenueHighlights: React.FC = () => {
-  const statIcons = [
-    <Armchair key="0" className="w-5 h-5 text-[#C5A45D]" />,
-    <Users key="1" className="w-5 h-5 text-[#C5A45D]" />,
-    <Utensils key="2" className="w-5 h-5 text-[#C5A45D]" />,
-    <Users key="3" className="w-5 h-5 text-[#C5A45D]" />,
-    <BedDouble key="4" className="w-5 h-5 text-[#C5A45D]" />,
-    <Car key="5" className="w-5 h-5 text-[#C5A45D]" />,
+  const highlights = [
+    {
+      icon: <Users className="w-5 h-5 text-[#C5A45D]" />,
+      value: '1,000+',
+      label: 'Main Hall Capacity',
+    },
+    {
+      icon: <Utensils className="w-5 h-5 text-[#C5A45D]" />,
+      value: '500+',
+      label: 'Dining Capacity',
+    },
+    {
+      icon: <Wind className="w-5 h-5 text-[#C5A45D]" />,
+      value: '100%',
+      label: 'Centralized AC',
+    },
+    {
+      icon: <Car className="w-5 h-5 text-[#C5A45D]" />,
+      value: '150+',
+      label: 'Valet Parking',
+    },
   ];
 
-  const featureIcons = [
-    <Wind key="0" className="w-5 h-5 text-[#C5A45D]" />,
-    <Tv key="1" className="w-5 h-5 text-[#C5A45D]" />,
-    <Zap key="2" className="w-5 h-5 text-[#C5A45D]" />,
-    <Shield key="3" className="w-5 h-5 text-[#C5A45D]" />,
+  const features = [
+    { icon: <Zap className="w-4 h-4 text-[#C5A45D]" />, text: '100% DG Power Backup' },
+    { icon: <Building2 className="w-4 h-4 text-[#C5A45D]" />, text: 'VIP Elevator Access' },
+    { icon: <Shield className="w-4 h-4 text-[#C5A45D]" />, text: '24/7 Monitored Security' },
+    { icon: <Sparkles className="w-4 h-4 text-[#C5A45D]" />, text: 'Auspicious Ganesha Temple' },
   ];
 
   return (
-    <section className="py-24 sm:py-32 bg-[#E8F2E8] border-y border-[#cfdfcf]/70 relative">
+    <section className="bg-[#234D3C] text-white py-12 sm:py-16 border-y border-[#C5A45D]/30 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
-          <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
-            CAPACITY & SPECIFICATIONS
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#234D3C] tracking-tight">
-            Exceptional Spaces. <br />
-            <span className="italic font-semibold">Memorable Experiences.</span>
-          </h2>
-        </div>
-
-        {/* Statistic Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6 mb-8 sm:mb-12">
-          {VENUE_INFO.stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-3.5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 border-t-2 border-[#C5A45D] text-center flex flex-col items-center justify-center group"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#FAF8F2] flex items-center justify-center mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
-                {statIcons[idx]}
+        
+        {/* Simple & Premium 4-Metric Grid (Low Context) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pb-10 border-b border-white/10">
+          {highlights.map((item, idx) => (
+            <div key={idx} className="flex items-center gap-3.5 sm:gap-4">
+              <div className="w-12 h-12 bg-black/25 border border-[#C5A45D]/40 flex items-center justify-center shrink-0">
+                {item.icon}
               </div>
-              <div className="space-y-0.5 sm:space-y-1">
-                <span className="block text-2xl sm:text-4xl font-bold text-[#234D3C] tracking-tight">
-                  {stat.value}
+              <div>
+                <span className="block text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                  {item.value}
                 </span>
-                <span className="block text-[10px] sm:text-[11px] font-semibold text-[#202823] tracking-wider uppercase">
-                  {stat.label}
+                <span className="block text-[10px] sm:text-xs text-gray-300 uppercase tracking-widest font-medium mt-0.5">
+                  {item.label}
                 </span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Premium Feature Strip */}
-        <div className="bg-[#234D3C] text-white shadow-2xl p-4 sm:p-6 lg:p-8 border border-[#C5A45D]/30">
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {VENUE_INFO.featureStrip.map((feature, i) => (
-              <div key={i} className="flex items-center gap-3 sm:gap-3.5">
-                <div className="p-2.5 sm:p-3 bg-white/10 shrink-0 border border-[#C5A45D]/30">
-                  {featureIcons[i]}
-                </div>
-                <h3 className="text-xs sm:text-sm font-semibold text-white tracking-wider uppercase">
-                  {feature.title}
-                </h3>
-              </div>
-            ))}
-          </div>
+        {/* Refined Feature Line */}
+        <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-xs text-gray-200">
+          {features.map((feat, i) => (
+            <div key={i} className="flex items-center gap-2.5">
+              {feat.icon}
+              <span className="font-light tracking-wide">{feat.text}</span>
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   );
