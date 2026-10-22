@@ -188,7 +188,7 @@ export const GALLERY_ITEMS = [
     id: 4,
     title: 'Exterior Architecture',
     category: 'Exterior',
-    image: 'https://images.unsplash.com/photo-1545232979-fbf68fe9b1af?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
     caption: 'Contemporary architectural entrance in Palur Village.'
   },
   {
