@@ -50,7 +50,7 @@ export const BlogsModal: React.FC<BlogsModalProps> = ({ isOpen, onClose, onCheck
               <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A45D] block">
                 PS CONVENTION CENTER JOURNAL
               </span>
-              <h3 className="text-xl font-bold font-serif">Blogs, Muhurtham Dates & Venue Insights</h3>
+              <h3 className="text-xl font-bold">Blogs, Muhurtham Dates & Venue Insights</h3>
             </div>
           </div>
           <button

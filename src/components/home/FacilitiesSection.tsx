@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { FACILITIES } from '../../data/venueData';
 
 interface FacilitiesSectionProps {
@@ -8,17 +8,19 @@ interface FacilitiesSectionProps {
 
 export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFacilityForBooking }) => {
   return (
-    <section id="facilities" className="py-20 sm:py-28 bg-white relative">
+    <section id="facilities" className="py-24 sm:py-32 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-14 space-y-2">
-          <div className="inline-flex items-center gap-2 text-[#C5A45D] text-xs uppercase tracking-widest font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>EXPLORE OUR FACILITIES</span>
+        <div className="mb-16 space-y-2">
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-px bg-[#C5A45D]" />
+            <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
+              EXPLORE OUR FACILITIES
+            </span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#234D3C] tracking-tight">
             Designed for Comfort. <br />
-            <span className="font-serif italic font-semibold">Crafted for Celebrations.</span>
+            <span className="italic font-semibold">Crafted for Celebrations.</span>
           </h2>
         </div>
 
@@ -28,7 +30,7 @@ export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFa
             <div
               key={facility.id}
               onClick={() => onSelectFacilityForBooking(facility.title)}
-              className="group bg-white rounded-sm overflow-hidden border border-gray-200/80 hover:border-[#C5A45D]/60 transition-all duration-300 hover:shadow-xl flex flex-col justify-between cursor-pointer"
+              className="group bg-white border border-gray-200/90 hover:border-[#C5A45D] transition-all duration-500 hover:shadow-2xl flex flex-col justify-between cursor-pointer"
             >
               {/* Large Photograph with Smooth Hover Zoom */}
               <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
@@ -40,15 +42,15 @@ export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFa
                 />
               </div>
 
-              {/* Content Details */}
+              {/* Content Details - Main content only */}
               <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-xl font-bold text-[#234D3C] group-hover:text-[#C5A45D] transition-colors">
+                  <h3 className="text-lg font-bold text-[#234D3C] group-hover:text-[#C5A45D] transition-colors">
                     {facility.title}
                   </h3>
                   <ArrowUpRight className="w-5 h-5 text-[#C5A45D] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform shrink-0" />
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
                   {facility.description}
                 </p>
               </div>

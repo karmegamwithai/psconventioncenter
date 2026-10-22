@@ -12,14 +12,21 @@
   --color-sage-dark: #cfdfcf;
   --color-cream: #FAF8F2;
   --color-charcoal: #202823;
-  --font-montserrat: 'Montserrat', sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-poppins: 'Poppins', sans-serif;
+  --font-sans: 'Poppins', sans-serif;
+  --font-serif: 'Poppins', sans-serif;
 }
 
 @layer base {
+  *, ::before, ::after {
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
   html {
     scroll-behavior: smooth;
-    font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  body {
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 

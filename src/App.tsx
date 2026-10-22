@@ -59,7 +59,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#202823] font-['Montserrat',sans-serif]">
+    <div className="min-h-screen flex flex-col bg-white text-[#202823] font-['Poppins',sans-serif]">
       {/* Shared Premium Sticky Header */}
       <Navbar
         currentRoute={currentRoute}

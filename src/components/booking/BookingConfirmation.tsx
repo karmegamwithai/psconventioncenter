@@ -62,7 +62,7 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
         {/* Reference Code */}
         <div className="mt-5 inline-block bg-black/30 border border-[#C5A45D] px-5 py-2 rounded-sm">
           <span className="text-[10px] uppercase tracking-wider text-gray-300 block">Unique Enquiry Reference</span>
-          <span className="text-xl font-mono font-bold text-[#C5A45D] tracking-wider">
+          <span className="text-xl font-bold text-[#C5A45D] tracking-widest">
             {data.reference}
           </span>
         </div>
