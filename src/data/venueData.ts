@@ -117,7 +117,7 @@ export const EVENTS = [
     id: 'traditional',
     title: 'Traditional Ceremonies',
     desc: 'Traditional Ceremonies & Poojas',
-    image: 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'anniversaries',
