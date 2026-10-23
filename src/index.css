@@ -12,22 +12,51 @@
   --color-sage-dark: #cfdfcf;
   --color-cream: #FAF8F2;
   --color-charcoal: #202823;
-  --font-poppins: 'Poppins', sans-serif;
-  --font-sans: 'Poppins', sans-serif;
-  --font-serif: 'Poppins', sans-serif;
+  --font-bodoni: 'Bodoni Moda', serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-sans: 'Cinzel', serif;
+  --font-serif: 'Bodoni Moda', serif;
 }
 
 @layer base {
-  *, ::before, ::after {
-    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
   html {
     scroll-behavior: smooth;
-    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Cinzel', serif;
   }
   body {
-    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.02em;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bodoni Moda', serif;
+    letter-spacing: 0.01em;
+  }
+  button, nav, select, input, textarea {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+.font-bodoni {
+  font-family: 'Bodoni Moda', serif !important;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif !important;
+}
+
+/* User-defined Logo Typography Styles */
+.logo-title {
+  font-family: "Bodoni Moda", serif !important;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: #11614F;
+}
+
+.logo-subtitle {
+  font-family: "Cinzel", serif !important;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: #444444;
 }
 
 /* Custom luxury scrollbar */
