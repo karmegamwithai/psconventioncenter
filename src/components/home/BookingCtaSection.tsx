@@ -19,14 +19,14 @@ export const BookingCtaSection: React.FC<BookingCtaSectionProps> = ({ onGoToBook
         {/* Label */}
         <div className="flex items-center justify-center gap-3">
           <span className="w-8 h-px bg-[#C5A45D]" />
-          <span className="text-[11px] sm:text-xs font-semibold tracking-[0.25em] text-[#C5A45D] uppercase font-['Cinzel',serif]">
+          <span className="text-[11px] sm:text-xs font-semibold tracking-[0.25em] text-[#C5A45D] uppercase font-['Outfit',sans-serif]">
             PLAN YOUR CELEBRATION
           </span>
           <span className="w-8 h-px bg-[#C5A45D]" />
         </div>
 
         {/* Heading */}
-        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-tight font-['Bodoni_Moda',serif]">
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-tight font-['Cormorant_Garamond',serif]">
           Your Perfect Celebration <br />
           <span className="italic font-semibold text-[#C5A45D]">
             Starts Here.
@@ -42,14 +42,14 @@ export const BookingCtaSection: React.FC<BookingCtaSectionProps> = ({ onGoToBook
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             onClick={onGoToBooking}
-            className="w-full sm:w-auto px-8 py-4 bg-[#C5A45D] text-[#0e241b] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#d8bc7a] transition-all shadow-2xl flex items-center justify-center gap-2 cursor-pointer font-['Cinzel',serif]"
+            className="w-full sm:w-auto px-8 py-4 bg-[#C5A45D] text-[#0e241b] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#d8bc7a] transition-all shadow-2xl flex items-center justify-center gap-2 cursor-pointer font-['Outfit',sans-serif]"
           >
             <Calendar className="w-4 h-4 text-[#0e241b]" />
             <span>VIEW BOOKING CALENDAR</span>
           </button>
           <button
             onClick={onSendEnquiry}
-            className="w-full sm:w-auto px-8 py-4 border border-white/60 dark:border-[#C5A45D]/60 text-white font-semibold text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-[#1b3d30] dark:hover:bg-[#C5A45D] dark:hover:text-[#0b1b14] transition-all flex items-center justify-center gap-2 cursor-pointer font-['Cinzel',serif]"
+            className="w-full sm:w-auto px-8 py-4 border border-white/60 dark:border-[#C5A45D]/60 text-white font-semibold text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-[#1b3d30] dark:hover:bg-[#C5A45D] dark:hover:text-[#0b1b14] transition-all flex items-center justify-center gap-2 cursor-pointer font-['Outfit',sans-serif]"
           >
             <Mail className="w-4 h-4 text-[#C5A45D]" />
             <span>SEND AN ENQUIRY</span>

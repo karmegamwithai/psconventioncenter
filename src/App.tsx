@@ -65,7 +65,7 @@ export default function App() {
       {/* Luxury GSAP Custom Follower Cursor */}
       <LuxuryCursor />
 
-      <div className="min-h-screen flex flex-col bg-white dark:bg-[#06140e] text-[#202823] dark:text-gray-100 font-['Cinzel',serif] transition-colors duration-300">
+      <div className="min-h-screen flex flex-col bg-white dark:bg-[#06140e] text-[#202823] dark:text-gray-100 font-['Outfit',sans-serif] transition-colors duration-300">
         {/* Shared Premium Sticky Header with Dark Mode Toggle */}
         <Navbar
           currentRoute={currentRoute}
