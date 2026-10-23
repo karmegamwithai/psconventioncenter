@@ -13,21 +13,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 pb-10 sm:pb-14 border-b border-white/10">
           {/* Col 1: Brand & Identity */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-white p-1.5 sm:p-2 shadow-sm border border-[#C5A45D]/40 shrink-0">
+            <div className="flex items-center">
+              <div className="bg-white p-1.5 sm:p-2 shadow-sm border border-[#C5A45D]/40 shrink-0 inline-block">
                 <img
                   src="/assets/aistudio/image_d32710d1.png"
                   alt="PS Convention Center Logo"
-                  className="h-9 sm:h-11 w-auto object-contain"
+                  className="h-10 sm:h-12 w-auto object-contain"
                 />
-              </div>
-              <div className="flex flex-col">
-                <span className="logo-title text-sm sm:text-base !text-white">
-                  PS Convention Center
-                </span>
-                <span className="logo-subtitle text-[8px] sm:text-[9px] !text-[#C5A45D] uppercase">
-                  Palur Village &bull; Tamil Nadu
-                </span>
               </div>
             </div>
             <p className="text-xs text-gray-300 leading-relaxed font-light">

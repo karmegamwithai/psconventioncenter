@@ -56,13 +56,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo & Name */}
+          {/* Brand Logo */}
           <button
             onClick={() => {
               setMenuOpen(false);
               onNavigate('/');
             }}
-            className="flex items-center gap-2 sm:gap-3 group text-left focus:outline-none cursor-pointer shrink-0"
+            className="flex items-center group text-left focus:outline-none cursor-pointer shrink-0"
             aria-label="PS Convention Center Home"
           >
             <div className="bg-white p-1 sm:p-1.5 shadow-sm border border-[#C5A45D]/50 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
@@ -71,22 +71,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
                 alt="PS Convention Center Logo"
                 className="h-8 sm:h-11 w-auto object-contain"
               />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span
-                className={`logo-title text-xs sm:text-base transition-colors truncate ${
-                  !isSolid ? '!text-white' : 'dark:!text-[#F7E7BE]'
-                }`}
-              >
-                PS Convention Center
-              </span>
-              <span
-                className={`logo-subtitle text-[8px] sm:text-[10px] uppercase transition-colors truncate ${
-                  !isSolid ? '!text-[#C5A45D]' : 'dark:!text-[#C5A45D]'
-                }`}
-              >
-                Palur Village &bull; Tamil Nadu
-              </span>
             </div>
           </button>
 
