@@ -9,7 +9,6 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onCheckAvailability, onExploreVenue }) => {
   const heroSectionRef = useRef<HTMLElement>(null);
-  const textContainerRef = useRef<HTMLDivElement>(null);
   const bgImageRef = useRef<HTMLImageElement>(null);
 
   // GSAP Text Entrance Animation
@@ -19,7 +18,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onCheckAvailability, o
       if (bgImageRef.current) {
         gsap.fromTo(
           bgImageRef.current,
-          { scale: 1.08, opacity: 0.8 },
+          { scale: 1.05, opacity: 0.85 },
           { scale: 1, opacity: 1, duration: 2.2, ease: 'power2.out' }
         );
       }
@@ -48,81 +47,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onCheckAvailability, o
     return () => ctx.revert();
   }, []);
 
-  // Cursor-driven perspective tilt
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!heroSectionRef.current) return;
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-
-    // Normalized offset from center (-1 to 1)
-    const normX = (clientX / innerWidth - 0.5) * 2;
-    const normY = (clientY / innerHeight - 0.5) * 2;
-
-    // Perspective tilt on text container
-    if (textContainerRef.current) {
-      gsap.to(textContainerRef.current, {
-        x: normX * 18,
-        y: normY * 14,
-        rotateY: normX * 4,
-        rotateX: -normY * 4,
-        transformPerspective: 1200,
-        duration: 0.7,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
-    }
-
-    // Subtle counter-parallax on background image for grand 3D depth
-    if (bgImageRef.current) {
-      gsap.to(bgImageRef.current, {
-        x: -normX * 12,
-        y: -normY * 10,
-        scale: 1.03,
-        duration: 1.2,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (textContainerRef.current) {
-      gsap.to(textContainerRef.current, {
-        x: 0,
-        y: 0,
-        rotateY: 0,
-        rotateX: 0,
-        duration: 0.9,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
-    }
-    if (bgImageRef.current) {
-      gsap.to(bgImageRef.current, {
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 1.2,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
-    }
-  };
-
   return (
     <section
       ref={heroSectionRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-[#07150e] text-white"
     >
-      {/* Background cinematic photography - Grandly Visible with 3D Depth */}
+      {/* Background cinematic photography - Grandly Visible */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           ref={bgImageRef}
           src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=2400&q=95"
           alt="PS Convention Center Grand Regal Ballroom"
-          className="w-full h-full object-cover object-center will-change-transform"
+          className="w-full h-full object-cover object-center"
         />
         
         {/* Soft luxury gradient: Weighted toward bottom-left for crisp text while chandeliers shine bright */}
@@ -130,11 +66,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onCheckAvailability, o
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 to-transparent" />
       </div>
 
-      {/* Main Hero Content - Bottom Left Corner Style with GSAP Perspective */}
+      {/* Main Hero Content - Bottom Left Corner Style */}
       <div
-        ref={textContainerRef}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pb-12 sm:pb-16 lg:pb-20 pt-28 w-full text-left flex flex-col items-start will-change-transform"
-        style={{ transformStyle: 'preserve-3d' }}
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pb-12 sm:pb-16 lg:pb-20 pt-28 w-full text-left flex flex-col items-start"
       >
         
         {/* Headline with Italic Styling & GSAP Text Entrance */}
