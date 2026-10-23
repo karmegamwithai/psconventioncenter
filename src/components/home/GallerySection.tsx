@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Maximize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GALLERY_ITEMS } from '../../data/venueData';
+import { CursorPerspectiveCard } from '../common/CursorPerspectiveCard';
 
 export const GallerySection: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -25,16 +26,16 @@ export const GallerySection: React.FC = () => {
   };
 
   return (
-    <section id="gallery" className="py-24 sm:py-32 bg-[#FAF8F2] relative border-t border-[#e2d8c3]/60">
+    <section id="gallery" className="py-24 sm:py-32 bg-[#FAF8F2] dark:bg-[#06140e] relative border-t border-[#e2d8c3]/60 dark:border-[#C5A45D]/20 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-2">
           <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
             A GLIMPSE OF OUR VENUE
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#234D3C] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#234D3C] dark:text-[#f3eedd] tracking-tight">
             Spaces That Inspire <br />
-            <span className="italic font-semibold">Beautiful Memories.</span>
+            <span className="italic font-semibold text-[#C5A45D]">Beautiful Memories.</span>
           </h2>
         </div>
 
@@ -46,8 +47,8 @@ export const GallerySection: React.FC = () => {
               onClick={() => setActiveFilter(cat)}
               className={`px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
                 activeFilter === cat
-                  ? 'bg-[#234D3C] text-white shadow-md'
-                  : 'bg-white text-gray-700 hover:bg-[#E8F2E8] hover:text-[#234D3C] border border-gray-200'
+                  ? 'bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] shadow-md'
+                  : 'bg-white dark:bg-[#0c2317] text-gray-700 dark:text-gray-200 hover:bg-[#E8F2E8] dark:hover:bg-[#122e20] hover:text-[#234D3C] dark:hover:text-[#C5A45D] border border-gray-200 dark:border-white/10'
               }`}
             >
               {cat}
@@ -55,34 +56,37 @@ export const GallerySection: React.FC = () => {
           ))}
         </div>
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid with Cursor Perspective */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {filteredItems.map((item, index) => (
-            <div
+            <CursorPerspectiveCard
               key={item.id}
+              maxRotation={7}
               onClick={() => setSelectedImageIndex(GALLERY_ITEMS.findIndex(g => g.id === item.id))}
-              className={`group relative overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-300 ${
+              className={`cursor-pointer ${
                 index === 0 ? 'sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto' : 'aspect-square'
               }`}
             >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                <span className="text-[10px] uppercase tracking-widest text-[#C5A45D] font-bold">
-                  {item.category}
-                </span>
-                <h4 className="text-base font-bold drop-shadow">{item.title}</h4>
-                <p className="text-xs text-gray-300 line-clamp-1 mt-0.5">{item.caption}</p>
-                <div className="mt-2 flex items-center gap-1.5 text-xs text-[#C5A45D] font-semibold">
-                  <Maximize2 className="w-3.5 h-3.5" />
-                  <span>View Fullsize</span>
+              <div className="group relative overflow-hidden h-full w-full shadow-sm hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-[#C5A45D]">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                  <span className="text-[10px] uppercase tracking-widest text-[#C5A45D] font-bold">
+                    {item.category}
+                  </span>
+                  <h4 className="text-base font-bold drop-shadow">{item.title}</h4>
+                  <p className="text-xs text-gray-300 line-clamp-1 mt-0.5">{item.caption}</p>
+                  <div className="mt-2 flex items-center gap-1.5 text-xs text-[#C5A45D] font-semibold">
+                    <Maximize2 className="w-3.5 h-3.5" />
+                    <span>View Fullsize</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </CursorPerspectiveCard>
           ))}
         </div>
       </div>
@@ -115,21 +119,21 @@ export const GallerySection: React.FC = () => {
             <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
-          {/* Current Image & Caption */}
-          <div className="max-w-4xl max-h-[85vh] flex flex-col items-center px-4">
+          {/* Active Image Stage */}
+          <div className="max-w-5xl max-h-[85vh] flex flex-col items-center justify-center relative p-2">
             <img
               src={GALLERY_ITEMS[selectedImageIndex].image}
               alt={GALLERY_ITEMS[selectedImageIndex].title}
-              className="max-h-[60vh] sm:max-h-[70vh] w-auto max-w-full object-contain shadow-2xl border border-white/10"
+              className="max-h-[70vh] sm:max-h-[75vh] w-auto max-w-full object-contain border border-[#C5A45D]/40 shadow-2xl"
             />
-            <div className="text-center mt-3 sm:mt-4 text-white max-w-xl space-y-1">
-              <span className="text-[10px] sm:text-[11px] uppercase tracking-widest text-[#C5A45D] font-semibold">
+            <div className="mt-4 text-center text-white space-y-1">
+              <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#C5A45D] font-bold">
                 {GALLERY_ITEMS[selectedImageIndex].category}
               </span>
-              <h3 className="text-base sm:text-xl font-bold">
+              <h3 className="text-lg sm:text-xl font-bold">
                 {GALLERY_ITEMS[selectedImageIndex].title}
               </h3>
-              <p className="text-xs sm:text-sm text-gray-300">
+              <p className="text-xs sm:text-sm text-gray-300 font-light max-w-lg mx-auto">
                 {GALLERY_ITEMS[selectedImageIndex].caption}
               </p>
             </div>

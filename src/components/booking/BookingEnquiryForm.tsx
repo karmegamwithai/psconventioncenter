@@ -124,24 +124,24 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
   const isSlotUnavailable = selectedDate !== null && availabilityCheck !== null && !availabilityCheck.available;
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white border border-gray-200 border-t-4 border-t-[#C5A45D] shadow-xl p-6 sm:p-10 transition-all">
+    <div className="w-full max-w-4xl mx-auto bg-white dark:bg-[#0c2317] border border-gray-200 dark:border-[#C5A45D]/30 border-t-4 border-t-[#C5A45D] shadow-xl p-6 sm:p-10 transition-colors duration-300">
       {/* Simple Form Header */}
-      <div className="mb-6 sm:mb-8 text-center sm:text-left border-b border-gray-100 pb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="mb-6 sm:mb-8 text-center sm:text-left border-b border-gray-100 dark:border-white/10 pb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <span className="text-[10px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-[#C5A45D] block">
             RESERVATION ENQUIRY
           </span>
-          <h3 className="text-2xl sm:text-3xl font-bold text-[#234D3C] tracking-tight mt-0.5">
+          <h3 className="text-2xl sm:text-3xl font-bold text-[#234D3C] dark:text-[#f3eedd] tracking-tight mt-0.5">
             Book Your Event
           </h3>
         </div>
 
         {/* Selected Date Summary Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#FAF8F2] border border-[#e2d8c3] self-center sm:self-auto">
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#e2d8c3] dark:border-[#C5A45D]/30 self-center sm:self-auto">
           <Calendar className="w-4 h-4 text-[#C5A45D] shrink-0" />
           <div className="text-left">
-            <span className="block text-[9px] uppercase tracking-wider text-gray-500 font-medium">Selected Date</span>
-            <span className="block text-xs sm:text-sm font-bold text-[#234D3C]">
+            <span className="block text-[9px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium">Selected Date</span>
+            <span className="block text-xs sm:text-sm font-bold text-[#234D3C] dark:text-gray-100">
               {formattedSelectedDate}
             </span>
           </div>
@@ -149,7 +149,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
       </div>
 
       {errors.selectedDate && (
-        <div className="mb-6 p-3 bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+        <div className="mb-6 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errors.selectedDate}</span>
         </div>
@@ -160,7 +160,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
         
         {/* Session Slot Selection */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-2">
             Session Slot *
           </label>
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -173,11 +173,11 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
                   onClick={() => setSession(opt.id)}
                   className={`py-3 px-2 text-center transition-all cursor-pointer border text-xs font-bold uppercase tracking-wider ${
                     isChosen
-                      ? 'bg-[#234D3C] text-white border-[#234D3C] shadow-sm'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                      ? 'bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] border-[#234D3C] dark:border-[#C5A45D] shadow-sm'
+                      : 'bg-white dark:bg-[#07150e] text-gray-700 dark:text-gray-200 border-gray-300 dark:border-white/20 hover:border-gray-400'
                   }`}
                 >
-                  <span className={isChosen ? 'text-[#C5A45D]' : 'text-gray-800'}>
+                  <span className={isChosen ? 'text-[#C5A45D] dark:text-[#07150e]' : 'text-gray-800 dark:text-gray-200'}>
                     {opt.label}
                   </span>
                 </button>
@@ -189,12 +189,12 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
           {selectedDate && availabilityCheck && (
             <div className="mt-2 text-xs flex items-center gap-1.5">
               {availabilityCheck.available ? (
-                <span className="text-emerald-700 font-medium flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   Slot Available for booking
                 </span>
               ) : (
-                <span className="text-red-600 font-semibold flex items-center gap-1">
+                <span className="text-red-600 dark:text-red-400 font-semibold flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {availabilityCheck.message}
                 </span>
@@ -206,7 +206,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
         {/* Contact Information (2 Columns) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Full Name *
             </label>
             <input
@@ -215,13 +215,13 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Your Full Name"
-              className="w-full px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+              className="w-full px-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
             />
-            {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
+            {errors.fullName && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.fullName}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Mobile Number *
             </label>
             <div className="relative">
@@ -232,17 +232,17 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
                 placeholder="98401 23456"
-                className="w-full pl-12 pr-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+                className="w-full pl-12 pr-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
               />
             </div>
-            {errors.mobileNumber && <p className="text-xs text-red-600 mt-1">{errors.mobileNumber}</p>}
+            {errors.mobileNumber && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.mobileNumber}</p>}
           </div>
         </div>
 
         {/* Email & Event Type (2 Columns) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Email Address *
             </label>
             <input
@@ -251,22 +251,22 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+              className="w-full px-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
             />
-            {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
+            {errors.email && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Event Type *
             </label>
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              className="w-full px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+              className="w-full px-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
             >
               {eventTypesList.map((type) => (
-                <option key={type} value={type}>
+                <option key={type} value={type} className="bg-white dark:bg-[#07150e] text-gray-800 dark:text-gray-100">
                   {type}
                 </option>
               ))}
@@ -277,7 +277,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
         {/* Guests & Catering (2 Columns) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Expected Guests *
             </label>
             <input
@@ -288,30 +288,30 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
               step={25}
               value={expectedGuests}
               onChange={(e) => setExpectedGuests(Number(e.target.value))}
-              className="w-full px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+              className="w-full px-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
             />
-            {errors.expectedGuests && <p className="text-xs text-red-600 mt-1">{errors.expectedGuests}</p>}
+            {errors.expectedGuests && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.expectedGuests}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
               Catering Preference *
             </label>
             <select
               value={cateringPreference}
               onChange={(e) => setCateringPreference(e.target.value as CateringType)}
-              className="w-full px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none transition-all"
+              className="w-full px-4 py-3 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
             >
-              <option value="VEGETARIAN">Vegetarian (Pure Veg Kitchen)</option>
-              <option value="NON_VEGETARIAN">Non-Vegetarian (Dedicated Kitchen)</option>
-              <option value="DISCUSS_LATER">Decide Later</option>
+              <option value="VEGETARIAN" className="bg-white dark:bg-[#07150e] text-gray-800 dark:text-gray-100">Vegetarian (Pure Veg Kitchen)</option>
+              <option value="NON_VEGETARIAN" className="bg-white dark:bg-[#07150e] text-gray-800 dark:text-gray-100">Non-Vegetarian (Dedicated Kitchen)</option>
+              <option value="DISCUSS_LATER" className="bg-white dark:bg-[#07150e] text-gray-800 dark:text-gray-100">Decide Later</option>
             </select>
           </div>
         </div>
 
         {/* Optional Notes */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
             Special Requests <span className="text-gray-400 font-normal lowercase">(optional)</span>
           </label>
           <textarea
@@ -319,7 +319,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
             value={additionalRequirements}
             onChange={(e) => setAdditionalRequirements(e.target.value)}
             placeholder="Any specific requests or requirements..."
-            className="w-full px-4 py-2.5 text-sm bg-white border border-gray-300 focus:border-[#234D3C] focus:ring-1 focus:ring-[#234D3C] outline-none resize-none transition-all"
+            className="w-full px-4 py-2.5 text-sm bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none resize-none transition-all"
           />
         </div>
 
@@ -330,21 +330,21 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
             disabled={isSubmitting || isSlotUnavailable}
             className={`w-full py-4 px-8 text-xs sm:text-sm uppercase font-bold tracking-[0.2em] transition-all flex items-center justify-center gap-2.5 shadow-lg cursor-pointer ${
               isSubmitting || isSlotUnavailable
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
-                : 'bg-[#234D3C] text-white hover:bg-[#163b2c] hover:shadow-xl active:scale-[0.99]'
+                ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed shadow-none'
+                : 'bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] hover:shadow-xl active:scale-[0.99]'
             }`}
           >
             {isSubmitting ? (
               <span>Submitting Your Enquiry...</span>
             ) : (
               <>
-                <Send className="w-4 h-4 text-[#C5A45D]" />
+                <Send className="w-4 h-4 text-[#C5A45D] dark:text-[#07150e]" />
                 <span>SUBMIT BOOKING ENQUIRY</span>
               </>
             )}
           </button>
 
-          <p className="text-[11px] text-gray-500 text-center mt-3">
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 text-center mt-3">
             Our team will connect with you to confirm dates and guide you through the venue arrangements.
           </p>
         </div>

@@ -89,7 +89,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
   const currentSelectedDayData = availability.find(a => a.date === selectedDate) || null;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F2]">
+    <div className="min-h-screen bg-[#FAF8F2] dark:bg-[#06140e] text-[#202823] dark:text-gray-100 transition-colors duration-300">
       {/* Section 1: Booking Page Hero */}
       <BookingHero onGoHome={onGoHome} />
 

@@ -83,27 +83,27 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
     const isSelected = selectedDate === item.dateStr;
     if (isSelected) {
-      return 'bg-[#1b3d30] text-white border-2 border-[#C5A45D] shadow-xl scale-[1.02] z-10';
+      return 'bg-[#1b3d30] dark:bg-[#C5A45D] text-white dark:text-[#07150e] border-2 border-[#C5A45D] dark:border-white shadow-xl scale-[1.02] z-10';
     }
 
     if (item.isPast) {
-      return 'bg-[#F3F4F6] text-gray-400 cursor-not-allowed border border-transparent opacity-60';
+      return 'bg-[#F3F4F6] dark:bg-[#07150e] text-gray-400 dark:text-gray-600 cursor-not-allowed border border-transparent opacity-60';
     }
 
     const status = item.data?.status || 'AVAILABLE';
 
     switch (status) {
       case 'BLOCKED':
-        return 'bg-[#F3F4F6] text-gray-500 cursor-not-allowed border border-gray-200';
+        return 'bg-[#F3F4F6] dark:bg-[#07150e] text-gray-500 dark:text-gray-600 cursor-not-allowed border border-gray-200 dark:border-white/10';
       case 'CONFIRMED':
-        return 'bg-[#FBEBEB] text-[#842029] hover:border-red-400 border border-red-200 cursor-pointer';
+        return 'bg-[#FBEBEB] dark:bg-[#2b1214] text-[#842029] dark:text-[#f0858f] hover:border-red-400 border border-red-200 dark:border-red-900/60 cursor-pointer';
       case 'PARTIALLY_BOOKED':
-        return 'bg-[#FBF5E6] text-[#7c5819] hover:border-amber-400 border border-amber-200 cursor-pointer';
+        return 'bg-[#FBF5E6] dark:bg-[#281d0c] text-[#7c5819] dark:text-[#f3d489] hover:border-amber-400 border border-amber-200 dark:border-amber-900/60 cursor-pointer';
       case 'PENDING_ENQUIRY':
-        return 'bg-[#FBF5E6] text-[#7A641F] hover:border-[#C5A45D] border border-amber-200 cursor-pointer';
+        return 'bg-[#FBF5E6] dark:bg-[#281d0c] text-[#7A641F] dark:text-[#f3d489] hover:border-[#C5A45D] border border-amber-200 dark:border-amber-900/60 cursor-pointer';
       case 'AVAILABLE':
       default:
-        return 'bg-[#EBF5ED] text-[#1B4D20] hover:border-[#C5A45D] border border-emerald-200 hover:shadow-md cursor-pointer';
+        return 'bg-[#EBF5ED] dark:bg-[#0d2a1b] text-[#1B4D20] dark:text-[#8ae0a8] hover:border-[#C5A45D] border border-emerald-200 dark:border-emerald-800/60 hover:shadow-md cursor-pointer';
     }
   };
 
@@ -130,19 +130,19 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border border-gray-200 shadow-xl p-3.5 sm:p-6 lg:p-10 flex flex-col justify-between">
+    <div className="w-full bg-white dark:bg-[#0c2317] border border-gray-200 dark:border-[#C5A45D]/30 shadow-xl p-3.5 sm:p-6 lg:p-10 flex flex-col justify-between transition-colors duration-300">
       {/* Month Navigation Header */}
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-gray-100 gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-gray-100 dark:border-white/10 gap-3 sm:gap-4">
           <div className="flex items-center gap-2.5 sm:gap-3.5">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-[#FAF8F2] text-[#234D3C] flex items-center justify-center border border-[#C5A45D]/40 shrink-0">
-              <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#234D3C]" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-[#FAF8F2] dark:bg-[#07150e] text-[#234D3C] dark:text-[#C5A45D] flex items-center justify-center border border-[#C5A45D]/40 shrink-0">
+              <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#234D3C] dark:text-[#C5A45D]" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#234D3C] tracking-tight">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#234D3C] dark:text-[#f3eedd] tracking-tight">
                 {monthNames[month]} {year}
               </h2>
-              <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium tracking-wider uppercase block">
+              <span className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 font-medium tracking-wider uppercase block">
                 Venue Calendar (IST)
               </span>
             </div>
@@ -152,22 +152,22 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={onToday}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#234D3C] bg-[#FAF8F2] border border-gray-300 hover:bg-[#E8F2E8] transition-colors cursor-pointer"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#234D3C] dark:text-[#C5A45D] bg-[#FAF8F2] dark:bg-[#07150e] border border-gray-300 dark:border-white/20 hover:bg-[#E8F2E8] dark:hover:bg-[#122e20] transition-colors cursor-pointer"
             >
               Today
             </button>
-            <div className="flex items-center border border-gray-300 bg-white shadow-sm">
+            <div className="flex items-center border border-gray-300 dark:border-white/20 bg-white dark:bg-[#07150e] shadow-sm">
               <button
                 onClick={onPrevMonth}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-white/10 text-[#202823] dark:text-gray-100 transition-colors cursor-pointer"
                 aria-label="Previous month"
               >
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <div className="w-px h-4 sm:h-5 bg-gray-200" />
+              <div className="w-px h-4 sm:h-5 bg-gray-200 dark:bg-white/10" />
               <button
                 onClick={onNextMonth}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 text-[#202823] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-white/10 text-[#202823] dark:text-gray-100 transition-colors cursor-pointer"
                 aria-label="Next month"
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />

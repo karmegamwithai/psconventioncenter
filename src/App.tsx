@@ -9,6 +9,8 @@ import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { BookingPage } from './pages/BookingPage';
 import { BlogsModal } from './components/modals/BlogsModal';
+import { ThemeProvider } from './context/ThemeContext';
+import { LuxuryCursor } from './components/common/LuxuryCursor';
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState<'/' | '/booking'>('/');
@@ -59,41 +61,46 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#202823] font-['Cinzel',serif]">
-      {/* Shared Premium Sticky Header */}
-      <Navbar
-        currentRoute={currentRoute}
-        onNavigate={navigateTo}
-        onOpenBlogs={() => setBlogsOpen(true)}
-      />
+    <ThemeProvider>
+      {/* Luxury GSAP Custom Follower Cursor */}
+      <LuxuryCursor />
 
-      {/* Primary Page Outlet */}
-      <main className="flex-1">
-        {currentRoute === '/' ? (
-          <HomePage
-            onNavigate={navigateTo}
-            onSelectEventForBooking={handleSelectEventForBooking}
-          />
-        ) : (
-          <BookingPage
-            onGoHome={() => navigateTo('/')}
-            preselectedEventType={selectedEventType}
-          />
-        )}
-      </main>
+      <div className="min-h-screen flex flex-col bg-white dark:bg-[#06140e] text-[#202823] dark:text-gray-100 font-['Cinzel',serif] transition-colors duration-300">
+        {/* Shared Premium Sticky Header with Dark Mode Toggle */}
+        <Navbar
+          currentRoute={currentRoute}
+          onNavigate={navigateTo}
+          onOpenBlogs={() => setBlogsOpen(true)}
+        />
 
-      {/* Shared Luxury Footer */}
-      <Footer onNavigate={navigateTo} />
+        {/* Primary Page Outlet */}
+        <main className="flex-1">
+          {currentRoute === '/' ? (
+            <HomePage
+              onNavigate={navigateTo}
+              onSelectEventForBooking={handleSelectEventForBooking}
+            />
+          ) : (
+            <BookingPage
+              onGoHome={() => navigateTo('/')}
+              preselectedEventType={selectedEventType}
+            />
+          )}
+        </main>
 
-      {/* Blogs & Updates Modal */}
-      <BlogsModal
-        isOpen={blogsOpen}
-        onClose={() => setBlogsOpen(false)}
-        onCheckDates={() => {
-          setBlogsOpen(false);
-          navigateTo('/booking');
-        }}
-      />
-    </div>
+        {/* Shared Luxury Footer */}
+        <Footer onNavigate={navigateTo} />
+
+        {/* Blogs & Updates Modal */}
+        <BlogsModal
+          isOpen={blogsOpen}
+          onClose={() => setBlogsOpen(false)}
+          onCheckDates={() => {
+            setBlogsOpen(false);
+            navigateTo('/booking');
+          }}
+        />
+      </div>
+    </ThemeProvider>
   );
 }

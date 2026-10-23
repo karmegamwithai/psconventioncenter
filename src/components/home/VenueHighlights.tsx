@@ -33,7 +33,7 @@ export const VenueHighlights: React.FC = () => {
   ];
 
   return (
-    <section className="bg-[#234D3C] text-white py-12 sm:py-16 border-y border-[#C5A45D]/30 relative">
+    <section className="bg-[#234D3C] dark:bg-[#05140d] text-white py-12 sm:py-16 border-y border-[#C5A45D]/30 dark:border-[#C5A45D]/40 transition-colors duration-300 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Simple & Premium 4-Metric Grid (Low Context) */}

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-forest: #234D3C;
   --color-forest-dark: #17372a;
@@ -26,6 +28,7 @@
   body {
     font-family: 'Cinzel', serif;
     letter-spacing: 0.02em;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Bodoni Moda', serif;
@@ -59,6 +62,15 @@
   color: #444444;
 }
 
+/* Dark mode adjustments for logo text */
+.dark .logo-title {
+  color: #f7e6b8 !important;
+}
+
+.dark .logo-subtitle {
+  color: #C5A45D !important;
+}
+
 /* Custom luxury scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -66,6 +78,9 @@
 }
 ::-webkit-scrollbar-track {
   background: #FAF8F2;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #07150e;
 }
 ::-webkit-scrollbar-thumb {
   background: #C5A45D;
