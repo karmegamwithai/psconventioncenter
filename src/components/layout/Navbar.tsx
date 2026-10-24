@@ -46,8 +46,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
     }
   };
 
+  // Dynamic logo selection: without scroll show "logo png-23.png", while scroll show "logo png-18.png"
+  const isWhiteNav = (isScrolled || currentRoute === '/booking') && theme !== 'dark';
+  const logoSrc = isWhiteNav
+    ? '/assets/aistudio/logo_png-18_361e3e3b.png'
+    : '/assets/aistudio/logo_png-23_edd56dd7.png';
+
   return (
     <>
+      {/* Hidden preloads so scroll logo swap is instantaneous */}
+      <div className="hidden" aria-hidden="true">
+        <img src="/assets/aistudio/logo_png-23_edd56dd7.png" alt="" />
+        <img src="/assets/aistudio/logo_png-18_361e3e3b.png" alt="" />
+      </div>
+
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isSolid
@@ -62,16 +74,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onOpen
               setMenuOpen(false);
               onNavigate('/');
             }}
-            className="flex items-center group text-left focus:outline-none cursor-pointer shrink-0"
-            aria-label="PS Convention Center Home"
+            className="flex items-center group text-left focus:outline-none cursor-pointer shrink-0 transition-transform duration-200 hover:scale-[1.02]"
+            aria-label="Padmasena Convention Center Home"
           >
-            <div className="bg-white p-1 sm:p-1.5 shadow-sm border border-[#C5A45D]/50 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-              <img
-                src="/assets/aistudio/image_d32710d1.png"
-                alt="PS Convention Center Logo"
-                className="h-8 sm:h-11 w-auto object-contain"
-              />
-            </div>
+            <img
+              src={logoSrc}
+              alt="Padmasena Convention Center Logo"
+              className="h-7 sm:h-9 md:h-10 w-auto max-w-[160px] xs:max-w-[200px] sm:max-w-[260px] md:max-w-[300px] object-contain transition-all duration-300"
+            />
           </button>
 
           {/* Right Header Navigation & Actions */}

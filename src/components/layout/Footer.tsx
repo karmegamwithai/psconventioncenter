@@ -14,13 +14,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Col 1: Brand & Identity */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <div className="bg-white p-1.5 sm:p-2 shadow-sm border border-[#C5A45D]/40 shrink-0 inline-block">
-                <img
-                  src="/assets/aistudio/image_d32710d1.png"
-                  alt="PS Convention Center Logo"
-                  className="h-10 sm:h-12 w-auto object-contain"
-                />
-              </div>
+              <img
+                src="/assets/aistudio/logo_png-23_edd56dd7.png"
+                alt="Padmasena Convention Center Logo"
+                className="h-10 sm:h-12 w-auto max-w-[240px] sm:max-w-[280px] object-contain"
+              />
             </div>
             <p className="text-xs text-gray-300 leading-relaxed font-light">
               Palur's premier luxury destination for royal weddings, grand receptions, and executive conclaves.
