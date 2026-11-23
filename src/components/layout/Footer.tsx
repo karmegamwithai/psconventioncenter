@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail, Clock, Calendar, Instagram, Facebook, Youtube, Che
 import { VENUE_INFO } from '../../data/venueData';
 
 interface FooterProps {
-  onNavigate: (route: '/' | '/booking', sectionId?: string) => void;
+  onNavigate: (route: string, sectionId?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
@@ -78,6 +78,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   className="hover:text-[#C5A45D] transition-colors text-left flex items-center gap-1.5 cursor-pointer"
                 >
                   <ChevronRight className="w-3 h-3 text-[#C5A45D]" /> Facilities & Capacity
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('/', 'virtual-tour')}
+                  className="hover:text-[#C5A45D] transition-colors text-left flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ChevronRight className="w-3 h-3 text-[#C5A45D]" /> 3D Virtual Tour
                 </button>
               </li>
               <li>

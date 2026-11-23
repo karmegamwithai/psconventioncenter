@@ -8,14 +8,24 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { BookingPage } from './pages/BookingPage';
+import { FacilityDetailPage } from './pages/FacilityDetailPage';
 import { BlogsModal } from './components/modals/BlogsModal';
 import { ThemeProvider } from './context/ThemeContext';
 import { LuxuryCursor } from './components/common/LuxuryCursor';
+import { FACILITIES, FacilityId } from './data/venueData';
+
+const VALID_FACILITY_IDS = new Set<string>(FACILITIES.map((f) => f.id));
+
+function parseFacilityIdFromRoute(route: string): FacilityId | null {
+  if (!route.startsWith('/facility/')) return null;
+  const slug = route.replace('/facility/', '').split('/')[0];
+  return VALID_FACILITY_IDS.has(slug) ? (slug as FacilityId) : null;
+}
 
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState<'/' | '/booking'>('/');
+  const [currentRoute, setCurrentRoute] = useState<string>('/');
   const [blogsOpen, setBlogsOpen] = useState(false);
-  const [selectedEventType, setSelectedEventType] = useState<string>('Wedding');
+  const [selectedEventType, setSelectedEventType] = useState<string>('Grand Weddings');
 
   // Sync with browser URL bar and back/forward buttons
   useEffect(() => {
@@ -23,6 +33,8 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/booking' || window.location.hash.includes('booking')) {
         setCurrentRoute('/booking');
+      } else if (parseFacilityIdFromRoute(path)) {
+        setCurrentRoute(path);
       } else {
         setCurrentRoute('/');
       }
@@ -33,10 +45,10 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateTo = (route: '/' | '/booking', sectionId?: string) => {
+  const navigateTo = (route: string, sectionId?: string) => {
     setCurrentRoute(route);
     if (window.history.pushState) {
-      window.history.pushState(null, '', route === '/booking' ? '/booking' : '/');
+      window.history.pushState(null, '', route);
     }
 
     if (route === '/') {
@@ -60,6 +72,8 @@ export default function App() {
     navigateTo('/booking');
   };
 
+  const activeFacilityId = parseFacilityIdFromRoute(currentRoute);
+
   return (
     <ThemeProvider>
       {/* Luxury GSAP Custom Follower Cursor */}
@@ -75,15 +89,21 @@ export default function App() {
 
         {/* Primary Page Outlet */}
         <main className="flex-1">
-          {currentRoute === '/' ? (
-            <HomePage
-              onNavigate={navigateTo}
-              onSelectEventForBooking={handleSelectEventForBooking}
-            />
-          ) : (
+          {currentRoute === '/booking' ? (
             <BookingPage
               onGoHome={() => navigateTo('/')}
               preselectedEventType={selectedEventType}
+            />
+          ) : activeFacilityId ? (
+            <FacilityDetailPage
+              facilityId={activeFacilityId}
+              onNavigate={navigateTo}
+              onBookFacility={handleSelectEventForBooking}
+            />
+          ) : (
+            <HomePage
+              onNavigate={navigateTo}
+              onSelectEventForBooking={handleSelectEventForBooking}
             />
           )}
         </main>

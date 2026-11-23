@@ -17,8 +17,9 @@ export interface DayAvailability {
 export interface BookingEnquiryPayload {
   fullName: string;
   mobileNumber: string;
-  email: string;
-  eventDate: string;
+  email?: string;
+  eventDate: string; // Check-in date (YYYY-MM-DD)
+  checkOutDate?: string; // Check-out date (YYYY-MM-DD)
   alternativeDate?: string;
   session: SessionSlot;
   eventType: string;
@@ -32,8 +33,9 @@ export interface StoredBooking {
   reference: string;
   customerName: string;
   phoneNumber: string;
-  email: string;
+  email?: string;
   eventDate: string; // YYYY-MM-DD
+  checkOutDate?: string; // YYYY-MM-DD
   session: SessionSlot;
   eventType: string;
   guestCount: number;
@@ -47,13 +49,14 @@ export interface BookingSubmissionResponse {
   success: boolean;
   reference: string;
   eventDate: string;
+  checkOutDate?: string;
   eventType: string;
   session: SessionSlot;
   status: 'PENDING';
   message: string;
   customerName: string;
   mobileNumber: string;
-  email: string;
+  email?: string;
   expectedGuests: number;
   cateringPreference: CateringType;
   submittedAt: string;

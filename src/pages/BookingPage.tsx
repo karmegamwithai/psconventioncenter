@@ -14,11 +14,13 @@ interface BookingPageProps {
 }
 
 export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedEventType }) => {
-  // Calendar month state
+  // Calendar month state & two-date range state (Check-In & Check-Out)
   const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [checkInDate, setCheckInDate] = useState<string | null>(null);
+  const [checkOutDate, setCheckOutDate] = useState<string | null>(null);
   const [availability, setAvailability] = useState<DayAvailability[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submissionResult, setSubmissionResult] = useState<BookingSubmissionResponse | null>(null);
 
   // Load availability whenever month/year changes
@@ -27,14 +29,6 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
     const month = currentDate.getMonth();
     const days = getAvailabilityForMonth(year, month);
     setAvailability(days);
-
-    // If no date is selected yet in this month, auto-pick the first available upcoming date
-    if (!selectedDate) {
-      const firstAvailable = days.find(d => !d.isBlocked && d.status !== 'CONFIRMED' && d.status !== 'BLOCKED');
-      if (firstAvailable) {
-        setSelectedDate(firstAvailable.date);
-      }
-    }
   }, [currentDate]);
 
   const handlePrevMonth = () => {
@@ -48,21 +42,62 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
   const handleToday = () => {
     const today = new Date();
     setCurrentDate(today);
-    const todayPad = today.getDate().toString().padStart(2, '0');
-    const monthPad = (today.getMonth() + 1).toString().padStart(2, '0');
-    setSelectedDate(`${today.getFullYear()}-${monthPad}-${todayPad}`);
   };
 
-  const handleSelectDate = (dateStr: string) => {
-    setSelectedDate(dateStr);
+  const scrollToForm = () => {
     const formEl = document.getElementById('booking-enquiry-form');
     if (formEl) {
       formEl.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  // Interactive two-date range selection (Check-In -> Check-Out)
+  const handleSelectCalendarDate = (dateStr: string) => {
+    setSubmitError(null);
+
+    // Start a fresh selection if none selected or both already selected
+    if (!checkInDate || (checkInDate && checkOutDate)) {
+      setCheckInDate(dateStr);
+      setCheckOutDate(null);
+      return;
+    }
+
+    // Second click completes the range (automatically orders earlier date as check-in)
+    if (dateStr < checkInDate) {
+      setCheckOutDate(checkInDate);
+      setCheckInDate(dateStr);
+    } else {
+      setCheckOutDate(dateStr);
+    }
+  };
+
+  const handleCheckInChange = (dateStr: string | null) => {
+    setSubmitError(null);
+    setCheckInDate(dateStr);
+    if (dateStr && checkOutDate && dateStr > checkOutDate) {
+      setCheckOutDate(dateStr);
+    }
+  };
+
+  const handleCheckOutChange = (dateStr: string | null) => {
+    setSubmitError(null);
+    if (dateStr && checkInDate && dateStr < checkInDate) {
+      setCheckInDate(dateStr);
+      setCheckOutDate(checkInDate);
+    } else {
+      setCheckOutDate(dateStr);
+    }
+  };
+
+  const handleClearDates = () => {
+    setCheckInDate(null);
+    setCheckOutDate(null);
+    setSubmitError(null);
+  };
+
   const handleSubmitEnquiry = async (payload: BookingEnquiryPayload) => {
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
       const res = await submitBookingEnquiry(payload);
       setSubmissionResult(res);
@@ -76,7 +111,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
       // Scroll to confirmation
       window.scrollTo({ top: 300, behavior: 'smooth' });
     } catch (err: any) {
-      alert(err.message || 'Unable to submit enquiry. Please check slot availability.');
+      setSubmitError(err?.message || 'Unable to submit enquiry. Please check slot availability.');
     } finally {
       setIsSubmitting(false);
     }
@@ -84,9 +119,8 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
 
   const handleMakeAnotherEnquiry = () => {
     setSubmissionResult(null);
+    setSubmitError(null);
   };
-
-  const currentSelectedDayData = availability.find(a => a.date === selectedDate) || null;
 
   return (
     <div className="min-h-screen bg-[#FAF8F2] dark:bg-[#06140e] text-[#202823] dark:text-gray-100 transition-colors duration-300">
@@ -103,14 +137,16 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
             onNewEnquiry={handleMakeAnotherEnquiry}
           />
         ) : (
-          /* Section 2, 3, & 4: Full Screen Calendar & Form Underneath */
+          /* Interactive Date Range Calendar & Synced Enquiry Form */
           <div className="space-y-8 sm:space-y-12">
-            {/* Full Screen / Full Width Calendar */}
             <div className="w-full">
               <AvailabilityCalendar
                 currentDate={currentDate}
-                selectedDate={selectedDate}
-                onSelectDate={handleSelectDate}
+                checkInDate={checkInDate}
+                checkOutDate={checkOutDate}
+                onSelectDate={handleSelectCalendarDate}
+                onClearDates={handleClearDates}
+                onJumpToForm={scrollToForm}
                 onPrevMonth={handlePrevMonth}
                 onNextMonth={handleNextMonth}
                 onToday={handleToday}
@@ -118,12 +154,20 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
               />
             </div>
 
+            {submitError && (
+              <div className="max-w-4xl mx-auto p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs sm:text-sm font-medium">
+                {submitError}
+              </div>
+            )}
+
             {/* Under: Fill the Form */}
             <div id="booking-enquiry-form" className="w-full scroll-mt-24">
               <BookingEnquiryForm
-                selectedDate={selectedDate}
-                dayData={currentSelectedDayData}
-                onDateChange={(d) => setSelectedDate(d)}
+                checkInDate={checkInDate}
+                checkOutDate={checkOutDate}
+                onCheckInChange={handleCheckInChange}
+                onCheckOutChange={handleCheckOutChange}
+                onClearDates={handleClearDates}
                 onSubmitEnquiry={handleSubmitEnquiry}
                 isSubmitting={isSubmitting}
                 preselectedEventType={preselectedEventType}

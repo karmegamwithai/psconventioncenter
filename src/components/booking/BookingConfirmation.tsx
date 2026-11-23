@@ -24,11 +24,21 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
   }, []);
 
   const formattedDate = new Date(data.eventDate + 'T00:00:00').toLocaleDateString('en-IN', {
-    weekday: 'long',
+    weekday: 'short',
     day: 'numeric',
-    month: 'long',
+    month: 'short',
     year: 'numeric'
   });
+
+  const formattedCheckOutDate =
+    data.checkOutDate && data.checkOutDate !== data.eventDate
+      ? new Date(data.checkOutDate + 'T00:00:00').toLocaleDateString('en-IN', {
+          weekday: 'short',
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        })
+      : null;
 
   const getSessionLabel = (s: string) => {
     switch (s) {
@@ -73,11 +83,13 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20">
             <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Outfit',sans-serif]">
-              Requested Event Date
+              {formattedCheckOutDate ? 'Check-In – Check-Out Dates' : 'Requested Event Date'}
             </span>
             <div className="flex items-center gap-2 text-sm font-bold text-[#234D3C] dark:text-[#d3e5dc]">
-              <Calendar className="w-4 h-4 text-[#C5A45D]" />
-              <span>{formattedDate}</span>
+              <Calendar className="w-4 h-4 text-[#C5A45D] shrink-0" />
+              <span>
+                {formattedCheckOutDate ? `${formattedDate} – ${formattedCheckOutDate}` : formattedDate}
+              </span>
             </div>
           </div>
 

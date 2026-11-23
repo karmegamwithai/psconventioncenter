@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { FACILITIES } from '../../data/venueData';
+import { FACILITIES, FacilityId } from '../../data/venueData';
 import { CursorPerspectiveCard } from '../common/CursorPerspectiveCard';
 import gsap from 'gsap';
 
 interface FacilitiesSectionProps {
-  onSelectFacilityForBooking: (facilityTitle: string) => void;
+  onSelectFacility: (facilityId: FacilityId) => void;
 }
 
-export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFacilityForBooking }) => {
+export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFacility }) => {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFa
   }, []);
 
   return (
-    <section id="facilities" ref={sectionRef} className="py-24 sm:py-32 bg-white dark:bg-[#081710] transition-colors duration-300 relative">
+    <section id="facilities" ref={sectionRef} className="py-24 sm:py-32 bg-white dark:bg-[#081710] transition-colors duration-300 relative scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-16 space-y-2">
@@ -46,7 +46,7 @@ export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFa
             <CursorPerspectiveCard
               key={facility.id}
               maxRotation={8}
-              onClick={() => onSelectFacilityForBooking(facility.title)}
+              onClick={() => onSelectFacility(facility.id)}
               className="facility-card-item cursor-pointer"
             >
               <div className="group bg-white dark:bg-[#0c2317] border border-gray-200/90 dark:border-white/10 hover:border-[#C5A45D] dark:hover:border-[#C5A45D] transition-all duration-300 hover:shadow-2xl flex flex-col justify-between h-full">
@@ -55,6 +55,7 @@ export const FacilitiesSection: React.FC<FacilitiesSectionProps> = ({ onSelectFa
                   <img
                     src={facility.image}
                     alt={facility.title}
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     loading="lazy"
                   />

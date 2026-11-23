@@ -1,4 +1,42 @@
 import { DayAvailability, SessionSlot, StoredBooking } from '../types/booking';
+import lowBudgetHallImg from '../assets/images/low_budget_hall_1795401387682.jpg';
+import highBudgetHallImg from '../assets/images/high_budget_hall_1795401387033.jpg';
+import premiumHallImg from '../assets/images/premium_hall_1795401387554.jpg';
+import eventLawnImg from '../assets/images/event_lawn_1795401389503.jpg';
+
+export type FacilityId =
+  | 'hall-3'
+  | 'lawn'
+  | 'rooms'
+  | 'dining-catering'
+  | 'open-terrace'
+  | 'parking-security';
+
+export interface HallTierItem {
+  id: string;
+  name: string;
+  tierLabel: string;
+  capacity: string;
+  description: string;
+  image: string;
+  features: string[];
+  idealFor: string;
+}
+
+export interface FacilityItem {
+  id: FacilityId;
+  title: string;
+  tagline: string;
+  capacity: string;
+  description: string;
+  overview: string;
+  image: string;
+  specs: string[];
+  details: Array<{ label: string; value: string }>;
+  highlights: string[];
+  idealFor: string[];
+  hallTiers?: HallTierItem[];
+}
 
 export const VENUE_INFO = {
   name: 'PS Convention Center',
@@ -37,54 +75,200 @@ export const VENUE_INFO = {
   ]
 };
 
-export const FACILITIES = [
+export const FACILITIES: FacilityItem[] = [
   {
-    id: 'main-hall',
-    title: 'Main Convention Hall',
-    capacity: '600 Seated • 1,000 Floating',
-    description: '600 seated guests, approximately 1,000 floating capacity, centralised HVAC.',
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
-    specs: ['600 Seating', '1,000 Floating', 'Centralized HVAC']
+    id: 'hall-3',
+    title: 'Hall - 3',
+    tagline: 'Three Distinct Air-Conditioned Convention Halls for Every Scale & Budget',
+    capacity: 'Low Budget • High Budget • Premium Hall',
+    description: 'Three versatile convention halls — Low Budget, High Budget, and Premium — with centralized HVAC and tailored seating.',
+    overview:
+      'PS Convention Center offers three thoughtfully tiered convention halls to match the exact scale, style, and budget of your celebration or corporate gathering. From intimate family ceremonies to opulent royal weddings and large-scale expos, every hall delivers climate-controlled comfort, refined acoustics, and uninterrupted power backup.',
+    image: premiumHallImg,
+    specs: ['3 Dedicated Hall Tiers', 'Up to 1,000 Floating', 'Centralized HVAC'],
+    details: [
+      { label: 'Available Tiers', value: 'Low Budget, High Budget & Premium' },
+      { label: 'Max Capacity', value: '600 Seated • 1,000 Floating' },
+      { label: 'Climate Control', value: 'Full Centralized HVAC' },
+      { label: 'Power Backup', value: '100% Uninterrupted DG Support' }
+    ],
+    highlights: [
+      'Three distinct venue tiers tailored to intimate, grand, and flagship celebrations',
+      'Pillarless sightlines with elevated ceremonial stages and floral mandap readiness',
+      'High-definition LED backdrop support and integrated acoustic sound distribution',
+      'Direct access to the air-conditioned dining hall, guest rooms, and elevator'
+    ],
+    idealFor: ['Grand Weddings', 'Royal Receptions', 'Corporate Summits & Expos', 'Engagements & Family Functions'],
+    hallTiers: [
+      {
+        id: 'low-budget-hall',
+        name: 'Low Budget Hall',
+        tierLabel: 'Economical & Intimate',
+        capacity: '150 Seated • 250 Floating',
+        description:
+          'A bright, well-maintained air-conditioned hall crafted for tasteful, budget-friendly family milestones, poojas, and intimate gatherings without compromising on cleanliness or hospitality.',
+        image: lowBudgetHallImg,
+        features: [
+          '150 Seated / 250 Floating capacity',
+          'Full air-conditioning & warm recessed lighting',
+          'Dedicated compact floral stage & podium',
+          'Basic PA sound system & 100% generator backup'
+        ],
+        idealFor: 'Engagements, Birthdays, Naming Ceremonies & Family Poojas'
+      },
+      {
+        id: 'high-budget-hall',
+        name: 'High Budget Hall',
+        tierLabel: 'Grand & Celebratory',
+        capacity: '400 Seated • 650 Floating',
+        description:
+          'An expansive architectural banquet hall featuring sculpted chandeliers, marble flooring, and a stately mandap stage designed for traditional weddings, grand receptions, and executive meetings.',
+        image: highBudgetHallImg,
+        features: [
+          '400 Seated / 650 Floating capacity',
+          'Centralized HVAC & chandelier illumination',
+          'Grand floral mandap stage & bridal green rooms',
+          'Direct connectivity to dining hall & courtyard lawn'
+        ],
+        idealFor: 'Traditional Weddings, Grand Receptions & Corporate Seminars'
+      },
+      {
+        id: 'premium-hall',
+        name: 'Premium Hall',
+        tierLabel: 'Flagship Royal Ballroom',
+        capacity: '600 Seated • 1,000 Floating',
+        description:
+          'Our flagship palatial ballroom featuring soaring coffered ceilings, dramatic crystal chandeliers, HD LED stage backdrop, and VIP suite access for prestigious weddings and major corporate expos.',
+        image: premiumHallImg,
+        features: [
+          '600 Seated / 1,000 Floating capacity',
+          'Flagship centralized HVAC & acoustic ceiling design',
+          'Wide elevated royal stage with HD LED display wall',
+          'Priority VIP elevator access, bridal suites & valet bay'
+        ],
+        idealFor: 'Royal Weddings, Major Expos, Corporate Summits & Gala Receptions'
+      }
+    ]
   },
   {
-    id: 'dining-hall',
-    title: 'Dining Hall',
-    capacity: '300 Seated • 500 Floating',
-    description: '300 seated guests, approximately 500 floating capacity, centralised HVAC.',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
-    specs: ['300 Seating', '500 Floating', 'Centralized HVAC']
+    id: 'lawn',
+    title: 'Lawn',
+    tagline: 'Manicured Open-Air Courtyard Lawn & Auspicious Ganesha Shrine',
+    capacity: 'Open-Air Courtyard • Ganesha Temple',
+    description: 'Lush landscaped open-air lawn and courtyard anchored by the traditional Ganesha temple for outdoor celebrations.',
+    overview:
+      'Nestled gracefully between the main convention spaces, our manicured open-air lawn blends serene greenery with traditional South Indian warmth. Anchored by a sanctified Ganesha shrine and illuminated with warm evening string lights, the lawn creates an unforgettable setting for twilight receptions, outdoor stalls, and auspicious pre-wedding rituals.',
+    image: eventLawnImg,
+    specs: ['Manicured Event Lawn', 'Ganesha Temple Shrine', 'Evening Lighting'],
+    details: [
+      { label: 'Setting', value: 'Landscaped Open-Air Courtyard' },
+      { label: 'Sacred Feature', value: 'Traditional Ganesha Temple' },
+      { label: 'Outdoor Setup', value: 'Reception Seating & Live Food Stalls' },
+      { label: 'Lighting', value: 'Warm Overhead Festoon & Architectural Uplights' }
+    ],
+    highlights: [
+      'Auspicious Ganesha temple on-site for traditional wedding rituals and blessings',
+      'Expansive manicured turf suitable for outdoor receptions, sangeet nights, and expos',
+      'Stone-paved walkways connecting effortlessly to the main hall and dining wing',
+      'Dedicated power points and lighting rigs for live music, decor canopies, and food counters'
+    ],
+    idealFor: ['Evening Receptions', 'Outdoor Wedding Rituals', 'Sangeet & Cultural Nights', 'Open-Air Exhibitions']
   },
   {
-    id: 'guest-rooms',
-    title: 'Guest Accommodation',
-    capacity: '6 Rooms with Lift',
-    description: 'Six guest rooms, including first-floor rooms with lift access.',
+    id: 'rooms',
+    title: 'Rooms',
+    tagline: 'Comfortable Air-Conditioned Guest Rooms & Bridal Suites with Lift Access',
+    capacity: '6 Guest Rooms • Elevator Access',
+    description: 'Six well-appointed air-conditioned guest rooms and bridal suites, including first-floor rooms with dedicated lift access.',
+    overview:
+      'Designed to give the bride, groom, elders, and out-of-town family members restful privacy throughout multi-day celebrations, our six air-conditioned guest rooms combine serene interiors with practical convenience. First-floor suites are seamlessly connected via an internal passenger elevator for effortless accessibility.',
     image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80',
-    specs: ['6 Guest Rooms', 'First-Floor Lift', 'Private Baths']
+    specs: ['6 AC Guest Rooms', 'First-Floor Lift', 'Attached Modern Baths'],
+    details: [
+      { label: 'Total Rooms', value: '6 Air-Conditioned Suites & Rooms' },
+      { label: 'Accessibility', value: 'First-Floor Rooms with Passenger Elevator' },
+      { label: 'Bridal Readiness', value: 'Full-Length Mirrors & Dressing Area' },
+      { label: 'Utilities', value: '24/7 Hot Water & 100% Power Backup' }
+    ],
+    highlights: [
+      'Dedicated VIP bridal and groom preparation suites with ample dressing space',
+      'Elevator connectivity ensuring comfortable access for senior citizens and guests',
+      'Quiet acoustic insulation away from the main celebration floor for undisturbed rest',
+      'Clean linens, attached hygienic restrooms, and round-the-clock housekeeping support'
+    ],
+    idealFor: ['Bridal & Groom Preparation', 'Overnight Family Stay', 'VIP Speaker Green Rooms', 'Multi-Day Wedding Guests']
+  },
+  {
+    id: 'dining-catering',
+    title: 'Dining & Catering',
+    tagline: 'Centralized AC Dining Hall with Vegetarian & Non-Vegetarian Kitchens',
+    capacity: '300 Seated • 500 Floating',
+    description: '300 seated guests, approximately 500 floating capacity, centralized HVAC dining hall with indoor veg & outdoor non-veg catering.',
+    overview:
+      'Hospitality is at the heart of every memorable South Indian celebration. Our fully air-conditioned dining hall seats 300 guests simultaneously and smoothly serves up to 500 floating diners per batch. Thoughtfully separated vegetarian indoor kitchens and outdoor non-vegetarian cooking zones uphold culinary traditions and strict hygiene standards.',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
+    specs: ['300 Seated • 500 Floating', 'Centralized HVAC', 'Veg & Non-Veg Kitchens'],
+    details: [
+      { label: 'Dining Seating', value: '300 Seated Guests per Batch' },
+      { label: 'Floating Capacity', value: 'Approx. 500 Floating Diners' },
+      { label: 'Climate Control', value: 'Centralized Air-Conditioned Hall' },
+      { label: 'Kitchen Setup', value: 'Pure Veg Indoor & Non-Veg Outdoor Cooking' }
+    ],
+    highlights: [
+      'Spacious traditional banana-leaf seating layout or modern buffet counter configuration',
+      'Dedicated indoor pure-vegetarian kitchen with commercial-grade ventilation and water supply',
+      'Separate outdoor cooking zone specifically designed for non-vegetarian catering teams',
+      'Hygienic handwash stations, smooth entry/exit crowd flow, and dedicated service passages'
+    ],
+    idealFor: ['Traditional Banana-Leaf Feasts', 'Grand Wedding Buffets', 'Corporate Luncheons', 'Live Counter Banquets']
   },
   {
     id: 'open-terrace',
     title: 'Open Terrace',
-    capacity: 'First-Floor Terrace',
-    description: 'First-floor open terrace.',
+    tagline: 'Breezy First-Floor Open Terrace for Twilight Celebrations & Lounges',
+    capacity: 'First-Floor Open-Air Terrace',
+    description: 'Spacious first-floor open terrace offering breezy panoramic views for evening gatherings, lounges, and photo sessions.',
+    overview:
+      'Elevated above the grounds on the first floor, our open terrace captures Palur’s peaceful evening breeze and scenic surroundings. Accessible via stairs and passenger lift, this versatile open-sky venue is a favorite for intimate twilight mixers, golden-hour portrait photography, cocktail lounges, and relaxed family conversations.',
     image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80',
-    specs: ['Open Air', 'First Floor', 'Panoramic View']
-  },
-  {
-    id: 'temple-courtyard',
-    title: 'Temple & Courtyard',
-    capacity: 'Ganesha Temple & Lawn',
-    description: 'Small Ganesha temple and open courtyard between halls.',
-    image: 'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80',
-    specs: ['Ganesha Temple', 'Open Courtyard', 'Sacred Rituals']
+    specs: ['Open-Sky First Floor', 'Lift Accessible', 'Scenic Evening Views'],
+    details: [
+      { label: 'Location', value: 'First-Floor Elevated Terrace' },
+      { label: 'Access', value: 'Grand Staircase & Passenger Lift' },
+      { label: 'Ambiance', value: 'Open-Air Breeze & Sunset Views' },
+      { label: 'Setup Options', value: 'Lounge Seating, Live Counters & Photo Booths' }
+    ],
+    highlights: [
+      'Generous open-air floor plan ideal for starlit evening receptions and sunset mixers',
+      'Secure architectural parapet railing and ambient perimeter lighting throughout',
+      'Direct proximity to the first-floor guest rooms and elevator lobby',
+      'Flexible layout for acoustic music setups, coffee/chaat counters, and bridal portraits'
+    ],
+    idealFor: ['Sunset Mixers', 'Bridal & Couple Photoshoots', 'Intimate Evening Dinners', 'VIP Networking Lounges']
   },
   {
     id: 'parking-security',
     title: 'Parking & Security',
-    capacity: '30 Cars Parking',
-    description: 'Parking for approximately 30 cars, separate entry and exit gates, CCTV and generator backup.',
+    tagline: 'Structured Parking, Dual Gates, 24/7 CCTV & 100% Generator Backup',
+    capacity: '30 Cars Parking • Dual Entry/Exit',
+    description: 'Dedicated parking for approximately 30 cars, separate entry and exit gates, 24/7 CCTV surveillance, and 100% DG backup.',
+    overview:
+      'Every smooth event begins with stress-free arrival and complete peace of mind. PS Convention Center features organized on-premise parking for approximately 30 cars with separate entry and exit gates to eliminate traffic bottlenecks, supported by round-the-clock CCTV monitoring, trained security staff, and 100% diesel generator power backup.',
     image: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=1200&q=80',
-    specs: ['30 Car Parking', 'Dual Gates', 'CCTV & DG Backup']
+    specs: ['30 Car Parking Bays', 'Separate Entry & Exit', '24/7 CCTV & DG Backup'],
+    details: [
+      { label: 'On-Site Parking', value: 'Approx. 30 Dedicated Car Bays' },
+      { label: 'Traffic Flow', value: 'Separate Entry & Exit Gates' },
+      { label: 'Surveillance', value: '24/7 Multi-Angle CCTV Coverage' },
+      { label: 'Power Continuity', value: '100% Heavy-Duty DG Backup' }
+    ],
+    highlights: [
+      'Separate entry and exit gates designed for smooth VIP drop-offs and congestion-free departures',
+      'Well-lit, demarcated parking bays close to the main portico and lift entrance',
+      'Comprehensive CCTV camera network across entrances, hallways, dining areas, and parking',
+      'Automatic changeover diesel generator ensuring uninterrupted AC, lighting, and audio'
+    ],
+    idealFor: ['Stress-Free Guest Arrivals', 'VIP & Bridal Car Drop-Offs', 'Corporate Delegations', 'Uninterrupted Full-Day Events']
   }
 ];
 

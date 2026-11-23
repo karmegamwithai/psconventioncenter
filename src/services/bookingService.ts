@@ -118,8 +118,8 @@ export function checkSessionAvailability(dateStr: string, session: SessionSlot):
 } {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const targetDate = new Date(dateStr);
-  if (targetDate < today) {
+  const targetDate = new Date(dateStr + 'T00:00:00');
+  if (isNaN(targetDate.getTime()) || targetDate < today) {
     return { available: false, message: 'Dates in the past cannot be booked.' };
   }
 
@@ -146,9 +146,60 @@ export function checkSessionAvailability(dateStr: string, session: SessionSlot):
   return { available: true, message: 'This date and session slot are available for reservation enquiry!' };
 }
 
+export function checkDateRangeAvailability(
+  checkInDate: string,
+  checkOutDate: string | null,
+  session: SessionSlot
+): {
+  available: boolean;
+  message: string;
+} {
+  const end = checkOutDate || checkInDate;
+  const startDt = new Date(checkInDate + 'T00:00:00');
+  const endDt = new Date(end + 'T00:00:00');
+
+  if (isNaN(startDt.getTime()) || isNaN(endDt.getTime())) {
+    return { available: false, message: 'Please select valid check-in and check-out dates.' };
+  }
+
+  if (endDt < startDt) {
+    return { available: false, message: 'Check-out date cannot be earlier than check-in date.' };
+  }
+
+  const cursor = new Date(startDt);
+  let daysChecked = 0;
+  while (cursor <= endDt && daysChecked < 60) {
+    const y = cursor.getFullYear();
+    const m = (cursor.getMonth() + 1).toString().padStart(2, '0');
+    const d = cursor.getDate().toString().padStart(2, '0');
+    const ds = `${y}-${m}-${d}`;
+    const single = checkSessionAvailability(ds, session);
+    if (!single.available) {
+      return {
+        available: false,
+        message: `${ds}: ${single.message}`
+      };
+    }
+    cursor.setDate(cursor.getDate() + 1);
+    daysChecked++;
+  }
+
+  return {
+    available: true,
+    message:
+      checkOutDate && checkOutDate !== checkInDate
+        ? 'Selected date range is available for reservation enquiry!'
+        : 'This date and session slot are available for reservation enquiry!'
+  };
+}
+
 export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Promise<BookingSubmissionResponse> {
-  // Re-verify availability
-  const check = checkSessionAvailability(payload.eventDate, payload.session);
+  // Re-verify date range availability
+  const check = checkDateRangeAvailability(
+    payload.eventDate,
+    payload.checkOutDate || payload.eventDate,
+    payload.session
+  );
   if (!check.available) {
     throw new Error(check.message);
   }
@@ -156,18 +207,20 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
   const randomRefNum = Math.floor(100000 + Math.random() * 900000);
   const reference = `PSC-2026-${randomRefNum}`;
   const now = new Date().toISOString();
+  const effectiveCheckOut = payload.checkOutDate || payload.eventDate;
 
   const newEnquiry = {
     id: `enq-${Date.now()}`,
     reference,
     fullName: payload.fullName,
     mobileNumber: payload.mobileNumber,
-    email: payload.email,
+    email: payload.email || undefined,
     eventDate: payload.eventDate,
+    checkOutDate: effectiveCheckOut,
     alternativeDate: payload.alternativeDate || undefined,
     session: payload.session,
     eventType: payload.eventType,
-    expectedGuests: Number(payload.expectedGuests),
+    expectedGuests: Number(payload.expectedGuests || 0),
     cateringPreference: payload.cateringPreference,
     additionalRequirements: payload.additionalRequirements || '',
     status: 'PENDING',
@@ -192,14 +245,15 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
     success: true,
     reference,
     eventDate: payload.eventDate,
+    checkOutDate: effectiveCheckOut,
     eventType: payload.eventType,
     session: payload.session,
     status: 'PENDING',
     message: 'Your booking enquiry has been received by PS Convention Center. Our reservation manager will review availability and call you within 24 hours.',
     customerName: payload.fullName,
     mobileNumber: payload.mobileNumber,
-    email: payload.email,
-    expectedGuests: Number(payload.expectedGuests),
+    email: payload.email || undefined,
+    expectedGuests: Number(payload.expectedGuests || 0),
     cateringPreference: payload.cateringPreference,
     submittedAt: now
   };

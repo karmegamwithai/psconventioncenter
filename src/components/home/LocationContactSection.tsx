@@ -6,11 +6,13 @@ export const LocationContactSection: React.FC = () => {
   const [formState, setFormState] = useState({
     name: '',
     phone: '',
-    email: '',
+    availability: '',
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const todayStr = new Date().toISOString().split('T')[0];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ export const LocationContactSection: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
-      setFormState({ name: '', phone: '', email: '', message: '' });
+      setFormState({ name: '', phone: '', availability: '', message: '' });
     }, 600);
   };
 
@@ -126,7 +128,7 @@ export const LocationContactSection: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-[11px] uppercase font-bold tracking-wider text-[#234D3C] dark:text-gray-200 mb-1">
-                    Your Name *
+                    Name *
                   </label>
                   <input
                     type="text"
@@ -140,7 +142,7 @@ export const LocationContactSection: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] uppercase font-bold tracking-wider text-[#234D3C] mb-1">
+                    <label className="block text-[11px] uppercase font-bold tracking-wider text-[#234D3C] dark:text-gray-200 mb-1">
                       Phone Number *
                     </label>
                     <input
@@ -154,14 +156,14 @@ export const LocationContactSection: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-[11px] uppercase font-bold tracking-wider text-[#234D3C] dark:text-gray-200 mb-1">
-                      Email Address *
+                      Availability *
                     </label>
                     <input
-                      type="email"
+                      type="date"
                       required
-                      value={formState.email}
-                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      placeholder="name@domain.com"
+                      min={todayStr}
+                      value={formState.availability}
+                      onChange={(e) => setFormState({ ...formState, availability: e.target.value })}
                       className="w-full px-3.5 py-2.5 text-xs bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none"
                     />
                   </div>
@@ -169,14 +171,13 @@ export const LocationContactSection: React.FC = () => {
 
                 <div>
                   <label className="block text-[11px] uppercase font-bold tracking-wider text-[#234D3C] dark:text-gray-200 mb-1">
-                    Message *
+                    Message <span className="text-gray-400 font-normal lowercase">(optional)</span>
                   </label>
                   <textarea
                     rows={4}
-                    required
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                    placeholder="Enter celebration details, dates, or venue tour request..."
+                    placeholder="Enter celebration details or venue tour request..."
                     className="w-full px-3.5 py-2.5 text-xs bg-white dark:bg-[#07150e] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none resize-none"
                   />
                 </div>
