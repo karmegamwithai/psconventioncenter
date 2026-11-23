@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Calendar, ChevronRight, ArrowDown } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface HeroSectionProps {
-  onCheckAvailability: () => void;
+  onCheckAvailability?: () => void;
   onExploreVenue: () => void;
   onExplore3DTour?: () => void;
 }
 
 interface StoryChapter {
   id: string;
-  eyebrow: string;
   headlineTop: string;
   headlineAccent: string;
   subtitle: string;
@@ -27,7 +26,6 @@ const HERO_VIDEO_SRC =
 const STORY_CHAPTERS: StoryChapter[] = [
   {
     id: 'welcome',
-    eyebrow: 'WELCOME',
     headlineTop: 'Welcome to Padmasena',
     headlineAccent: 'Convention Center.',
     subtitle:
@@ -36,7 +34,6 @@ const STORY_CHAPTERS: StoryChapter[] = [
   },
   {
     id: 'celebrations',
-    eyebrow: 'MEMORABLE CELEBRATIONS',
     headlineTop: 'Unforgettable Moments.',
     headlineAccent: 'Exceptional Experiences.',
     subtitle:
@@ -44,7 +41,6 @@ const STORY_CHAPTERS: StoryChapter[] = [
   },
   {
     id: 'convention-halls',
-    eyebrow: 'CONVENTION HALLS',
     headlineTop: 'Expansive Halls Crafted',
     headlineAccent: 'for Grand Celebrations.',
     subtitle:
@@ -52,7 +48,6 @@ const STORY_CHAPTERS: StoryChapter[] = [
   },
   {
     id: 'premium-hall',
-    eyebrow: 'THE PREMIUM HALL',
     headlineTop: 'The Premium Hall.',
     headlineAccent: 'Unrivaled Royal Luxury.',
     subtitle:
@@ -60,7 +55,6 @@ const STORY_CHAPTERS: StoryChapter[] = [
   },
   {
     id: 'lawn',
-    eyebrow: 'THE GRAND LAWN',
     headlineTop: 'Under Starlit Skies.',
     headlineAccent: 'Beautiful Outdoor Events.',
     subtitle:
@@ -68,7 +62,6 @@ const STORY_CHAPTERS: StoryChapter[] = [
   },
   {
     id: 'explore',
-    eyebrow: 'DISCOVER THE VENUE',
     headlineTop: 'Experience Every Space',
     headlineAccent: 'at Padmasena.',
     subtitle:
@@ -78,9 +71,7 @@ const STORY_CHAPTERS: StoryChapter[] = [
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  onCheckAvailability,
-  onExploreVenue,
-  onExplore3DTour
+  onExploreVenue
 }) => {
   const triggerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -347,7 +338,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       className="relative h-[100svh] w-full overflow-hidden bg-[#07150e] text-white"
       style={{ perspective: '1400px' }}
     >
-      {/* 3D Interactive Camera Background Stage with Uploaded Cinematic Video */}
+      {/* 3D Interactive Camera Background Stage with Unobstructed Full-Visibility Video */}
       <div
         className="hero-3d-camera absolute inset-0 z-0 will-change-transform"
         style={{ transformStyle: 'preserve-3d' }}
@@ -361,29 +352,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           onLoadedMetadata={handleVideoLoadedMetadata}
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-
-        {/* Editorial Contrast Gradients so Typography Remains Razor-Sharp Over Video */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#05110b]/90 via-black/35 to-black/40" />
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#05110b]/80 via-black/30 to-transparent" />
       </div>
 
       {/* Foreground Content Layer */}
       <div
-        className="relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col justify-between pt-24 sm:pt-28 pb-16 sm:pb-12"
+        className="relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col justify-center pt-24 sm:pt-28 pb-16 sm:pb-12 pointer-events-none"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
       >
-        {/* Top Row: 3D Virtual Tour Trigger Only (No Timeline Bar/Clock) */}
-        <div className="flex items-center justify-start">
-          <button
-            onClick={onExplore3DTour || onExploreVenue}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-black/45 hover:bg-black/70 border border-[#C5A45D]/60 hover:border-[#C5A45D] text-white text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.2em] backdrop-blur-md transition-all cursor-pointer"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#C5A45D] animate-ping" />
-            <span className="text-[#C5A45D]">3D VIRTUAL TOUR AVAILABLE</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#C5A45D]" />
-          </button>
-        </div>
-
         {/* Synchronized Down-to-Up Animated Storytelling Text Chapters */}
         <div
           className="relative flex-1 flex items-center my-4"
@@ -400,16 +375,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 <div className={`space-y-4 sm:space-y-5 ${chapter.isWelcome ? 'hero-welcome-inner' : ''}`}>
-                  {/* Eyebrow */}
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 sm:w-10 h-px bg-[#C5A45D]" />
-                    <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold text-[#C5A45D]">
-                      {chapter.eyebrow}
-                    </span>
-                  </div>
-
                   {/* Editorial Serif Headline */}
-                  <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-[1.08] drop-shadow-2xl">
+                  <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-[1.08] drop-shadow-[0_4px_20px_rgba(0,0,0,0.7)]">
                     <span className="block font-normal">{chapter.headlineTop}</span>
                     <span className="block text-[#C5A45D] italic font-semibold mt-1">
                       {chapter.headlineAccent}
@@ -417,29 +384,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </h1>
 
                   {/* Subtitle */}
-                  <p className="text-sm sm:text-base md:text-lg text-gray-200/95 max-w-2xl leading-relaxed font-light drop-shadow">
+                  <p className="text-sm sm:text-base md:text-lg text-white max-w-2xl leading-relaxed font-light drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
                     {chapter.subtitle}
                   </p>
-
-                  {/* Opening Actions */}
-                  {chapter.isWelcome && (
-                    <div className="pt-2 flex flex-wrap items-center gap-3.5">
-                      <button
-                        onClick={onCheckAvailability}
-                        className="px-6 sm:px-8 py-3.5 bg-[#C5A45D] text-[#07150e] font-bold text-xs tracking-[0.2em] uppercase hover:bg-[#d8bc7a] transition-all shadow-2xl flex items-center gap-2 cursor-pointer"
-                      >
-                        <Calendar className="w-4 h-4 text-[#07150e]" />
-                        <span>BOOK YOUR EVENT</span>
-                      </button>
-                      <button
-                        onClick={onExploreVenue}
-                        className="px-6 sm:px-8 py-3.5 bg-black/45 hover:bg-black/70 border border-white/60 hover:border-[#C5A45D] text-white hover:text-[#C5A45D] font-semibold text-xs tracking-[0.2em] uppercase transition-all backdrop-blur-sm flex items-center gap-2 cursor-pointer"
-                      >
-                        <span>EXPLORE FACILITIES</span>
-                        <ChevronRight className="w-4 h-4 text-[#C5A45D]" />
-                      </button>
-                    </div>
-                  )}
 
                   {/* Final Explore Call-To-Action */}
                   {chapter.isFinalCta && (
@@ -451,36 +398,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         <span>EXPLORE</span>
                         <ChevronRight className="w-4 h-4 text-[#07150e] shrink-0" />
                       </button>
-
-                      <button
-                        onClick={onCheckAvailability}
-                        className="w-full sm:w-auto px-8 sm:px-10 py-4 bg-black/45 hover:bg-black/70 border border-white/70 hover:border-[#C5A45D] text-white hover:text-[#C5A45D] font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase transition-all duration-300 backdrop-blur-sm flex items-center justify-center gap-2 cursor-pointer"
-                      >
-                        <Calendar className="w-4 h-4 text-[#C5A45D]" />
-                        <span>BOOK YOUR EVENT</span>
-                      </button>
                     </div>
                   )}
                 </div>
               </div>
             );
           })}
-        </div>
-
-        {/* Clean Bottom Scroll Indicator (Timeline Bar & Timestamp Markers Removed) */}
-        <div className="flex items-center justify-end">
-          <button
-            type="button"
-            onClick={onExploreVenue}
-            className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-gray-300 hover:text-[#C5A45D] transition-colors cursor-pointer"
-          >
-            <span>
-              {activeChapterIdx === STORY_CHAPTERS.length - 1
-                ? 'Explore Facilities'
-                : 'Scroll to Experience'}
-            </span>
-            <ArrowDown className="w-3.5 h-3.5 text-[#C5A45D] animate-bounce" />
-          </button>
         </div>
       </div>
     </section>
