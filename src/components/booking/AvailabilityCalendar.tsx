@@ -1,18 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
   Calendar as CalendarIcon,
   X,
-  ArrowRight
+  Check
 } from 'lucide-react';
 import { DayAvailability } from '../../types/booking';
 
 interface AvailabilityCalendarProps {
   currentDate: Date;
-  checkInDate: string | null;
-  checkOutDate: string | null;
-  onSelectDate: (dateStr: string) => void;
+  selectedDates: string[];
+  onToggleDate: (dateStr: string) => void;
   onClearDates: () => void;
   onJumpToForm?: () => void;
   onPrevMonth: () => void;
@@ -23,9 +22,8 @@ interface AvailabilityCalendarProps {
 
 export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   currentDate,
-  checkInDate,
-  checkOutDate,
-  onSelectDate,
+  selectedDates,
+  onToggleDate,
   onClearDates,
   onJumpToForm,
   onPrevMonth,
@@ -33,8 +31,6 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   onToday,
   availability
 }) => {
-  const [hoverDate, setHoverDate] = useState<string | null>(null);
-
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -54,39 +50,17 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     .toString()
     .padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
 
-  const formatShortDate = (dateStr: string | null) => {
-    if (!dateStr) return 'Not selected';
+  const selectedSet = useMemo(() => new Set(selectedDates), [selectedDates]);
+  const sortedSelectedDates = useMemo(() => [...selectedDates].sort(), [selectedDates]);
+
+  const formatShortDate = (dateStr: string) => {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-IN', {
+      weekday: 'short',
       day: 'numeric',
       month: 'short',
       year: 'numeric'
     });
   };
-
-  // Compute effective preview range while user is picking check-out date
-  const previewRange = useMemo(() => {
-    if (!checkInDate) return { start: null as string | null, end: null as string | null };
-    if (checkOutDate) {
-      return checkInDate <= checkOutDate
-        ? { start: checkInDate, end: checkOutDate }
-        : { start: checkOutDate, end: checkInDate };
-    }
-    if (hoverDate && hoverDate >= todayStr) {
-      return checkInDate <= hoverDate
-        ? { start: checkInDate, end: hoverDate }
-        : { start: hoverDate, end: checkInDate };
-    }
-    return { start: checkInDate, end: null as string | null };
-  }, [checkInDate, checkOutDate, hoverDate, todayStr]);
-
-  const totalSelectedDays = useMemo(() => {
-    if (!checkInDate) return 0;
-    const end = checkOutDate || checkInDate;
-    const startMs = new Date(checkInDate + 'T00:00:00').getTime();
-    const endMs = new Date(end + 'T00:00:00').getTime();
-    const diff = Math.round((endMs - startMs) / (1000 * 60 * 60 * 24));
-    return Math.max(1, diff + 1);
-  }, [checkInDate, checkOutDate]);
 
   // Build calendar matrix
   const calendarDays = useMemo(() => {
@@ -125,56 +99,15 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     return days;
   }, [year, month, availability, todayStr]);
 
-  const getCellRangeState = (dateStr: string | null) => {
-    if (!dateStr) {
-      return {
-        isStart: false,
-        isEnd: false,
-        isSameDayRange: false,
-        isInRange: false,
-        isPreviewInRange: false
-      };
-    }
-
-    const isStart = checkInDate === dateStr;
-    const isEnd = checkOutDate === dateStr;
-    const isSameDayRange = Boolean(checkInDate && checkOutDate && checkInDate === checkOutDate && isStart);
-    const isInRange = Boolean(
-      checkInDate &&
-        checkOutDate &&
-        dateStr > (checkInDate < checkOutDate ? checkInDate : checkOutDate) &&
-        dateStr < (checkInDate < checkOutDate ? checkOutDate : checkInDate)
-    );
-    const isPreviewInRange = Boolean(
-      !checkOutDate &&
-        previewRange.start &&
-        previewRange.end &&
-        dateStr > previewRange.start &&
-        dateStr <= previewRange.end
-    );
-
-    return { isStart, isEnd, isSameDayRange, isInRange, isPreviewInRange };
-  };
-
-  // All calendar dates kept at full 100% opacity so no date looks faded or washed out
   const getStatusColorClass = (item: (typeof calendarDays)[0]) => {
     if (!item.dateStr || item.dayNumber === null) return 'bg-transparent cursor-default';
 
-    const { isStart, isEnd, isInRange, isPreviewInRange } = getCellRangeState(item.dateStr);
+    const isSelected = selectedSet.has(item.dateStr);
 
-    if (isStart || isEnd) {
+    if (isSelected) {
       return 'opacity-100 bg-[#1b3d30] dark:bg-[#C5A45D] text-white dark:text-[#07150e] border-2 border-[#C5A45D] dark:border-white shadow-xl scale-[1.02] z-10 cursor-pointer ring-2 ring-[#C5A45D]/40';
     }
 
-    if (isInRange) {
-      return 'opacity-100 bg-[#F5E6BF] dark:bg-[#3a2d10] text-[#173628] dark:text-[#fff0c2] border-2 border-[#C5A45D] dark:border-[#C5A45D] shadow-md cursor-pointer';
-    }
-
-    if (isPreviewInRange && !item.isPast) {
-      return 'opacity-100 bg-[#FAF0D7] dark:bg-[#2a210c] text-[#173628] dark:text-[#fbe4a7] border-2 border-dashed border-[#C5A45D] cursor-pointer';
-    }
-
-    // Past dates: clearly visible (opacity-100), not faded, prevented from selection
     if (item.isPast) {
       return 'opacity-100 bg-[#ECEFE9] dark:bg-[#14241c] text-[#3d4d45] dark:text-[#a8beb2] border border-gray-300 dark:border-white/25 cursor-not-allowed';
     }
@@ -197,12 +130,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
   const getStatusBadgeText = (item: (typeof calendarDays)[0]) => {
     if (!item.dateStr || item.dayNumber === null) return null;
-    const { isStart, isEnd, isSameDayRange, isInRange } = getCellRangeState(item.dateStr);
-
-    if (isSameDayRange) return 'Check-In / Out';
-    if (isStart) return 'Check-In';
-    if (isEnd) return 'Check-Out';
-    if (isInRange) return 'In Range';
+    if (selectedSet.has(item.dateStr)) return 'Selected';
     if (item.isPast) return 'Past';
     if (item.data?.isBlocked) return 'Blocked';
     if (item.data?.status === 'CONFIRMED') return 'Booked';
@@ -213,12 +141,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
   const getShortBadgeText = (item: (typeof calendarDays)[0]) => {
     if (!item.dateStr || item.dayNumber === null) return null;
-    const { isStart, isEnd, isSameDayRange, isInRange } = getCellRangeState(item.dateStr);
-
-    if (isSameDayRange) return '1 Day';
-    if (isStart) return 'In';
-    if (isEnd) return 'Out';
-    if (isInRange) return 'Range';
+    if (selectedSet.has(item.dateStr)) return 'Picked';
     if (item.isPast) return 'Past';
     if (item.data?.isBlocked) return 'Block';
     if (item.data?.status === 'CONFIRMED') return 'Booked';
@@ -226,12 +149,6 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     if (item.data?.status === 'PENDING_ENQUIRY') return 'Req';
     return 'Avail';
   };
-
-  const selectionGuidance = !checkInDate
-    ? 'Step 1: Click any upcoming date to choose your Check-In date'
-    : !checkOutDate
-    ? 'Step 2: Click a Check-Out date to complete your date range (or click same date for 1 day)'
-    : `Selected ${totalSelectedDays} ${totalSelectedDays === 1 ? 'Day' : 'Days'} — Reflected automatically in the enquiry form below`;
 
   return (
     <div className="w-full bg-white dark:bg-[#071710] border border-gray-200 dark:border-[#C5A45D]/40 shadow-2xl p-3.5 sm:p-6 lg:p-10 flex flex-col justify-between transition-colors duration-300 rounded-sm">
@@ -247,7 +164,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                 {monthNames[month]} {year}
               </h2>
               <span className="text-[10px] sm:text-[11px] text-gray-600 dark:text-gray-300 font-medium tracking-wider uppercase block">
-                Venue Calendar (IST) &bull; Check-In &amp; Check-Out Range Selection
+                Venue Calendar (IST) &bull; Click Dates to Select or Deselect Multiple Event Dates
               </span>
             </div>
           </div>
@@ -283,61 +200,6 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
           </div>
         </div>
 
-        {/* Active Date Range Summary Strip */}
-        <div className="mt-4 p-3 sm:p-4 bg-[#FAF8F2] dark:bg-[#0c2317] border border-[#e2d8c3] dark:border-[#C5A45D]/35 flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="space-y-1">
-            <p className="text-[11px] sm:text-xs font-semibold text-[#234D3C] dark:text-[#f3eedd]">
-              {selectionGuidance}
-            </p>
-            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400">
-                  Check-In:
-                </span>
-                <span className="font-bold text-[#234D3C] dark:text-[#C5A45D]">
-                  {formatShortDate(checkInDate)}
-                </span>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[#C5A45D] shrink-0" />
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400">
-                  Check-Out:
-                </span>
-                <span className="font-bold text-[#234D3C] dark:text-[#C5A45D]">
-                  {formatShortDate(checkOutDate)}
-                </span>
-              </div>
-              {checkInDate && checkOutDate && (
-                <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e]">
-                  {totalSelectedDays} {totalSelectedDays === 1 ? 'Day' : 'Days'}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {(checkInDate || checkOutDate) && (
-              <button
-                type="button"
-                onClick={onClearDates}
-                className="px-3 py-1.5 text-[11px] uppercase font-bold tracking-wider border border-gray-300 dark:border-white/25 bg-white dark:bg-[#07150e] text-[#234D3C] dark:text-gray-200 hover:border-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors flex items-center gap-1 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>Clear</span>
-              </button>
-            )}
-            {checkInDate && checkOutDate && onJumpToForm && (
-              <button
-                type="button"
-                onClick={onJumpToForm}
-                className="px-3.5 py-1.5 text-[11px] uppercase font-bold tracking-wider bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] transition-colors cursor-pointer"
-              >
-                Continue to Enquiry &darr;
-              </button>
-            )}
-          </div>
-        </div>
-
         {/* Days of Week Header */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2 my-3 sm:my-5 text-center">
           {weekDayLabels.map((day, idx) => (
@@ -354,30 +216,24 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
           ))}
         </div>
 
-        {/* Calendar Matrix - Full Opacity, Responsive Desktop & Mobile */}
-        <div
-          className="grid grid-cols-7 gap-1 sm:gap-2 md:gap-3"
-          onMouseLeave={() => setHoverDate(null)}
-        >
+        {/* Calendar Matrix */}
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 md:gap-3">
           {calendarDays.map((cell, idx) => {
             const badge = getStatusBadgeText(cell);
             const shortBadge = getShortBadgeText(cell);
-            const { isStart, isEnd, isInRange } = getCellRangeState(cell.dateStr);
-            const isEndpoint = isStart || isEnd;
+            const isSelected = Boolean(cell.dateStr && selectedSet.has(cell.dateStr));
 
             return (
               <button
                 key={idx}
                 type="button"
                 disabled={!cell.dateStr || cell.isPast}
-                onMouseEnter={() => {
-                  if (cell.dateStr && !cell.isPast) setHoverDate(cell.dateStr);
-                }}
                 onClick={() => {
                   if (cell.dateStr && !cell.isPast) {
-                    onSelectDate(cell.dateStr);
+                    onToggleDate(cell.dateStr);
                   }
                 }}
+                aria-pressed={isSelected}
                 className={`relative min-h-[52px] xs:min-h-[58px] sm:min-h-[85px] md:min-h-[105px] p-1 xs:p-1.5 sm:p-2.5 md:p-3.5 flex flex-col justify-between transition-all duration-200 text-left focus:outline-none rounded-sm ${getStatusColorClass(
                   cell
                 )}`}
@@ -387,10 +243,8 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                     <div className="flex items-center justify-between w-full">
                       <span
                         className={`text-[11px] xs:text-xs sm:text-base font-bold ${
-                          isEndpoint
+                          isSelected
                             ? 'text-white dark:text-[#07150e]'
-                            : isInRange
-                            ? 'text-[#173628] dark:text-[#fff3cc]'
                             : cell.isPast
                             ? 'text-[#3d4d45] dark:text-[#b4c8bd]'
                             : 'text-[#143325] dark:text-white'
@@ -398,26 +252,26 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                       >
                         {cell.dayNumber}
                       </span>
-                      {cell.isToday && (
-                        <span
-                          className={`w-2 h-2 rounded-full shrink-0 ${
-                            isEndpoint
-                              ? 'bg-white dark:bg-[#07150e]'
-                              : 'bg-[#C5A45D] ring-2 ring-[#C5A45D]/40'
-                          }`}
-                          title="Today"
-                        />
+                      {isSelected ? (
+                        <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#C5A45D] dark:bg-[#07150e] text-[#07150e] dark:text-[#C5A45D] flex items-center justify-center shrink-0">
+                          <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 stroke-[3]" />
+                        </span>
+                      ) : (
+                        cell.isToday && (
+                          <span
+                            className="w-2 h-2 rounded-full shrink-0 bg-[#C5A45D] ring-2 ring-[#C5A45D]/40"
+                            title="Today"
+                          />
+                        )
                       )}
                     </div>
 
-                    {/* Status / Range Indicator Badge */}
+                    {/* Status / Selected Indicator Badge */}
                     <div className="mt-auto pt-0.5 sm:pt-1 w-full">
                       <span
                         className={`block text-center sm:inline-block text-[8px] sm:text-[10px] font-bold uppercase tracking-tight sm:tracking-wider px-1 sm:px-1.5 py-0.5 truncate rounded ${
-                          isEndpoint
+                          isSelected
                             ? 'bg-[#C5A45D] text-[#07150e] dark:bg-[#07150e] dark:text-[#C5A45D]'
-                            : isInRange
-                            ? 'bg-[#234D3C] text-white dark:bg-[#C5A45D] dark:text-[#07150e]'
                             : cell.isPast
                             ? 'bg-gray-200 dark:bg-white/15 text-[#2d3b34] dark:text-[#d2e0d8]'
                             : cell.data?.isBlocked
@@ -440,30 +294,87 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
             );
           })}
         </div>
+
+        {/* Selected Dates Display Box Below Calendar */}
+        <div className="mt-5 sm:mt-6 p-4 sm:p-5 bg-[#FAF8F2] dark:bg-[#0c2317] border border-[#e2d8c3] dark:border-[#C5A45D]/40 space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#234D3C] dark:text-[#f3eedd]">
+                Selected Event Dates
+              </span>
+              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e]">
+                {sortedSelectedDates.length} {sortedSelectedDates.length === 1 ? 'Date' : 'Dates'}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {sortedSelectedDates.length > 0 && (
+                <button
+                  type="button"
+                  onClick={onClearDates}
+                  className="px-3 py-1.5 text-[11px] uppercase font-bold tracking-wider border border-gray-300 dark:border-white/25 bg-white dark:bg-[#07150e] text-[#234D3C] dark:text-gray-200 hover:border-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Clear All</span>
+                </button>
+              )}
+              {sortedSelectedDates.length > 0 && onJumpToForm && (
+                <button
+                  type="button"
+                  onClick={onJumpToForm}
+                  className="px-3.5 py-1.5 text-[11px] uppercase font-bold tracking-wider bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] transition-colors cursor-pointer"
+                >
+                  Review in Enquiry Form &darr;
+                </button>
+              )}
+            </div>
+          </div>
+
+          {sortedSelectedDates.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {sortedSelectedDates.map((dateStr) => (
+                <span
+                  key={dateStr}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold bg-white dark:bg-[#07150e] border border-[#C5A45D] text-[#234D3C] dark:text-[#f3eedd] shadow-sm"
+                >
+                  <CalendarIcon className="w-3.5 h-3.5 text-[#C5A45D] shrink-0" />
+                  <span>{formatShortDate(dateStr)}</span>
+                  <button
+                    type="button"
+                    onClick={() => onToggleDate(dateStr)}
+                    title={`Deselect ${formatShortDate(dateStr)}`}
+                    aria-label={`Deselect ${formatShortDate(dateStr)}`}
+                    className="p-0.5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-gray-600 dark:text-gray-300">
+              Click on one or more upcoming dates on the calendar above to select your preferred event dates. Click a selected date again to deselect it.
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Calendar Legend below Calendar */}
       <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-white/15">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
           <span className="text-[11px] sm:text-xs uppercase font-bold tracking-wider text-[#234D3C] dark:text-[#C5A45D]">
-            Legend &amp; Range Indicators
+            Legend &amp; Availability Indicators
           </span>
           <span className="text-[10px] sm:text-[11px] text-gray-600 dark:text-gray-300">
-            Select a Check-In date and Check-Out date to populate your enquiry automatically
+            Select multiple event dates to populate your booking enquiry automatically
           </span>
         </div>
 
-        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 text-xs">
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 text-xs">
           <div className="flex items-center gap-2 p-1.5 rounded bg-gray-50 dark:bg-white/5">
             <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#1b3d30] dark:bg-[#C5A45D] border-2 border-[#C5A45D] dark:border-white shrink-0 rounded-sm" />
             <span className="text-gray-900 dark:text-white font-bold text-[10px] sm:text-[11px]">
-              Check-In / Out
-            </span>
-          </div>
-          <div className="flex items-center gap-2 p-1.5 rounded bg-gray-50 dark:bg-white/5">
-            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#F5E6BF] dark:bg-[#3a2d10] border-2 border-[#C5A45D] shrink-0 rounded-sm" />
-            <span className="text-gray-900 dark:text-gray-100 font-semibold text-[10px] sm:text-[11px]">
-              In Range
+              Selected Date
             </span>
           </div>
           <div className="flex items-center gap-2 p-1.5 rounded bg-gray-50 dark:bg-white/5">

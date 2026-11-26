@@ -14,10 +14,9 @@ interface BookingPageProps {
 }
 
 export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedEventType }) => {
-  // Calendar month state & two-date range state (Check-In & Check-Out)
+  // Calendar month state & multiple selected event dates state
   const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
-  const [checkInDate, setCheckInDate] = useState<string | null>(null);
-  const [checkOutDate, setCheckOutDate] = useState<string | null>(null);
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [availability, setAvailability] = useState<DayAvailability[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -51,47 +50,27 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
     }
   };
 
-  // Interactive two-date range selection (Check-In -> Check-Out)
-  const handleSelectCalendarDate = (dateStr: string) => {
+  // Toggle selection of any event date on the calendar or form
+  const handleToggleDate = (dateStr: string) => {
     setSubmitError(null);
-
-    // Start a fresh selection if none selected or both already selected
-    if (!checkInDate || (checkInDate && checkOutDate)) {
-      setCheckInDate(dateStr);
-      setCheckOutDate(null);
-      return;
-    }
-
-    // Second click completes the range (automatically orders earlier date as check-in)
-    if (dateStr < checkInDate) {
-      setCheckOutDate(checkInDate);
-      setCheckInDate(dateStr);
-    } else {
-      setCheckOutDate(dateStr);
-    }
+    setSelectedDates((prev) => {
+      if (prev.includes(dateStr)) {
+        return prev.filter((d) => d !== dateStr);
+      }
+      return [...prev, dateStr].sort();
+    });
   };
 
-  const handleCheckInChange = (dateStr: string | null) => {
+  const handleAddDate = (dateStr: string) => {
     setSubmitError(null);
-    setCheckInDate(dateStr);
-    if (dateStr && checkOutDate && dateStr > checkOutDate) {
-      setCheckOutDate(dateStr);
-    }
-  };
-
-  const handleCheckOutChange = (dateStr: string | null) => {
-    setSubmitError(null);
-    if (dateStr && checkInDate && dateStr < checkInDate) {
-      setCheckInDate(dateStr);
-      setCheckOutDate(checkInDate);
-    } else {
-      setCheckOutDate(dateStr);
-    }
+    setSelectedDates((prev) => {
+      if (prev.includes(dateStr)) return prev;
+      return [...prev, dateStr].sort();
+    });
   };
 
   const handleClearDates = () => {
-    setCheckInDate(null);
-    setCheckOutDate(null);
+    setSelectedDates([]);
     setSubmitError(null);
   };
 
@@ -137,14 +116,13 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
             onNewEnquiry={handleMakeAnotherEnquiry}
           />
         ) : (
-          /* Interactive Date Range Calendar & Synced Enquiry Form */
+          /* Interactive Multiple-Date Calendar & Synced Enquiry Form */
           <div className="space-y-8 sm:space-y-12">
             <div className="w-full">
               <AvailabilityCalendar
                 currentDate={currentDate}
-                checkInDate={checkInDate}
-                checkOutDate={checkOutDate}
-                onSelectDate={handleSelectCalendarDate}
+                selectedDates={selectedDates}
+                onToggleDate={handleToggleDate}
                 onClearDates={handleClearDates}
                 onJumpToForm={scrollToForm}
                 onPrevMonth={handlePrevMonth}
@@ -163,10 +141,9 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
             {/* Under: Fill the Form */}
             <div id="booking-enquiry-form" className="w-full scroll-mt-24">
               <BookingEnquiryForm
-                checkInDate={checkInDate}
-                checkOutDate={checkOutDate}
-                onCheckInChange={handleCheckInChange}
-                onCheckOutChange={handleCheckOutChange}
+                selectedDates={selectedDates}
+                onToggleDate={handleToggleDate}
+                onAddDate={handleAddDate}
                 onClearDates={handleClearDates}
                 onSubmitEnquiry={handleSubmitEnquiry}
                 isSubmitting={isSubmitting}

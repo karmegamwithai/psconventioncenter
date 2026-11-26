@@ -23,22 +23,18 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
     }
   }, []);
 
-  const formattedDate = new Date(data.eventDate + 'T00:00:00').toLocaleDateString('en-IN', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  });
+  const formatSingleDate = (dateStr: string) =>
+    new Date(dateStr + 'T00:00:00').toLocaleDateString('en-IN', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
 
-  const formattedCheckOutDate =
-    data.checkOutDate && data.checkOutDate !== data.eventDate
-      ? new Date(data.checkOutDate + 'T00:00:00').toLocaleDateString('en-IN', {
-          weekday: 'short',
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        })
-      : null;
+  const displayDates =
+    data.selectedDates && data.selectedDates.length > 0
+      ? data.selectedDates.map(formatSingleDate)
+      : [formatSingleDate(data.eventDate)];
 
   const getSessionLabel = (s: string) => {
     switch (s) {
@@ -71,7 +67,7 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
 
         {/* Reference Code */}
         <div className="mt-4 sm:mt-5 inline-block bg-black/30 dark:bg-black/50 border border-[#C5A45D] px-4 sm:px-5 py-2 rounded-sm">
-          <span className="text-[10px] uppercase tracking-wider text-gray-300 block font-['Outfit',sans-serif]">Unique Enquiry Reference</span>
+          <span className="text-[10px] uppercase tracking-wider text-gray-300 block font-['Urbanist','Outfit',sans-serif]">Unique Enquiry Reference</span>
           <span className="text-lg sm:text-xl font-bold text-[#C5A45D] tracking-widest font-['Cormorant_Garamond',serif]">
             {data.reference}
           </span>
@@ -81,20 +77,27 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
       {/* Confirmation Summary Body */}
       <div className="p-4 sm:p-8 space-y-4 sm:space-y-5 bg-[#FAF8F2] dark:bg-[#091710]">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Outfit',sans-serif]">
-              {formattedCheckOutDate ? 'Check-In – Check-Out Dates' : 'Requested Event Date'}
+          <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20 sm:col-span-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1.5 font-['Urbanist','Outfit',sans-serif]">
+              {displayDates.length > 1
+                ? `Requested Event Dates (${displayDates.length} Dates)`
+                : 'Requested Event Date'}
             </span>
-            <div className="flex items-center gap-2 text-sm font-bold text-[#234D3C] dark:text-[#d3e5dc]">
-              <Calendar className="w-4 h-4 text-[#C5A45D] shrink-0" />
-              <span>
-                {formattedCheckOutDate ? `${formattedDate} – ${formattedCheckOutDate}` : formattedDate}
-              </span>
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-bold text-[#234D3C] dark:text-[#d3e5dc]">
+              {displayDates.map((dLabel, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#C5A45D]/40"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-[#C5A45D] shrink-0" />
+                  <span>{dLabel}</span>
+                </span>
+              ))}
             </div>
           </div>
 
           <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Outfit',sans-serif]">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Urbanist','Outfit',sans-serif]">
               Event Type
             </span>
             <div className="flex items-center gap-2 text-sm font-bold text-[#234D3C] dark:text-[#d3e5dc]">

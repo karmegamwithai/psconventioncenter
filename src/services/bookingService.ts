@@ -193,13 +193,44 @@ export function checkDateRangeAvailability(
   };
 }
 
+export function checkMultipleDatesAvailability(
+  selectedDates: string[],
+  session: SessionSlot
+): {
+  available: boolean;
+  message: string;
+} {
+  if (!selectedDates || selectedDates.length === 0) {
+    return { available: false, message: 'Please select at least one event date.' };
+  }
+
+  const sorted = [...selectedDates].sort();
+  for (const ds of sorted) {
+    const single = checkSessionAvailability(ds, session);
+    if (!single.available) {
+      return {
+        available: false,
+        message: `${ds}: ${single.message}`
+      };
+    }
+  }
+
+  return {
+    available: true,
+    message:
+      sorted.length > 1
+        ? `All ${sorted.length} selected dates are available for reservation enquiry!`
+        : 'This date and session slot are available for reservation enquiry!'
+  };
+}
+
 export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Promise<BookingSubmissionResponse> {
-  // Re-verify date range availability
-  const check = checkDateRangeAvailability(
-    payload.eventDate,
-    payload.checkOutDate || payload.eventDate,
-    payload.session
-  );
+  const effectiveDates =
+    payload.selectedDates && payload.selectedDates.length > 0
+      ? [...payload.selectedDates].sort()
+      : [payload.eventDate];
+
+  const check = checkMultipleDatesAvailability(effectiveDates, payload.session);
   if (!check.available) {
     throw new Error(check.message);
   }
@@ -207,7 +238,9 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
   const randomRefNum = Math.floor(100000 + Math.random() * 900000);
   const reference = `PSC-2026-${randomRefNum}`;
   const now = new Date().toISOString();
-  const effectiveCheckOut = payload.checkOutDate || payload.eventDate;
+  const primaryDate = effectiveDates[0];
+  const effectiveCheckOut =
+    payload.checkOutDate || effectiveDates[effectiveDates.length - 1] || primaryDate;
 
   const newEnquiry = {
     id: `enq-${Date.now()}`,
@@ -215,7 +248,8 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
     fullName: payload.fullName,
     mobileNumber: payload.mobileNumber,
     email: payload.email || undefined,
-    eventDate: payload.eventDate,
+    eventDate: primaryDate,
+    selectedDates: effectiveDates,
     checkOutDate: effectiveCheckOut,
     alternativeDate: payload.alternativeDate || undefined,
     session: payload.session,
@@ -224,7 +258,7 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
     cateringPreference: payload.cateringPreference,
     additionalRequirements: payload.additionalRequirements || '',
     status: 'PENDING',
-    date: payload.eventDate,
+    date: primaryDate,
     submittedAt: now
   };
 
@@ -244,7 +278,8 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
   return {
     success: true,
     reference,
-    eventDate: payload.eventDate,
+    eventDate: primaryDate,
+    selectedDates: effectiveDates,
     checkOutDate: effectiveCheckOut,
     eventType: payload.eventType,
     session: payload.session,

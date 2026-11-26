@@ -9,22 +9,33 @@ import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { BookingPage } from './pages/BookingPage';
 import { FacilityDetailPage } from './pages/FacilityDetailPage';
+import { HallPackageDetailPage } from './pages/HallPackageDetailPage';
 import { BlogsModal } from './components/modals/BlogsModal';
+import { ContactUsModal } from './components/modals/ContactUsModal';
 import { ThemeProvider } from './context/ThemeContext';
 import { LuxuryCursor } from './components/common/LuxuryCursor';
-import { FACILITIES, FacilityId } from './data/venueData';
+import { FACILITIES, FacilityId, HALL_PACKAGES, HallPackageId } from './data/venueData';
 
 const VALID_FACILITY_IDS = new Set<string>(FACILITIES.map((f) => f.id));
+const VALID_PACKAGE_IDS = new Set<string>(HALL_PACKAGES.map((p) => p.id));
 
 function parseFacilityIdFromRoute(route: string): FacilityId | null {
   if (!route.startsWith('/facility/')) return null;
   const slug = route.replace('/facility/', '').split('/')[0];
+  if (slug === 'hall') return 'hall-3';
   return VALID_FACILITY_IDS.has(slug) ? (slug as FacilityId) : null;
+}
+
+function parsePackageIdFromRoute(route: string): HallPackageId | null {
+  if (!route.startsWith('/package/')) return null;
+  const slug = route.replace('/package/', '').split('/')[0];
+  return VALID_PACKAGE_IDS.has(slug) ? (slug as HallPackageId) : null;
 }
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState<string>('/');
   const [blogsOpen, setBlogsOpen] = useState(false);
+  const [contactUsOpen, setContactUsOpen] = useState(false);
   const [selectedEventType, setSelectedEventType] = useState<string>('Grand Weddings');
 
   // Sync with browser URL bar and back/forward buttons
@@ -34,6 +45,8 @@ export default function App() {
       if (path === '/booking' || window.location.hash.includes('booking')) {
         setCurrentRoute('/booking');
       } else if (parseFacilityIdFromRoute(path)) {
+        setCurrentRoute(path);
+      } else if (parsePackageIdFromRoute(path)) {
         setCurrentRoute(path);
       } else {
         setCurrentRoute('/');
@@ -73,18 +86,20 @@ export default function App() {
   };
 
   const activeFacilityId = parseFacilityIdFromRoute(currentRoute);
+  const activePackageId = parsePackageIdFromRoute(currentRoute);
 
   return (
     <ThemeProvider>
       {/* Luxury GSAP Custom Follower Cursor */}
       <LuxuryCursor />
 
-      <div className="min-h-screen flex flex-col bg-white dark:bg-[#06140e] text-[#202823] dark:text-gray-100 font-['Outfit',sans-serif] transition-colors duration-300">
-        {/* Shared Premium Sticky Header with Dark Mode Toggle */}
+      <div className="min-h-screen flex flex-col bg-white dark:bg-[#06140e] text-[#202823] dark:text-gray-100 font-['Urbanist','Outfit',sans-serif] transition-colors duration-300">
+        {/* Shared Premium Sticky Header */}
         <Navbar
           currentRoute={currentRoute}
           onNavigate={navigateTo}
           onOpenBlogs={() => setBlogsOpen(true)}
+          onOpenContactUs={() => setContactUsOpen(true)}
         />
 
         {/* Primary Page Outlet */}
@@ -93,6 +108,12 @@ export default function App() {
             <BookingPage
               onGoHome={() => navigateTo('/')}
               preselectedEventType={selectedEventType}
+            />
+          ) : activePackageId ? (
+            <HallPackageDetailPage
+              packageId={activePackageId}
+              onNavigate={navigateTo}
+              onEnquirePackage={handleSelectEventForBooking}
             />
           ) : activeFacilityId ? (
             <FacilityDetailPage
@@ -110,6 +131,12 @@ export default function App() {
 
         {/* Shared Luxury Footer */}
         <Footer onNavigate={navigateTo} />
+
+        {/* Contact Us Centered Overlay Modal */}
+        <ContactUsModal
+          isOpen={contactUsOpen}
+          onClose={() => setContactUsOpen(false)}
+        />
 
         {/* Blogs & Updates Modal */}
         <BlogsModal

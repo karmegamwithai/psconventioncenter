@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Calendar, CheckCircle2, AlertCircle, Send, X, ArrowRight } from 'lucide-react';
+import { Calendar, CheckCircle2, AlertCircle, Send, X, Plus } from 'lucide-react';
 import { SessionSlot, CateringType, BookingEnquiryPayload } from '../../types/booking';
-import { checkDateRangeAvailability } from '../../services/bookingService';
+import { checkMultipleDatesAvailability } from '../../services/bookingService';
 
 interface BookingEnquiryFormProps {
-  checkInDate: string | null;
-  checkOutDate: string | null;
-  onCheckInChange: (dateStr: string | null) => void;
-  onCheckOutChange: (dateStr: string | null) => void;
+  selectedDates: string[];
+  onToggleDate: (dateStr: string) => void;
+  onAddDate: (dateStr: string) => void;
   onClearDates: () => void;
   onSubmitEnquiry: (payload: BookingEnquiryPayload) => Promise<void>;
   isSubmitting: boolean;
@@ -15,10 +14,9 @@ interface BookingEnquiryFormProps {
 }
 
 export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
-  checkInDate,
-  checkOutDate,
-  onCheckInChange,
-  onCheckOutChange,
+  selectedDates,
+  onToggleDate,
+  onAddDate,
   onClearDates,
   onSubmitEnquiry,
   isSubmitting,
@@ -31,11 +29,14 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
   const [expectedGuests, setExpectedGuests] = useState<string>('500');
   const [cateringPreference, setCateringPreference] = useState<CateringType>('VEGETARIAN');
   const [additionalRequirements, setAdditionalRequirements] = useState('');
+  const [manualDateInput, setManualDateInput] = useState('');
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [availabilityCheck, setAvailabilityCheck] = useState<{ available: boolean; message: string } | null>(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
+
+  const sortedDates = useMemo(() => [...selectedDates].sort(), [selectedDates]);
 
   useEffect(() => {
     if (preselectedEventType) {
@@ -44,16 +45,15 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
   }, [preselectedEventType]);
 
   useEffect(() => {
-    if (checkInDate) {
-      const res = checkDateRangeAvailability(checkInDate, checkOutDate || checkInDate, session);
+    if (sortedDates.length > 0) {
+      const res = checkMultipleDatesAvailability(sortedDates, session);
       setAvailabilityCheck(res);
     } else {
       setAvailabilityCheck(null);
     }
-  }, [checkInDate, checkOutDate, session]);
+  }, [sortedDates, session]);
 
-  const formatDisplayDate = (dateStr: string | null) => {
-    if (!dateStr) return null;
+  const formatDisplayDate = (dateStr: string) => {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-IN', {
       weekday: 'short',
       day: 'numeric',
@@ -62,13 +62,11 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
     });
   };
 
-  const totalDays = useMemo(() => {
-    if (!checkInDate) return 0;
-    const end = checkOutDate || checkInDate;
-    const s = new Date(checkInDate + 'T00:00:00').getTime();
-    const e = new Date(end + 'T00:00:00').getTime();
-    return Math.max(1, Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1);
-  }, [checkInDate, checkOutDate]);
+  const handleManualAddDate = () => {
+    if (!manualDateInput || manualDateInput < todayStr) return;
+    onAddDate(manualDateInput);
+    setManualDateInput('');
+  };
 
   const validate = (): boolean => {
     const err: Record<string, string> = {};
@@ -82,12 +80,8 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
       err.mobileNumber = 'Please enter a valid 10-digit phone number.';
     }
 
-    if (!checkInDate) {
-      err.availability = 'Please select your check-in date from the calendar or below.';
-    } else if (!checkOutDate) {
-      err.availability = 'Please select your check-out date to complete the date range.';
-    } else if (checkOutDate < checkInDate) {
-      err.availability = 'Check-out date cannot be earlier than check-in date.';
+    if (sortedDates.length === 0) {
+      err.availability = 'Please select at least one event date from the calendar above or add a date below.';
     } else if (availabilityCheck && !availabilityCheck.available) {
       err.availability = availabilityCheck.message;
     }
@@ -99,13 +93,14 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    if (!checkInDate) return;
+    if (sortedDates.length === 0) return;
 
     await onSubmitEnquiry({
       fullName: fullName.trim(),
       mobileNumber: mobileNumber.trim(),
-      eventDate: checkInDate,
-      checkOutDate: checkOutDate || checkInDate,
+      eventDate: sortedDates[0],
+      selectedDates: sortedDates,
+      checkOutDate: sortedDates[sortedDates.length - 1],
       session,
       eventType,
       expectedGuests: Number(expectedGuests) || 0,
@@ -127,10 +122,13 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
     'Engagement Ceremonies',
     'Traditional Ceremonies',
     'Anniversary Celebrations',
+    'Low Budget Plan',
+    'High Budget Plan',
+    'Premium Budget Plan',
     'Low Budget Hall',
     'High Budget Hall',
     'Premium Hall',
-    'Hall - 3',
+    'Hall',
     'Lawn',
     'Rooms',
     'Dining & Catering',
@@ -139,9 +137,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
     'Other Private Event'
   ];
 
-  const isSlotUnavailable = checkInDate !== null && availabilityCheck !== null && !availabilityCheck.available;
-  const checkInLabel = formatDisplayDate(checkInDate);
-  const checkOutLabel = formatDisplayDate(checkOutDate);
+  const isSlotUnavailable = sortedDates.length > 0 && availabilityCheck !== null && !availabilityCheck.available;
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-white dark:bg-[#0c2317] border border-gray-200 dark:border-[#C5A45D]/30 border-t-4 border-t-[#C5A45D] shadow-xl p-6 sm:p-10 transition-colors duration-300">
@@ -156,37 +152,32 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
           </h3>
         </div>
 
-        {/* Selected Date Range Summary Badge */}
+        {/* Selected Dates Count Summary Badge */}
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 px-4 py-2.5 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#e2d8c3] dark:border-[#C5A45D]/40">
           <Calendar className="w-4 h-4 text-[#C5A45D] shrink-0" />
           <div className="text-left">
             <span className="block text-[9px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold">
-              Selected Availability Range
+              Selected Event Dates
             </span>
-            {checkInLabel ? (
+            {sortedDates.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm font-bold text-[#234D3C] dark:text-gray-100">
-                <span>{checkInLabel}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#C5A45D]" />
-                <span>{checkOutLabel || 'Pick Check-Out'}</span>
-                {checkInDate && checkOutDate && (
-                  <span className="ml-1 px-1.5 py-0.5 text-[10px] uppercase bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e]">
-                    {totalDays} {totalDays === 1 ? 'Day' : 'Days'}
-                  </span>
-                )}
+                <span>
+                  {sortedDates.length} {sortedDates.length === 1 ? 'Date Selected' : 'Dates Selected'}
+                </span>
               </div>
             ) : (
               <span className="block text-xs sm:text-sm font-semibold text-gray-500 dark:text-gray-400">
-                Select dates on calendar or below
+                Select dates on calendar above
               </span>
             )}
           </div>
-          {(checkInDate || checkOutDate) && (
+          {sortedDates.length > 0 && (
             <button
               type="button"
               onClick={onClearDates}
-              title="Clear selected dates"
+              title="Clear all selected dates"
               className="ml-1 p-1.5 border border-gray-300 dark:border-white/20 text-gray-500 dark:text-gray-300 hover:text-red-600 hover:border-red-400 transition-colors cursor-pointer"
-              aria-label="Clear selected dates"
+              aria-label="Clear all selected dates"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -232,51 +223,88 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
           </div>
         </div>
 
-        {/* Mandatory Availability Date Range (Synced with Calendar, Editable & Clearable) */}
-        <div className="p-4 sm:p-5 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#e2d8c3] dark:border-[#C5A45D]/30 space-y-3">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#234D3C] dark:text-[#C5A45D]">
-              Availability (Check-In &amp; Check-Out Dates) *
-            </span>
-            {(checkInDate || checkOutDate) && (
+        {/* Automatically Populated Selected Calendar Dates Section */}
+        <div className="p-4 sm:p-5 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#e2d8c3] dark:border-[#C5A45D]/30 space-y-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#234D3C] dark:text-[#C5A45D]">
+                Selected Event Dates (Auto-Populated from Calendar) *
+              </span>
+              <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e]">
+                {sortedDates.length} {sortedDates.length === 1 ? 'Date' : 'Dates'}
+              </span>
+            </div>
+            {sortedDates.length > 0 && (
               <button
                 type="button"
                 onClick={onClearDates}
                 className="text-[11px] uppercase font-semibold tracking-wider text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-1 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
-                <span>Clear Dates</span>
+                <span>Clear All Dates</span>
               </button>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 mb-1.5">
-                Check-In Date *
-              </label>
+          {/* Populated Selected Dates Review List */}
+          {sortedDates.length > 0 ? (
+            <div className="space-y-2.5">
+              <div className="flex flex-wrap items-center gap-2">
+                {sortedDates.map((dateStr) => (
+                  <div
+                    key={dateStr}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold bg-white dark:bg-[#0c2317] border border-[#C5A45D] text-[#234D3C] dark:text-[#f3eedd] shadow-sm"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-[#C5A45D] shrink-0" />
+                    <span>{formatDisplayDate(dateStr)}</span>
+                    <button
+                      type="button"
+                      onClick={() => onToggleDate(dateStr)}
+                      title={`Remove ${formatDisplayDate(dateStr)}`}
+                      aria-label={`Remove ${formatDisplayDate(dateStr)}`}
+                      className="p-0.5 text-gray-500 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400 transition-colors cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
               <input
-                type="date"
-                required
-                min={todayStr}
-                value={checkInDate || ''}
-                onChange={(e) => onCheckInChange(e.target.value || null)}
-                className="w-full px-4 py-3 text-sm bg-white dark:bg-[#0c2317] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
+                type="text"
+                readOnly
+                value={sortedDates.map((d) => formatDisplayDate(d)).join(' • ')}
+                aria-label="Selected event dates summary"
+                className="w-full px-3.5 py-2.5 text-xs font-semibold bg-white/90 dark:bg-[#0c2317] border border-gray-200 dark:border-white/15 text-[#234D3C] dark:text-[#f3eedd] outline-none"
               />
             </div>
+          ) : (
+            <div className="p-3 bg-white dark:bg-[#0c2317] border border-dashed border-gray-300 dark:border-white/20 text-xs text-gray-600 dark:text-gray-300">
+              No dates selected yet. Click one or more dates on the interactive calendar above, or add a date below.
+            </div>
+          )}
 
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 mb-1.5">
-                Check-Out Date *
-              </label>
+          {/* Optional Manual Date Picker to Add More Dates */}
+          <div className="pt-2 border-t border-gray-200/70 dark:border-white/10 flex flex-col sm:flex-row sm:items-center gap-2.5">
+            <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 shrink-0">
+              Add Another Date:
+            </label>
+            <div className="flex items-center gap-2 flex-1 max-w-sm">
               <input
                 type="date"
-                required
-                min={checkInDate || todayStr}
-                value={checkOutDate || ''}
-                onChange={(e) => onCheckOutChange(e.target.value || null)}
-                className="w-full px-4 py-3 text-sm bg-white dark:bg-[#0c2317] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] focus:ring-1 focus:ring-[#234D3C] dark:focus:ring-[#C5A45D] outline-none transition-all"
+                min={todayStr}
+                value={manualDateInput}
+                onChange={(e) => setManualDateInput(e.target.value)}
+                className="flex-1 px-3 py-2 text-xs bg-white dark:bg-[#0c2317] border border-gray-300 dark:border-white/20 dark:text-white focus:border-[#234D3C] dark:focus:border-[#C5A45D] outline-none"
               />
+              <button
+                type="button"
+                onClick={handleManualAddDate}
+                disabled={!manualDateInput}
+                className="px-3.5 py-2 bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] text-xs font-bold uppercase tracking-wider hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] disabled:opacity-40 transition-all flex items-center gap-1 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add</span>
+              </button>
             </div>
           </div>
 
@@ -284,8 +312,8 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
             <p className="text-xs text-red-600 dark:text-red-400 font-medium">{errors.availability}</p>
           )}
 
-          {/* Range Availability Status */}
-          {checkInDate && availabilityCheck && (
+          {/* Multiple Dates Availability Status */}
+          {sortedDates.length > 0 && availabilityCheck && (
             <div className="text-xs flex items-center gap-1.5 pt-1">
               {availabilityCheck.available ? (
                 <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1.5">
@@ -336,7 +364,7 @@ export const BookingEnquiryForm: React.FC<BookingEnquiryFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-200 mb-1.5">
-                Event / Facility <span className="text-gray-400 font-normal lowercase">(optional)</span>
+                Event / Facility / Package <span className="text-gray-400 font-normal lowercase">(optional)</span>
               </label>
               <select
                 value={eventType}
