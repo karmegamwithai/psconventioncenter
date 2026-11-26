@@ -18,7 +18,8 @@ export interface BookingEnquiryPayload {
   fullName: string;
   mobileNumber: string;
   email?: string;
-  eventDate: string; // Check-in date (YYYY-MM-DD)
+  eventDate: string; // Primary event date (YYYY-MM-DD)
+  selectedDates?: string[]; // All selected event dates (YYYY-MM-DD[])
   checkOutDate?: string; // Check-out date (YYYY-MM-DD)
   alternativeDate?: string;
   session: SessionSlot;
@@ -35,6 +36,7 @@ export interface StoredBooking {
   phoneNumber: string;
   email?: string;
   eventDate: string; // YYYY-MM-DD
+  selectedDates?: string[]; // YYYY-MM-DD[]
   checkOutDate?: string; // YYYY-MM-DD
   session: SessionSlot;
   eventType: string;
@@ -49,6 +51,7 @@ export interface BookingSubmissionResponse {
   success: boolean;
   reference: string;
   eventDate: string;
+  selectedDates?: string[];
   checkOutDate?: string;
   eventType: string;
   session: SessionSlot;

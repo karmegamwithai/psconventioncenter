@@ -15,18 +15,19 @@
   --color-cream: #FAF8F2;
   --color-charcoal: #202823;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Outfit', sans-serif;
+  --font-sans: 'Urbanist', 'Outfit', sans-serif;
   --font-cormorant: 'Cormorant Garamond', Georgia, serif;
-  --font-outfit: 'Outfit', sans-serif;
+  --font-outfit: 'Urbanist', 'Outfit', sans-serif;
+  --font-urbanist: 'Urbanist', 'Outfit', sans-serif;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Urbanist', 'Outfit', sans-serif;
   }
   body {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Urbanist', 'Outfit', sans-serif;
     letter-spacing: 0.01em;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -35,7 +36,7 @@
     letter-spacing: 0.01em;
   }
   button, nav, select, input, textarea {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Urbanist', 'Outfit', sans-serif;
   }
 }
 
@@ -43,8 +44,8 @@
   font-family: 'Cormorant Garamond', Georgia, serif !important;
 }
 
-.font-outfit, .font-sans {
-  font-family: 'Outfit', sans-serif !important;
+.font-outfit, .font-urbanist, .font-sans {
+  font-family: 'Urbanist', 'Outfit', sans-serif !important;
 }
 
 /* Backward compatibility aliases */

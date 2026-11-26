@@ -120,16 +120,19 @@ export const FacilityDetailPage: React.FC<FacilityDetailPageProps> = ({
               </p>
             </div>
 
-            {/* Three Individual Hall Cards */}
+            {/* Three Individual Hall Package Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {facility.hallTiers.map((tier) => (
                 <CursorPerspectiveCard key={tier.id} maxRotation={6} className="h-full">
                   <div className="group bg-white dark:bg-[#0c2317] border border-gray-200/90 dark:border-[#C5A45D]/30 hover:border-[#C5A45D] transition-all duration-300 shadow-sm hover:shadow-2xl flex flex-col h-full">
-                    {/* Hall Image */}
-                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-black">
+                    {/* Hall Image (Clickable to Package Page) */}
+                    <div
+                      onClick={() => onNavigate(`/package/${tier.packageSlug}`)}
+                      className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-black cursor-pointer"
+                    >
                       <img
                         src={tier.image}
-                        alt={tier.name}
+                        alt={tier.planTitle}
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
@@ -148,10 +151,18 @@ export const FacilityDetailPage: React.FC<FacilityDetailPageProps> = ({
                     {/* Hall Card Content */}
                     <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
                       <div className="space-y-3">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="text-2xl font-bold text-[#234D3C] dark:text-[#f3eedd] group-hover:text-[#C5A45D] transition-colors">
-                            {tier.name}
-                          </h3>
+                        <div
+                          onClick={() => onNavigate(`/package/${tier.packageSlug}`)}
+                          className="flex items-start justify-between gap-2 cursor-pointer"
+                        >
+                          <div>
+                            <h3 className="text-2xl font-bold text-[#234D3C] dark:text-[#f3eedd] group-hover:text-[#C5A45D] transition-colors">
+                              {tier.planTitle}
+                            </h3>
+                            <span className="text-[11px] uppercase tracking-wider font-semibold text-[#C5A45D]">
+                              {tier.name}
+                            </span>
+                          </div>
                           <Sparkles className="w-4 h-4 text-[#C5A45D] shrink-0 mt-1.5" />
                         </div>
 
@@ -180,13 +191,22 @@ export const FacilityDetailPage: React.FC<FacilityDetailPageProps> = ({
                         </div>
                       </div>
 
-                      <button
-                        onClick={() => onBookFacility(tier.name)}
-                        className="w-full py-3 px-4 bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] text-xs uppercase font-semibold tracking-[0.18em] hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                      >
-                        <Calendar className="w-3.5 h-3.5 text-[#C5A45D] dark:text-[#07150e]" />
-                        <span>Enquire for {tier.name}</span>
-                      </button>
+                      <div className="space-y-2.5 pt-2">
+                        <button
+                          onClick={() => onNavigate(`/package/${tier.packageSlug}`)}
+                          className="w-full py-2.5 px-4 bg-[#FAF8F2] dark:bg-[#07150e] border border-[#C5A45D]/50 text-[#234D3C] dark:text-[#C5A45D] text-xs uppercase font-semibold tracking-[0.16em] hover:bg-[#E8F2E8] dark:hover:bg-[#122e20] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <span>View {tier.planTitle}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-[#C5A45D]" />
+                        </button>
+                        <button
+                          onClick={() => onBookFacility(tier.planTitle)}
+                          className="w-full py-3 px-4 bg-[#234D3C] dark:bg-[#C5A45D] text-white dark:text-[#07150e] text-xs uppercase font-semibold tracking-[0.18em] hover:bg-[#163b2c] dark:hover:bg-[#d8bc7a] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-[#C5A45D] dark:text-[#07150e]" />
+                          <span>Enquire Now</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </CursorPerspectiveCard>
