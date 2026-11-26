@@ -10,6 +10,7 @@ import { HomePage } from './pages/HomePage';
 import { BookingPage } from './pages/BookingPage';
 import { FacilityDetailPage } from './pages/FacilityDetailPage';
 import { HallPackageDetailPage } from './pages/HallPackageDetailPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { BlogsModal } from './components/modals/BlogsModal';
 import { ContactUsModal } from './components/modals/ContactUsModal';
 import { ThemeProvider } from './context/ThemeContext';
@@ -42,7 +43,9 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
-      if (path === '/booking' || window.location.hash.includes('booking')) {
+      if (path === '/admin' || window.location.hash.includes('admin')) {
+        setCurrentRoute('/admin');
+      } else if (path === '/booking' || window.location.hash.includes('booking')) {
         setCurrentRoute('/booking');
       } else if (parseFacilityIdFromRoute(path)) {
         setCurrentRoute(path);
@@ -104,7 +107,9 @@ export default function App() {
 
         {/* Primary Page Outlet */}
         <main className="flex-1">
-          {currentRoute === '/booking' ? (
+          {currentRoute === '/admin' ? (
+            <AdminDashboardPage onGoHome={() => navigateTo('/')} />
+          ) : currentRoute === '/booking' ? (
             <BookingPage
               onGoHome={() => navigateTo('/')}
               preselectedEventType={selectedEventType}

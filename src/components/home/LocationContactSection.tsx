@@ -14,14 +14,29 @@ export const LocationContactSection: React.FC = () => {
 
   const todayStr = new Date().toISOString().split('T')[0];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formState.name,
+          phoneNumber: formState.phone,
+          availability: formState.availability,
+          message: formState.message || `Enquiry for event availability on ${formState.availability}`,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setFormState({ name: '', phone: '', availability: '', message: '' });
+      }
+    } catch (err) {
+      console.error('Error submitting enquiry:', err);
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-      setFormState({ name: '', phone: '', availability: '', message: '' });
-    }, 600);
+    }
   };
 
   return (

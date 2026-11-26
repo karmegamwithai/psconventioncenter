@@ -5,7 +5,7 @@ import { BookingEnquiryForm } from '../components/booking/BookingEnquiryForm';
 import { BookingConfirmation } from '../components/booking/BookingConfirmation';
 import { BookingSteps } from '../components/booking/BookingSteps';
 import { BookingFaq } from '../components/booking/BookingFaq';
-import { getAvailabilityForMonth, submitBookingEnquiry } from '../services/bookingService';
+import { getAvailabilityForMonth, submitBookingEnquiry, syncBookingsFromDatabase } from '../services/bookingService';
 import { DayAvailability, BookingEnquiryPayload, BookingSubmissionResponse } from '../types/booking';
 
 interface BookingPageProps {
@@ -22,12 +22,20 @@ export const BookingPage: React.FC<BookingPageProps> = ({ onGoHome, preselectedE
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submissionResult, setSubmissionResult] = useState<BookingSubmissionResponse | null>(null);
 
-  // Load availability whenever month/year changes
+  // Sync live PostgreSQL bookings on mount and load availability whenever month/year changes
   useEffect(() => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const days = getAvailabilityForMonth(year, month);
-    setAvailability(days);
+    let active = true;
+    const load = async () => {
+      await syncBookingsFromDatabase();
+      if (!active) return;
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      setAvailability(getAvailabilityForMonth(year, month));
+    };
+    load();
+    return () => {
+      active = false;
+    };
   }, [currentDate]);
 
   const handlePrevMonth = () => {

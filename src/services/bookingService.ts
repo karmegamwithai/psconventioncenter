@@ -7,6 +7,86 @@ const STORAGE_KEYS = {
   BLOCKED: 'ps_cc_blocked_dates'
 };
 
+let liveDbBookingsCache: Array<{
+  id: number;
+  referenceCode: string;
+  eventDate: string;
+  eventDates: string;
+  session: SessionSlot;
+  eventType: string;
+  status: string;
+}> | null = null;
+
+export async function syncBookingsFromDatabase(): Promise<void> {
+  try {
+    const res = await fetch('/api/bookings/availability');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data?.bookings)) {
+      liveDbBookingsCache = data.bookings;
+    }
+  } catch {
+    // Fallback to local sample data if offline
+  }
+}
+
+function getEffectiveBookingsAndEnquiries(): {
+  confirmed: Array<{ eventDate: string; session: SessionSlot; status: 'CONFIRMED' }>;
+  pendingDates: Set<string>;
+} {
+  if (liveDbBookingsCache && liveDbBookingsCache.length > 0) {
+    const confirmed: Array<{ eventDate: string; session: SessionSlot; status: 'CONFIRMED' }> = [];
+    const pendingDates = new Set<string>();
+
+    for (const row of liveDbBookingsCache) {
+      let dates: string[] = [row.eventDate];
+      try {
+        const parsed = JSON.parse(row.eventDates);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          dates = parsed;
+        }
+      } catch {
+        dates = [row.eventDate];
+      }
+
+      const sessionSlot = (row.session as SessionSlot) || 'FULL_DAY';
+      for (const d of dates) {
+        if (row.status === 'CONFIRMED') {
+          confirmed.push({
+            eventDate: d,
+            session: sessionSlot,
+            status: 'CONFIRMED',
+          });
+        } else if (row.status === 'PENDING') {
+          pendingDates.add(d);
+        }
+      }
+    }
+
+    return { confirmed, pendingDates };
+  }
+
+  // Fallback before initial sync finishes
+  const storedBookings = getStoredBookings();
+  const storedEnquiries = getStoredEnquiries();
+  const confirmed = storedBookings
+    .filter((b) => b.status === 'CONFIRMED')
+    .map((b) => ({
+      eventDate: b.eventDate,
+      session: b.session,
+      status: 'CONFIRMED' as const,
+    }));
+  const pendingDates = new Set<string>();
+  for (const e of storedEnquiries) {
+    if (e.date) pendingDates.add(e.date);
+    if (e.eventDate) pendingDates.add(e.eventDate);
+    if (Array.isArray(e.selectedDates)) {
+      for (const sd of e.selectedDates) pendingDates.add(sd);
+    }
+  }
+  return { confirmed, pendingDates };
+}
+
 function getStoredBookings(): StoredBooking[] {
   if (typeof window === 'undefined') return INITIAL_SAMPLE_BOOKINGS;
   try {
@@ -51,8 +131,7 @@ function getStoredBlockedDates(): { date: string; reason: string }[] {
 
 export function getAvailabilityForMonth(year: number, monthZeroIndexed: number): DayAvailability[] {
   const daysInMonth = new Date(year, monthZeroIndexed + 1, 0).getDate();
-  const bookings = getStoredBookings();
-  const enquiries = getStoredEnquiries();
+  const { confirmed, pendingDates } = getEffectiveBookingsAndEnquiries();
   const blockedDates = getStoredBlockedDates();
 
   const today = new Date();
@@ -68,8 +147,8 @@ export function getAvailabilityForMonth(year: number, monthZeroIndexed: number):
 
     const isPast = dateObj < today;
     const isBlocked = blockedDates.some(b => b.date === dateStr);
-    const dayBookings = bookings.filter(b => b.eventDate === dateStr && b.status === 'CONFIRMED');
-    const dayEnquiries = enquiries.filter(e => e.date === dateStr || e.eventDate === dateStr);
+    const dayBookings = confirmed.filter(b => b.eventDate === dateStr);
+    const hasPendingEnquiry = pendingDates.has(dateStr);
 
     const bookedSessions = dayBookings.map(b => b.session);
     const hasFullDay = bookedSessions.includes('FULL_DAY');
@@ -94,7 +173,7 @@ export function getAvailabilityForMonth(year: number, monthZeroIndexed: number):
       status = 'CONFIRMED';
     } else if (hasMorning || hasEvening) {
       status = 'PARTIALLY_BOOKED';
-    } else if (dayEnquiries.length > 0) {
+    } else if (hasPendingEnquiry) {
       status = 'PENDING_ENQUIRY';
     }
 
@@ -103,7 +182,7 @@ export function getAvailabilityForMonth(year: number, monthZeroIndexed: number):
       status,
       availableSessions,
       bookedSessions,
-      enquiryCount: dayEnquiries.length,
+      enquiryCount: hasPendingEnquiry ? 1 : 0,
       isBlocked: isBlocked || isPast,
       notes: isBlocked ? 'Date blocked for venue maintenance' : undefined
     });
@@ -128,7 +207,8 @@ export function checkSessionAvailability(dateStr: string, session: SessionSlot):
     return { available: false, message: 'This date is blocked for maintenance or private VIP reservations.' };
   }
 
-  const bookings = getStoredBookings().filter(b => b.eventDate === dateStr && b.status === 'CONFIRMED');
+  const { confirmed } = getEffectiveBookingsAndEnquiries();
+  const bookings = confirmed.filter(b => b.eventDate === dateStr);
   const bookedSessions = bookings.map(b => b.session);
 
   if (bookedSessions.includes('FULL_DAY')) {
@@ -235,61 +315,27 @@ export async function submitBookingEnquiry(payload: BookingEnquiryPayload): Prom
     throw new Error(check.message);
   }
 
-  const randomRefNum = Math.floor(100000 + Math.random() * 900000);
-  const reference = `PSC-2026-${randomRefNum}`;
-  const now = new Date().toISOString();
-  const primaryDate = effectiveDates[0];
-  const effectiveCheckOut =
-    payload.checkOutDate || effectiveDates[effectiveDates.length - 1] || primaryDate;
+  const response = await fetch('/api/bookings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...payload,
+      selectedDates: effectiveDates,
+      eventDate: effectiveDates[0],
+    }),
+  });
 
-  const newEnquiry = {
-    id: `enq-${Date.now()}`,
-    reference,
-    fullName: payload.fullName,
-    mobileNumber: payload.mobileNumber,
-    email: payload.email || undefined,
-    eventDate: primaryDate,
-    selectedDates: effectiveDates,
-    checkOutDate: effectiveCheckOut,
-    alternativeDate: payload.alternativeDate || undefined,
-    session: payload.session,
-    eventType: payload.eventType,
-    expectedGuests: Number(payload.expectedGuests || 0),
-    cateringPreference: payload.cateringPreference,
-    additionalRequirements: payload.additionalRequirements || '',
-    status: 'PENDING',
-    date: primaryDate,
-    submittedAt: now
-  };
-
-  if (typeof window !== 'undefined') {
-    try {
-      const existing = getStoredEnquiries();
-      existing.push(newEnquiry);
-      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(existing));
-    } catch (e) {
-      console.error('Storage error', e);
-    }
+  if (!response.ok) {
+    const errData = await response.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to submit booking enquiry. Please try again.');
   }
 
-  // Artificial short delay to give genuine network review experience
-  await new Promise(r => setTimeout(r, 650));
+  const result: BookingSubmissionResponse = await response.json();
 
-  return {
-    success: true,
-    reference,
-    eventDate: primaryDate,
-    selectedDates: effectiveDates,
-    checkOutDate: effectiveCheckOut,
-    eventType: payload.eventType,
-    session: payload.session,
-    status: 'PENDING',
-    message: 'Your booking enquiry has been received by PS Convention Center. Our reservation manager will review availability and call you within 24 hours.',
-    customerName: payload.fullName,
-    mobileNumber: payload.mobileNumber,
-    email: payload.email || undefined,
-    expectedGuests: Number(payload.expectedGuests || 0),
-    cateringPreference: payload.cateringPreference,
-    submittedAt: now
-  };
+  // Refresh in-memory database cache so calendar reflects the new enquiry immediately
+  await syncBookingsFromDatabase();
+
+  return result;
 }

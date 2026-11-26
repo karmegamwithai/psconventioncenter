@@ -11,6 +11,7 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -48,15 +49,34 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose 
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
     if (!validate()) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          phoneNumber: phoneNumber.trim(),
+          message: message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Unable to submit your enquiry right now.');
+      }
+
       setIsSubmitted(true);
-    }, 450);
+    } catch (err: any) {
+      setSubmitError(err.message || 'Unable to submit your enquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleResetAndClose = () => {
@@ -64,6 +84,7 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose 
     setPhoneNumber('');
     setMessage('');
     setErrors({});
+    setSubmitError(null);
     setIsSubmitted(false);
     onClose();
   };
@@ -132,6 +153,7 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose 
                     setPhoneNumber('');
                     setMessage('');
                     setErrors({});
+                    setSubmitError(null);
                     setIsSubmitted(false);
                   }}
                   className="px-5 py-2.5 border border-[#234D3C] dark:border-[#C5A45D]/50 text-[#234D3C] dark:text-[#C5A45D] text-xs uppercase font-bold tracking-[0.16em] hover:bg-[#E8F2E8] dark:hover:bg-[#122e22] transition-all cursor-pointer"
@@ -149,6 +171,12 @@ export const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose 
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
+              {submitError && (
+                <div className="p-3 bg-red-50 dark:bg-red-950/50 border border-red-300 dark:border-red-700 text-xs text-red-700 dark:text-red-300">
+                  {submitError}
+                </div>
+              )}
+
               {/* 1. Name Field (Mandatory) */}
               <div>
                 <label

@@ -191,11 +191,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         {/* Bottom Credits */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-4">
-          <p>&copy; {new Date().getFullYear()} PS Convention Center. All rights reserved.</p>
+          <p className="font-medium text-gray-300">
+            &copy; 2026 All Rights Reserved. Designed &amp; Developed by <span className="text-[#C5A45D] font-semibold">Kodestory</span>.
+          </p>
           <div className="flex items-center gap-4 text-gray-400 text-xs">
             <span>Palur Village, Chengalpattu Dt.</span>
             <span>&bull;</span>
             <span>Tamil Nadu, India</span>
+            <span>&bull;</span>
+            <button
+              type="button"
+              onClick={() => onNavigate('/admin')}
+              className="text-gray-400 hover:text-[#C5A45D] transition-colors cursor-pointer"
+            >
+              Admin Dashboard
+            </button>
           </div>
         </div>
       </div>

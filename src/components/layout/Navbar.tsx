@@ -37,21 +37,36 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenContactUs
 }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const { theme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25);
+    const checkScrollPosition = () => {
+      if (currentRoute !== '/') {
+        setIsPastHero(true);
+        return;
+      }
+      const heroEl = document.getElementById('hero-section');
+      if (heroEl) {
+        const rect = heroEl.getBoundingClientRect();
+        // When the bottom of the hero section scrolls above the navbar height, switch to solid white
+        setIsPastHero(rect.bottom <= 72);
+      } else {
+        setIsPastHero(window.scrollY > window.innerHeight * 0.85);
+      }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    checkScrollPosition();
+    window.addEventListener('scroll', checkScrollPosition, { passive: true });
+    window.addEventListener('resize', checkScrollPosition, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', checkScrollPosition);
+      window.removeEventListener('resize', checkScrollPosition);
+    };
+  }, [currentRoute]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,16 +78,15 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isSolid = isScrolled || currentRoute !== '/';
+  const isSolid = isPastHero || currentRoute !== '/';
 
-  // Dynamic logo selection: without scroll show "logo png-23.png", while scroll show "logo png-18.png"
-  const isWhiteNav = isSolid && theme !== 'dark';
-  const logoSrc = isWhiteNav
+  // White logo over the hero gradient, dark logo on solid white navbar
+  const logoSrc = isSolid
     ? '/assets/aistudio/logo_png-18_361e3e3b.png'
     : '/assets/aistudio/logo_png-23_edd56dd7.png';
 
   const navItemClass = isSolid
-    ? 'text-[#234D3C] dark:text-gray-100 hover:text-[#C5A45D] dark:hover:text-[#C5A45D]'
+    ? 'text-black hover:text-[#C5A45D]'
     : 'text-white/95 hover:text-[#C5A45D]';
 
   const handleNavClick = (route: string, sectionId?: string) => {
@@ -93,17 +107,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      {/* Hidden preloads so scroll logo swap is instantaneous */}
+      {/* Preload both logos so transition is seamless */}
       <div className="hidden" aria-hidden="true">
         <img src="/assets/aistudio/logo_png-23_edd56dd7.png" alt="" />
         <img src="/assets/aistudio/logo_png-18_361e3e3b.png" alt="" />
       </div>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           isSolid
-            ? 'bg-white/95 dark:bg-[#07150e]/95 backdrop-blur-md shadow-md border-b border-[#e2d8c3]/60 dark:border-[#C5A45D]/30 py-2.5 sm:py-3 text-[#202823] dark:text-gray-100'
-            : 'bg-gradient-to-b from-black/85 via-black/45 to-transparent py-3 sm:py-4 text-white'
+            ? 'bg-white shadow-md border-b border-gray-200/80 py-2.5 sm:py-3 text-black'
+            : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-3 sm:py-4 text-white'
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -127,9 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <button
               onClick={() => handleNavClick('/')}
-              className={`text-xs uppercase tracking-[0.16em] font-semibold transition-colors cursor-pointer ${
-                currentRoute === '/' ? navItemClass : navItemClass
-              }`}
+              className={`text-xs uppercase tracking-[0.16em] font-semibold transition-colors cursor-pointer ${navItemClass}`}
             >
               Home
             </button>
@@ -157,9 +169,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <span>Services</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-[#C5A45D] transition-transform duration-200 ${
-                    servicesDropdownOpen ? 'rotate-180' : ''
-                  }`}
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                    isSolid ? 'text-black' : 'text-[#C5A45D]'
+                  } ${servicesDropdownOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
@@ -225,9 +237,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={handleContactUsClick}
-              className="px-3 sm:px-5 py-2 sm:py-2.5 bg-[#C5A45D] text-[#0e241b] text-[11px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] font-semibold hover:bg-[#d8bc7a] transition-all shadow-md flex items-center gap-1.5 sm:gap-2 cursor-pointer"
+              className="px-3 sm:px-5 py-2 sm:py-2.5 bg-[#C5A45D] text-black text-[11px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] font-semibold hover:bg-[#d8bc7a] transition-all shadow-md flex items-center gap-1.5 sm:gap-2 cursor-pointer"
             >
-              <Phone className="w-3.5 h-3.5 text-[#0e241b] shrink-0" />
+              <Phone className="w-3.5 h-3.5 text-black shrink-0" />
               <span>CONTACT US</span>
             </button>
 
@@ -236,15 +248,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setMenuOpen(!menuOpen)}
               className={`lg:hidden px-2.5 sm:px-3.5 py-1.5 sm:py-2 border flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 isSolid
-                  ? 'border-gray-300 dark:border-[#C5A45D]/40 bg-white dark:bg-[#0c2317] text-[#234D3C] dark:text-gray-100 hover:border-[#C5A45D]'
+                  ? 'border-gray-300 bg-white text-black hover:border-[#C5A45D]'
                   : 'border-white/40 bg-black/40 text-white hover:border-[#C5A45D] hover:text-[#C5A45D]'
               }`}
               aria-label="Toggle menu navigation"
             >
               {menuOpen ? (
-                <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D]" />
+                <X className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSolid ? 'text-black' : 'text-[#C5A45D]'}`} />
               ) : (
-                <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A45D]" />
+                <Menu className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSolid ? 'text-black' : 'text-[#C5A45D]'}`} />
               )}
               <span>{menuOpen ? 'CLOSE' : 'MENU'}</span>
             </button>

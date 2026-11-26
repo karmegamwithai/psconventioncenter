@@ -1,27 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Maximize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GALLERY_ITEMS } from '../../data/venueData';
 import { CursorPerspectiveCard } from '../common/CursorPerspectiveCard';
 
+export interface GalleryDisplayItem {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+  caption: string;
+}
+
 export const GallerySection: React.FC = () => {
+  const [galleryItems, setGalleryItems] = useState<GalleryDisplayItem[]>(GALLERY_ITEMS);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
-  const categories = ['All', 'Main Hall', 'Wedding Stage', 'Dining Hall', 'Exterior', 'Guest Rooms', 'Open Terrace'];
+  useEffect(() => {
+    let isMounted = true;
+    const fetchGallery = async () => {
+      try {
+        const res = await fetch('/api/gallery');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isMounted && Array.isArray(data?.items) && data.items.length > 0) {
+          const mapped: GalleryDisplayItem[] = data.items.map((row: any) => ({
+            id: Number(row.id),
+            title: row.title,
+            category: row.category,
+            image: row.imageUrl || row.image,
+            caption: row.caption || '',
+          }));
+          setGalleryItems(mapped);
+        }
+      } catch {
+        // Keep initial fallback items if request fails
+      }
+    };
+    fetchGallery();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => {
+    const baseCats = ['Main Hall', 'Wedding Stage', 'Dining Hall', 'Exterior', 'Guest Rooms', 'Open Terrace'];
+    const dynamicCats = Array.from(new Set(galleryItems.map((i) => i.category)));
+    const merged = Array.from(new Set(['All', ...baseCats, ...dynamicCats]));
+    return merged;
+  }, [galleryItems]);
 
   const filteredItems = activeFilter === 'All'
-    ? GALLERY_ITEMS
-    : GALLERY_ITEMS.filter(item => item.category === activeFilter);
+    ? galleryItems
+    : galleryItems.filter(item => item.category === activeFilter);
 
   const handleNext = () => {
-    if (selectedImageIndex !== null) {
-      setSelectedImageIndex((selectedImageIndex + 1) % GALLERY_ITEMS.length);
+    if (selectedImageIndex !== null && galleryItems.length > 0) {
+      setSelectedImageIndex((selectedImageIndex + 1) % galleryItems.length);
     }
   };
 
   const handlePrev = () => {
-    if (selectedImageIndex !== null) {
-      setSelectedImageIndex((selectedImageIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length);
+    if (selectedImageIndex !== null && galleryItems.length > 0) {
+      setSelectedImageIndex((selectedImageIndex - 1 + galleryItems.length) % galleryItems.length);
     }
   };
 
@@ -62,7 +103,7 @@ export const GallerySection: React.FC = () => {
             <CursorPerspectiveCard
               key={item.id}
               maxRotation={7}
-              onClick={() => setSelectedImageIndex(GALLERY_ITEMS.findIndex(g => g.id === item.id))}
+              onClick={() => setSelectedImageIndex(galleryItems.findIndex(g => g.id === item.id))}
               className={`cursor-pointer ${
                 index === 0 ? 'sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto' : 'aspect-square'
               }`}
@@ -92,7 +133,7 @@ export const GallerySection: React.FC = () => {
       </div>
 
       {/* Fullscreen Lightbox Modal */}
-      {selectedImageIndex !== null && (
+      {selectedImageIndex !== null && galleryItems[selectedImageIndex] && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
           <button
             onClick={() => setSelectedImageIndex(null)}
@@ -122,19 +163,19 @@ export const GallerySection: React.FC = () => {
           {/* Active Image Stage */}
           <div className="max-w-5xl max-h-[85vh] flex flex-col items-center justify-center relative p-2">
             <img
-              src={GALLERY_ITEMS[selectedImageIndex].image}
-              alt={GALLERY_ITEMS[selectedImageIndex].title}
+              src={galleryItems[selectedImageIndex].image}
+              alt={galleryItems[selectedImageIndex].title}
               className="max-h-[70vh] sm:max-h-[75vh] w-auto max-w-full object-contain border border-[#C5A45D]/40 shadow-2xl"
             />
             <div className="mt-4 text-center text-white space-y-1">
               <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#C5A45D] font-bold">
-                {GALLERY_ITEMS[selectedImageIndex].category}
+                {galleryItems[selectedImageIndex].category}
               </span>
               <h3 className="text-lg sm:text-xl font-bold">
-                {GALLERY_ITEMS[selectedImageIndex].title}
+                {galleryItems[selectedImageIndex].title}
               </h3>
               <p className="text-xs sm:text-sm text-gray-300 font-light max-w-lg mx-auto">
-                {GALLERY_ITEMS[selectedImageIndex].caption}
+                {galleryItems[selectedImageIndex].caption}
               </p>
             </div>
           </div>
