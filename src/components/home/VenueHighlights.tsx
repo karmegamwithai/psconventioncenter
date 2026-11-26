@@ -5,13 +5,13 @@ export const VenueHighlights: React.FC = () => {
   const highlights = [
     {
       icon: <Users className="w-5 h-5 text-[#C5A45D]" />,
-      value: '1,000+',
-      label: 'Main Hall Capacity',
+      value: '600+',
+      label: 'Seating Capacity',
     },
     {
       icon: <Utensils className="w-5 h-5 text-[#C5A45D]" />,
-      value: '500+',
-      label: 'Dining Capacity',
+      value: '3',
+      label: 'Halls',
     },
     {
       icon: <Wind className="w-5 h-5 text-[#C5A45D]" />,
@@ -20,8 +20,8 @@ export const VenueHighlights: React.FC = () => {
     },
     {
       icon: <Car className="w-5 h-5 text-[#C5A45D]" />,
-      value: '150+',
-      label: 'Valet Parking',
+      value: '8+',
+      label: 'Guest Rooms',
     },
   ];
 
