@@ -12,7 +12,7 @@ interface HeroSectionProps {
 }
 
 const HERO_VIDEO_SRC =
-  '/assets/aistudio/padmasena_convention_center_Cinematic_video_ad8de83f.mp4';
+  '/assets/aistudio/padmasena_website_video___1__fb266d3d.mp4';
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onCheckAvailability,
