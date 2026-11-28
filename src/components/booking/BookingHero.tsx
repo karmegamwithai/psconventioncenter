@@ -21,7 +21,7 @@ export const BookingHero: React.FC<BookingHeroProps> = ({ onGoHome }) => {
           <ChevronRight className="w-3 h-3 text-gray-400" />
           <span className="text-[#234D3C] dark:text-[#C5A45D] font-semibold flex items-center gap-1">
             <Calendar className="w-3.5 h-3.5 text-[#C5A45D]" />
-            <span>Book Your Event</span>
+            <span>Book Event</span>
           </span>
         </nav>
 

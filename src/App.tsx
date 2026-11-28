@@ -8,6 +8,8 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { BookingPage } from './pages/BookingPage';
+import { AboutPage } from './pages/AboutPage';
+import { CorporateEventsPage } from './pages/CorporateEventsPage';
 import { FacilityDetailPage } from './pages/FacilityDetailPage';
 import { HallPackageDetailPage } from './pages/HallPackageDetailPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
@@ -37,7 +39,7 @@ export default function App() {
   const [currentRoute, setCurrentRoute] = useState<string>('/');
   const [blogsOpen, setBlogsOpen] = useState(false);
   const [contactUsOpen, setContactUsOpen] = useState(false);
-  const [selectedEventType, setSelectedEventType] = useState<string>('Grand Weddings');
+  const [selectedEventType, setSelectedEventType] = useState<string>('Low Budget Plan – Hall');
 
   // Sync with browser URL bar and back/forward buttons
   useEffect(() => {
@@ -47,6 +49,10 @@ export default function App() {
         setCurrentRoute('/admin');
       } else if (path === '/booking' || window.location.hash.includes('booking')) {
         setCurrentRoute('/booking');
+      } else if (path === '/about') {
+        setCurrentRoute('/about');
+      } else if (path === '/corporate') {
+        setCurrentRoute('/corporate');
       } else if (parseFacilityIdFromRoute(path)) {
         setCurrentRoute(path);
       } else if (parsePackageIdFromRoute(path)) {
@@ -67,17 +73,15 @@ export default function App() {
       window.history.pushState(null, '', route);
     }
 
-    if (route === '/') {
-      if (sectionId) {
-        setTimeout(() => {
-          const el = document.getElementById(sectionId);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 80);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+    if (sectionId) {
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -85,7 +89,7 @@ export default function App() {
 
   const handleSelectEventForBooking = (eventTitle: string) => {
     setSelectedEventType(eventTitle);
-    navigateTo('/booking');
+    navigateTo('/booking', 'booking-enquiry-form');
   };
 
   const activeFacilityId = parseFacilityIdFromRoute(currentRoute);
@@ -114,6 +118,13 @@ export default function App() {
               onGoHome={() => navigateTo('/')}
               preselectedEventType={selectedEventType}
             />
+          ) : currentRoute === '/about' ? (
+            <AboutPage onNavigate={navigateTo} />
+          ) : currentRoute === '/corporate' ? (
+            <CorporateEventsPage
+              onNavigate={navigateTo}
+              onBookCorporateEvent={handleSelectEventForBooking}
+            />
           ) : activePackageId ? (
             <HallPackageDetailPage
               packageId={activePackageId}
@@ -137,7 +148,7 @@ export default function App() {
         {/* Shared Luxury Footer */}
         <Footer onNavigate={navigateTo} />
 
-        {/* Contact Us Centered Overlay Modal */}
+        {/* Contact Centered Overlay Modal */}
         <ContactUsModal
           isOpen={contactUsOpen}
           onClose={() => setContactUsOpen(false)}
@@ -149,7 +160,7 @@ export default function App() {
           onClose={() => setBlogsOpen(false)}
           onCheckDates={() => {
             setBlogsOpen(false);
-            navigateTo('/booking');
+            navigateTo('/booking', 'booking-enquiry-form');
           }}
         />
       </div>

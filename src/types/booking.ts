@@ -2,6 +2,8 @@ export type SessionSlot = 'FULL_DAY' | 'MORNING' | 'EVENING';
 
 export type CateringType = 'VEGETARIAN' | 'NON_VEGETARIAN' | 'DISCUSS_LATER';
 
+export type GuestRoomRequirement = 'Yes' | 'No' | 'Decide Later';
+
 export type DayStatus = 'AVAILABLE' | 'PENDING_ENQUIRY' | 'CONFIRMED' | 'BLOCKED' | 'PARTIALLY_BOOKED';
 
 export interface DayAvailability {
@@ -26,6 +28,7 @@ export interface BookingEnquiryPayload {
   eventType: string;
   expectedGuests: number;
   cateringPreference: CateringType;
+  guestRoomRequirement: GuestRoomRequirement;
   additionalRequirements?: string;
 }
 
@@ -42,6 +45,7 @@ export interface StoredBooking {
   eventType: string;
   guestCount: number;
   cateringPreference: CateringType;
+  guestRoomRequirement?: GuestRoomRequirement;
   notes?: string;
   status: 'PENDING' | 'CONFIRMED';
   createdAt: string;
@@ -62,5 +66,6 @@ export interface BookingSubmissionResponse {
   email?: string;
   expectedGuests: number;
   cateringPreference: CateringType;
+  guestRoomRequirement?: GuestRoomRequirement;
   submittedAt: string;
 }

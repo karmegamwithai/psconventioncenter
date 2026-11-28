@@ -30,6 +30,7 @@ export const bookingEnquiries = pgTable('booking_enquiries', {
   eventType: text('event_type').notNull(),
   expectedGuests: integer('expected_guests').default(500).notNull(),
   cateringPreference: text('catering_preference').default('NEED_ASSISTANCE').notNull(),
+  guestRoomRequirement: text('guest_room_requirement').default('Decide Later').notNull(),
   message: text('message').default('').notNull(),
   status: text('status').default('PENDING').notNull(),
   userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),

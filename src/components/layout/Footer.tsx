@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('/', 'about')}
+                  onClick={() => onNavigate('/about')}
                   className="hover:text-[#C5A45D] transition-colors text-left flex items-center gap-1.5 cursor-pointer"
                 >
                   <ChevronRight className="w-3 h-3 text-[#C5A45D]" /> About Venue
@@ -90,10 +90,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('/', 'events')}
+                  onClick={() => onNavigate('/corporate')}
                   className="hover:text-[#C5A45D] transition-colors text-left flex items-center gap-1.5 cursor-pointer"
                 >
-                  <ChevronRight className="w-3 h-3 text-[#C5A45D]" /> Events & Occasions
+                  <ChevronRight className="w-3 h-3 text-[#C5A45D]" /> Corporate Events
                 </button>
               </li>
               <li>

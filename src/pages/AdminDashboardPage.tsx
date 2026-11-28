@@ -46,6 +46,7 @@ interface BookingEnquiryRow {
   eventType: string;
   expectedGuests: number;
   cateringPreference: string;
+  guestRoomRequirement?: string;
   message: string;
   status: string;
   createdAt: string;
@@ -1178,7 +1179,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onGoHome
                             {b.eventType}
                           </div>
                           <div className="text-xs text-gray-500 mt-0.5">
-                            {b.expectedGuests} Guests &bull; {b.cateringPreference.replace(/_/g, ' ')}
+                            {b.expectedGuests} Guests &bull; Rooms: {b.guestRoomRequirement || 'Decide Later'} &bull; {b.cateringPreference.replace(/_/g, ' ')}
                           </div>
                           {b.message && (
                             <div className="text-xs text-gray-500 line-clamp-1 mt-1 italic">
@@ -1614,7 +1615,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onGoHome
                 </div>
                 <div>
                   <span className="text-[11px] uppercase font-bold text-gray-400 block">
-                    Event Type
+                    Event
                   </span>
                   <span className="font-semibold">{selectedBookingDetail.eventType}</span>
                 </div>
@@ -1625,6 +1626,20 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onGoHome
                   <span>
                     {selectedBookingDetail.session} &bull; {selectedBookingDetail.expectedGuests} Guests
                   </span>
+                </div>
+                <div>
+                  <span className="text-[11px] uppercase font-bold text-gray-400 block">
+                    Guest Room Requirement
+                  </span>
+                  <span className="font-semibold text-[#234D3C] dark:text-[#C5A45D]">
+                    {selectedBookingDetail.guestRoomRequirement || 'Decide Later'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[11px] uppercase font-bold text-gray-400 block">
+                    Catering Preference
+                  </span>
+                  <span>{selectedBookingDetail.cateringPreference.replace(/_/g, ' ')}</span>
                 </div>
               </div>
 

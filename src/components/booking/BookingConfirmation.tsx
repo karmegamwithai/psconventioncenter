@@ -117,6 +117,15 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ data, 
           </div>
 
           <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Urbanist','Outfit',sans-serif]">
+              Guest Room Requirement
+            </span>
+            <div className="flex items-center gap-2 text-sm font-bold text-[#234D3C] dark:text-[#d3e5dc]">
+              <span>{data.guestRoomRequirement || 'Decide Later'}</span>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-[#0e241b] p-4 rounded border border-gray-200 dark:border-[#C5A45D]/20">
             <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400 block mb-1 font-['Outfit',sans-serif]">
               Enquiry Status
             </span>

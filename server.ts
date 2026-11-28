@@ -323,6 +323,11 @@ async function startServer() {
         req.body?.cateringPreference || 'NEED_ASSISTANCE',
         60
       );
+      const rawGuestRoom = sanitizeText(req.body?.guestRoomRequirement || 'Decide Later', 40);
+      const allowedGuestRoom = ['Yes', 'No', 'Decide Later'];
+      const guestRoomRequirement = allowedGuestRoom.includes(rawGuestRoom)
+        ? rawGuestRoom
+        : 'Decide Later';
       const message = sanitizeText(
         req.body?.additionalRequirements || req.body?.message || '',
         1500
@@ -340,6 +345,8 @@ async function startServer() {
           .sort();
       } else if (typeof req.body?.eventDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(req.body.eventDate)) {
         selectedDates = [req.body.eventDate];
+      } else {
+        selectedDates = [new Date().toISOString().split('T')[0]];
       }
 
       if (!customerName || customerName.length < 2) {
@@ -347,9 +354,6 @@ async function startServer() {
       }
       if (!isValidPhone(phoneNumber)) {
         return res.status(400).json({ error: 'Please provide a valid 10-digit phone number.' });
-      }
-      if (selectedDates.length === 0) {
-        return res.status(400).json({ error: 'Please select at least one valid event date.' });
       }
 
       const primaryDate = selectedDates[0];
@@ -369,6 +373,7 @@ async function startServer() {
           eventType,
           expectedGuests,
           cateringPreference,
+          guestRoomRequirement,
           message,
           status: 'PENDING',
         })
@@ -392,6 +397,7 @@ async function startServer() {
         email: record.email || undefined,
         expectedGuests: record.expectedGuests,
         cateringPreference: record.cateringPreference,
+        guestRoomRequirement: record.guestRoomRequirement,
         submittedAt: record.createdAt.toISOString(),
       });
     } catch (error) {

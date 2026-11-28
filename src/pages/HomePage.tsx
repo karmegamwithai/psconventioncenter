@@ -26,7 +26,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectEventFor
     <div className="min-h-screen">
       {/* 1. Cinematic Hero */}
       <HeroSection
-        onCheckAvailability={() => onNavigate('/booking')}
+        onCheckAvailability={() => onNavigate('/booking', 'booking-enquiry-form')}
         onExploreVenue={() => scrollToSection('facilities')}
         onExplore3DTour={() => scrollToSection('virtual-tour')}
       />
